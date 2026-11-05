@@ -4,10 +4,10 @@ import type { Env } from "../config/env.js";
 import { RepositorioEmArquivo } from "../repo/arquivo.js";
 import { migrar } from "../repo/migrar.js";
 import { conectar, RepositorioPostgres } from "../repo/postgres.js";
-import type { Repositorio } from "../repo/repositorio.js";
+import type { RepositorioDoServico } from "../repo/repositorio.js";
 
 export interface RepositorioAberto {
-  repo: Repositorio;
+  repo: RepositorioDoServico;
   descricao: string;
   fechar(): Promise<void>;
 }

@@ -1,6 +1,6 @@
 # ARAUTO — PLAN.md
 
-**Status:** aprovado por André em 04/11/2026 (respostas Q1–Q7: recomendações adotadas). Etapa 0 entregue e publicada; aguardando o teste dele para abrir a Etapa 1.
+**Status:** aprovado por André em 04/11/2026 (respostas Q1–Q7: recomendações adotadas). Etapas 0 e 1 entregues e publicadas. André aprovou a Etapa 1 em 05/11/2026 e a **Etapa 2 foi aberta pelo servidor** (fatia A, abaixo); as 3 execuções reais da Etapa 1 continuam pendentes da chave dele.
 **Data:** 04/11/2026 · **Etapa:** 0 (fundação) · **Fonte de requisitos:** [docs/briefing.md](docs/briefing.md) (cópia fiel do seu briefing)
 
 Legenda das verificações: ✅ testei hoje na rede ou li na documentação oficial · ⚠️ não consegui confirmar, fica como tarefa da etapa indicada.
@@ -302,6 +302,68 @@ pnpm brief:gerar --sem-banco --replay real-1   # repete de graça
 ```
 
 **Pontos em aberto da Etapa 1:** pesos da pontuação (provisórios), tamanho real do briefing (meta de 5 a 7 min, só se mede com a execução real), custo real contra a estimativa da seção 3, perfil Econômico contra Padrão (seção 3.3) e se o modelo recusa notícias sensíveis. O `tema:testar` não entra no total do mês do livro-caixa (custa centavos).
+
+### Etapa 2, fatia A (05/11/2026): servidor, acesso e travas de custo, sem interface
+
+A Etapa 2 é grande (servidor, web, temas, Web Push), então entra em fatias. A **fatia A** é só o servidor, porque não depende do pacote do Claude Design (Q7) e é onde moram as travas de custo que André mais pediu.
+
+**Construído** (`packages/server`): API Fastify sob `/api`; pareamento por código de uso único e token por aparelho (guardado só como hash); orquestrador com as travas de "Atualizar agora"; agendador por reconciliação (D5); cabeçalhos de segurança, CORS restrito, limite de taxa e arquivos estáticos blindados; comandos `servidor`, `pareamento:gerar` e `dispositivos`. **349 testes no server** (eram 175; 323 sem Postgres), contra memória, arquivo e um Postgres 16 real.
+
+| Rota | Quem | O que faz |
+|---|---|---|
+| `GET /api/saude` | pública | O banco está de pé? (para o Railway) |
+| `POST /api/pareamento` | pública, 5 por 10 min por IP | Troca o código por um token |
+| `GET /api/briefing/hoje`, `/api/briefing/:data`, `/api/historico` | token | Só leem do banco, com `ETag` (304 sem corpo) |
+| `GET /api/estado` | token | Atualizações usadas, gasto do mês, atraso, modo leitura |
+| `POST /api/atualizar` | token, 10 por hora por IP | "Atualizar agora" (202 / 200 já em andamento / 429 / 503) |
+| `GET /api/execucoes/:id` | token | Situação de uma execução (para acompanhar depois de recarregar) |
+| `GET`/`DELETE /api/dispositivo` | token | Quem sou eu / sair deste aparelho |
+
+**Defesa de custo, como ficou (seção 2.8):**
+
+| Item da 2.8 | Como está feito |
+|---|---|
+| 1 Leitura é grátis | Rotas de leitura só consultam o banco. Teste: 1.000 leituras, zero chamadas ao modelo, zero execuções, gasto zero. |
+| 2 Sem token, 401 | Todas as rotas que mostram dados ou gastam exigem token. Teste: 1.000 pedidos sem token ou com token falso, tudo 401, nada executa. |
+| 3 Limite global no banco | 3 por dia e 30 min de intervalo, contados em `execucoes`. Teste: 5 aparelhos fazem 3 atualizações, não 15. |
+| 4 Uma execução paga por vez | **Índice único parcial no Postgres** (`execucoes_uma_rodando`). Teste: 100 pedidos simultâneos, uma execução. |
+| 5 Atualização incremental | **Não feita nesta fatia** (ver abaixo). |
+| 6 Limite de taxa HTTP | `@fastify/rate-limit` por IP, **antes** da autenticação (quem só erra o token também é segurado). |
+| 7 Interruptor geral | `GASTOS_PAUSADOS=1` recusa atualização com 503; ao bater `MAX_USD_MES` o serviço entra sozinho em modo leitura (`/api/estado`). |
+| 8 Trava fora do código | Depende de André (limite no console da Anthropic). |
+| 9 Avisos a 50/80/100% | O nível já sai em `/api/estado`; o **envio** depende do Web Push (fatia B). |
+| 10 Testes de abuso | Feitos: 100 atualizações, 1.000 leituras, 1.000 sem token, insistir de 31 em 31 minutos o dia inteiro. Rodam **sem** o limite de taxa, para provar que as travas do banco valem sozinhas. |
+
+**Reserva do mês (seção 2.6), ainda mais firme do que o plano:** `reserva = dias restantes × custo médio dos últimos 7 briefings diários` (US$ 0,50 enquanto não há histórico). O orquestrador recusa cedo, com a conta na mensagem, e o próprio `Orcamento` confere de novo **dentro** da execução, a cada chamada ao modelo. O briefing das 06:00 nunca tem reserva.
+
+**Onde saí do plano, e por quê:**
+
+| Plano | Feito | Por quê |
+|---|---|---|
+| D5: `pg_advisory_lock` + chave única `(data, tipo)` | Índice único parcial "só uma `rodando`" | O banco recusa a segunda execução no `insert`, sem lock preso a uma conexão. `(data, tipo)` não serve: a diária tem até 2 tentativas e há até 3 atualizações por dia. |
+| Rotas `GET /briefing/...` | Prefixo `/api` | Separa a API das rotas da interface (`/lab`, `/instalar`) e do fallback de página. |
+| Vigias às 06:20 e 06:40 | Uma pergunta só, a cada minuto | "Atrasou" é um **estado** (`briefingAtrasado`, depois das 06:40 sem briefing), não um evento que pode se perder num reinício. |
+| Tentativas do briefing do dia | No máximo 2, 10 min entre elas; parada por custo não repete | Cada tentativa pode custar até US$ 1; sem teto, um erro persistente queimaria o mês. |
+| Limite de taxa por IP **e** por token | Só por IP | Chave por token deixaria quem inventa tokens ganhar um balde novo a cada pedido. |
+| Execução órfã | Vira falha sozinha depois de 30 min, ao criar a próxima e ao ligar o serviço | Um deploy no meio de uma execução não pode prender a trava de "uma por vez". |
+
+**Pendente (fatia B e seguintes):**
+- **"Atualizar agora" incremental** (Q5, seção 2.6). Hoje uma atualização refaz o pipeline inteiro, limitada a 3 por dia, uma por vez e dentro da reserva. O incremental de verdade precisa guardar a impressão digital dos acontecimentos, e é melhor medi-la com dados reais do termômetro. Uma heurística de "poucas notícias novas" foi descartada: com 38 feeds ela quase nunca dispararia.
+- Web Push (VAPID), política de avisos (1 + 2 por dia, silêncio), aviso de atraso e de gasto.
+- Ajustes do usuário (horário, silêncio, modo sóbrio) no servidor.
+- Web/PWA, motor de temas, `/lab`, Stories, Lista, Ouvir, `/instalar` (dependem do pacote do Claude Design, Q7).
+- Deploy no Railway e **confirmar quantos proxies há na frente** (`CONFIAR_PROXY_SALTOS`). ⚠️ Não verifiquei: se o valor for maior que o real, o cliente forja o IP e foge do limite por IP (as travas do banco continuam valendo); se for menor, todos dividem o IP do proxy.
+- O verificador de segredos varrer o `dist` da web e `pnpm audit` no CI.
+- O limite de taxa fica na memória do processo: reiniciar zera o contador (as travas do banco não).
+
+**Como rodar:**
+
+```bash
+pnpm servidor --sem-banco --codigo   # sobe a API; imprime um código de pareamento (vale 10 min)
+pnpm pareamento:gerar                # com Postgres: gera outro código, de outro terminal
+pnpm dispositivos listar             # aparelhos pareados (nunca mostra o token)
+pnpm dispositivos revogar <id>
+```
 
 ---
 

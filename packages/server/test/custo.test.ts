@@ -132,6 +132,34 @@ describe("Orcamento (travas de custo)", () => {
     }
   });
 
+  it("a reserva dos briefings diários protege o mês das atualizações", () => {
+    // Teto de 25, reserva de 13: a atualização só pode levar o mês até 12.
+    const orcamento = new Orcamento({ ...base, gastoDoMesAntesUsd: 11.6, reservaUsd: 13 });
+    expect(() => orcamento.verificarAntes(0.4)).not.toThrow(); // 12,0
+    try {
+      orcamento.verificarAntes(0.5); // 12,1 invade a reserva
+      expect.unreachable();
+    } catch (erro) {
+      expect((erro as OrcamentoEsgotado).motivo).toBe("reserva");
+      expect((erro as OrcamentoEsgotado).message).toContain("reserva");
+    }
+  });
+
+  it("sem reserva (o briefing das 06:00), o mês pode ir até o teto", () => {
+    const orcamento = new Orcamento({ ...base, gastoDoMesAntesUsd: 24.2 });
+    expect(() => orcamento.verificarAntes(0.8)).not.toThrow(); // 25,0
+  });
+
+  it("a trava do teto vale antes da da reserva", () => {
+    const orcamento = new Orcamento({ ...base, gastoDoMesAntesUsd: 24.8, reservaUsd: 13 });
+    try {
+      orcamento.verificarAntes(0.5);
+      expect.unreachable();
+    } catch (erro) {
+      expect((erro as OrcamentoEsgotado).motivo).toBe("mes");
+    }
+  });
+
   it("acumula o gasto e as buscas da execução", () => {
     const orcamento = new Orcamento(base);
     orcamento.registrar(uso(0.12, 2));
@@ -145,6 +173,41 @@ describe("Orcamento (travas de custo)", () => {
     const orcamento = new Orcamento(base);
     for (let i = 0; i < 10; i++) orcamento.registrar(uso(0.1));
     expect(orcamento.gastoDaExecucaoUsd).toBe(1);
+  });
+});
+
+describe("lerEnv (servidor)", () => {
+  it("padrões seguros: sem confiar em proxy, 3 atualizações por dia, agendador ligado", () => {
+    const env = lerEnv({});
+    expect(env).toMatchObject({
+      PORT: 3000,
+      CONFIAR_PROXY_SALTOS: 0,
+      ATUALIZACOES_POR_DIA: 3,
+      INTERVALO_ATUALIZACAO_MIN: 30,
+      TOKEN_INATIVO_DIAS: 90,
+      AGENDADOR_LIGADO: true,
+      ORIGENS_PERMITIDAS: [],
+    });
+  });
+
+  it("lê a lista de origens e o interruptor do agendador", () => {
+    const env = lerEnv({
+      ORIGENS_PERMITIDAS: " https://a.example , ,https://b.example ",
+      AGENDADOR_LIGADO: "0",
+      PORT: "8080",
+      CONFIAR_PROXY_SALTOS: "1",
+    });
+    expect(env.ORIGENS_PERMITIDAS).toEqual(["https://a.example", "https://b.example"]);
+    expect(env.AGENDADOR_LIGADO).toBe(false);
+    expect(env.PORT).toBe(8080);
+    expect(env.CONFIAR_PROXY_SALTOS).toBe(1);
+  });
+
+  it("recusa valores absurdos", () => {
+    expect(() => lerEnv({ PORT: "0" })).toThrow();
+    expect(() => lerEnv({ PORT: "70000" })).toThrow();
+    expect(() => lerEnv({ CONFIAR_PROXY_SALTOS: "9" })).toThrow();
+    expect(() => lerEnv({ ATUALIZACOES_POR_DIA: "0" })).toThrow();
   });
 });
 

@@ -1,6 +1,6 @@
 import type { UsoDeModelo } from "@arauto/core";
 
-export type MotivoDeParada = "execucao" | "mes" | "pausado";
+export type MotivoDeParada = "execucao" | "mes" | "reserva" | "pausado";
 
 /** Lançado quando uma trava de custo impede a chamada. O pipeline para e avisa (briefing: "pare e me avise"). */
 export class OrcamentoEsgotado extends Error {
@@ -20,6 +20,11 @@ export interface ConfigDoOrcamento {
   gastoDoMesAntesUsd: number;
   /** Interruptor geral (GASTOS_PAUSADOS). */
   pausado: boolean;
+  /**
+   * Verba do mês que esta execução NÃO pode tocar: a dos briefings diários que ainda vão rodar
+   * (PLAN.md, seção 2.6). Só as atualizações sob demanda usam; o briefing das 06:00 usa 0.
+   */
+  reservaUsd?: number;
 }
 
 const usd = (valor: number) => `US$ ${valor.toFixed(4)}`;
@@ -66,6 +71,13 @@ export class Orcamento {
       throw new OrcamentoEsgotado(
         "mes",
         `A chamada poderia levar o mês a ${usd(mes)}, acima da trava de ${usd(this.config.maxMesUsd)} por mês (gasto antes desta execução: ${usd(this.config.gastoDoMesAntesUsd)}).`,
+      );
+    }
+    const reserva = this.config.reservaUsd ?? 0;
+    if (reserva > 0 && mes > this.config.maxMesUsd - reserva) {
+      throw new OrcamentoEsgotado(
+        "reserva",
+        `A chamada poderia levar o mês a ${usd(mes)} e invadir a reserva de ${usd(reserva)} dos briefings diários que ainda vão rodar (trava de ${usd(this.config.maxMesUsd)}).`,
       );
     }
   }

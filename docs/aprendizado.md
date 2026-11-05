@@ -112,3 +112,43 @@ Detalhes e a lista do que fica para o servidor na Etapa 2: [PLAN.md](../PLAN.md)
 - **3 execuções reais** (precisam da chave da Anthropic), com links abrindo, datas em até 36 h e leitura de 5 a 7 minutos.
 - **`pnpm tema:testar`** com o modelo real (os casos de tema).
 - Você testar. Depois disso, a Etapa 2.
+
+---
+
+## Etapa 2, fatia A: servidor, acesso e travas de custo (05/11/2026)
+
+### O que foi feito
+
+- **API Fastify** sob `/api`, com pareamento por código de uso único e token por aparelho. Só `/api/saude` e `/api/pareamento` são públicas.
+- **Orquestrador**: o único lugar que decide se uma execução paga pode começar. Limites do "Atualizar agora" (3 por dia, 30 minutos, somando todos os aparelhos), reserva do mês para os briefings diários, modo leitura e uma execução por vez.
+- **Agendador por reconciliação**: a cada minuto pergunta "o que já deveria existir hoje e não existe?". Recupera o briefing do dia depois de um deploy ruim.
+- **Segurança de borda**: cabeçalhos, CORS restrito, limite de taxa, erros sem detalhe, arquivos estáticos só de uma pasta.
+- **349 testes no server** (175 antes; 323 quando não há Postgres), incluindo os testes de abuso do PLAN.md e requisições HTTP cruas contra tentativas de ler arquivos fora da pasta.
+
+### Por que essa solução
+
+- **Quem decide é o banco, não a memória do processo.** "Uma execução por vez" é um índice único parcial no Postgres; os 3 por dia vêm de contar `execucoes`. Reiniciar o serviço, ter dois aparelhos ou fazer deploy sobreposto não abre brecha.
+- **Os testes de abuso rodam sem o limite de taxa.** Se rodassem com ele ligado, o 429 do limitador esconderia uma trava do banco quebrada. Assim cada camada é provada sozinha.
+- **O token nunca é guardado.** O banco tem só o SHA-256 (o token tem 256 bits aleatórios, então um hash rápido basta; senha de gente é que precisa de hash lento). Comparação em tempo constante, expiração por inatividade e revogação por aparelho.
+- **Erro de código queima o código.** Cada tentativa errada conta nos códigos ainda válidos, e 5 matam. Quem tenta adivinhar não ensina nada: errado, expirado e já usado dão a mesma resposta.
+- **Atraso é estado, não evento.** "O briefing atrasou" é `agora ≥ 06:40 e sem briefing hoje`. Um alarme de 06:40 se perderia se o serviço estivesse reiniciando; um estado calculado a cada consulta, não.
+
+### Alternativas descartadas
+
+- **`pg_advisory_lock`** (como no D5). O índice único falha no próprio `insert` e não depende de uma conexão manter o lock. A chave `(data, tipo)` também não servia: a diária tem 2 tentativas e há 3 atualizações por dia.
+- **Limite de taxa por token.** Quem inventa tokens ganharia um balde novo a cada pedido. Por IP, e antes da autenticação.
+- **Heurística "poucas notícias novas" para o incremental.** Com 38 feeds, quase sempre passaria do limiar e não pouparia nada. Fica para quando houver dados reais do termômetro.
+
+### O que aprendi (surpresas)
+
+- **`app.inject` mente sobre travessia de caminho.** Ele passa a URL pelo parser do WHATWG, que transforma `%2e%2e` em `..` e resolve **antes** de o servidor ver. `/%2e%2e/%2e%2e/etc/passwd` chegou como `/etc/passwd` e o servidor devolveu a página inicial, o que parecia falha e não era. Um atacante manda o caminho cru, então esses testes usam `http.request` de verdade.
+- **Fallback de página é um vazamento disfarçado.** `/.git/config` devolveu 200: não vazou o conteúdo, mas respondeu "existe" com a página inicial porque `config` não tem ponto. A regra agora é: qualquer trecho oculto ou com ponto é 404, depois de decodificar (`%2eenv` vale `.env`).
+- **Duas cercas escondem uma quebra.** Tirei só `dotfiles: "ignore"` e a suíte passou, porque `allowedPath` ainda barrava. Só tirando as duas juntas a suíte falha. É de propósito (defesa em profundidade), mas o teste de mutação precisa saber disso.
+- **`text/plain` não dá 415 no Fastify**: ele lê como texto e o contrato recusa com 400. O 415 vem de tipos sem leitor, como `application/xml`.
+- **Os tipos do Fastify 5.12 não aceitam número em `trustProxy`**, só função. `(endereço, salto) => salto < N` faz o mesmo que o número.
+- **Teste de mutação de novo.** Quebrei o código em 21 pontos (autenticação, limite diário, intervalo, reserva, teto, pausa, índice único, revogação, inatividade, tentativas do código, caminhos ocultos, vazamento de erro, `trustProxy: true`...) e a suíte falhou em todos os que importam.
+
+### Pendente
+
+Web Push, ajustes do usuário, "Atualizar agora" incremental, o app web e o deploy no Railway. A lista completa e as decisões em aberto estão no [PLAN.md](../PLAN.md), "Etapa 2, fatia A".
+

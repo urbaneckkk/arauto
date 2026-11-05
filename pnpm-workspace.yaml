@@ -8,11 +8,18 @@ packages:
 # e com "^" ele abre essa exceção sozinho. Subir a versão quando ela completar alguns dias.
 # - Biome: 2.6.4 (a 2.6.5 tinha 11 horas em 04/11/2026).
 # - SDK da Anthropic: 1.4.0 (a 1.5.0 tinha 5 horas em 04/11/2026).
+# - Fastify e plugins (Etapa 2): a última versão de cada um tinha de 1 a 3 dias em 05/11/2026;
+#   fixei a mais nova com mais de 7 dias (fastify 5.12.7, cors 11.3.1, rate-limit 11.2.1, static 10.1.8).
 catalog:
   "@anthropic-ai/sdk": 1.4.0
   "@biomejs/biome": 2.6.4
+  "@fastify/cors": 11.3.1
+  "@fastify/helmet": 13.2.0
+  "@fastify/rate-limit": 11.2.1
+  "@fastify/static": 10.1.8
   "@types/node": 24.19.2
   fast-xml-parser: 5.11.2
+  fastify: 5.12.7
   postgres: 4.0.0
   typescript: ^7.0.2
   vitest: ^5.1.0

@@ -21,7 +21,11 @@ export class RepositorioEmArquivo extends RepositorioEmMemoria {
 
   private static carregar(arquivo: string): EstadoEmMemoria {
     if (!existsSync(arquivo)) return estadoVazio();
-    return JSON.parse(readFileSync(arquivo, "utf8")) as EstadoEmMemoria;
+    // Arquivo gravado por uma versão anterior não tem as listas novas: completa com as vazias.
+    return {
+      ...estadoVazio(),
+      ...(JSON.parse(readFileSync(arquivo, "utf8")) as Partial<EstadoEmMemoria>),
+    };
   }
 
   /**

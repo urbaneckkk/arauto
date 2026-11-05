@@ -2,7 +2,7 @@
   "name": "@arauto/server",
   "version": "0.0.0",
   "private": true,
-  "description": "Pipeline do briefing, agendador e API. Etapa 1: o pipeline e os comandos de linha.",
+  "description": "Pipeline do briefing, agendador e API (Etapas 1 e 2).",
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
@@ -10,12 +10,20 @@
     "test": "vitest run",
     "brief:gerar": "node --env-file-if-exists=../../.env dist/cli/gerar.js",
     "brief:ver": "node --env-file-if-exists=../../.env dist/cli/ver.js",
+    "servidor": "node --env-file-if-exists=../../.env dist/servidor.js",
+    "pareamento:gerar": "node --env-file-if-exists=../../.env dist/cli/pareamento.js",
+    "dispositivos": "node --env-file-if-exists=../../.env dist/cli/dispositivos.js",
     "db:migrar": "node --env-file-if-exists=../../.env dist/cli/migrar.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "catalog:",
     "@arauto/core": "workspace:*",
+    "@fastify/cors": "catalog:",
+    "@fastify/helmet": "catalog:",
+    "@fastify/rate-limit": "catalog:",
+    "@fastify/static": "catalog:",
     "fast-xml-parser": "catalog:",
+    "fastify": "catalog:",
     "postgres": "catalog:",
     "zod": "catalog:"
   },
