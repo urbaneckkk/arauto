@@ -17,6 +17,26 @@ jobs:
   verificar:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+    # Postgres só para os testes do repositório (sem senha, só dentro do runner, apagado ao final).
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: arauto
+          POSTGRES_DB: arauto_teste
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U arauto"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL_TESTE: postgres://arauto@localhost:5432/arauto_teste
+
     steps:
       # As ações abaixo estão fixadas pelo hash do commit (o comentário diz a versão).
       # Tag pode ser movida por quem controla o repositório da ação; hash não.

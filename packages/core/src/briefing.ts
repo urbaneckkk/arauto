@@ -85,15 +85,19 @@ export const AlertaSchema = z
   });
 export type Alerta = z.infer<typeof AlertaSchema>;
 
+/**
+ * `minC`, `maxC` e `chuvaPct` são nulos quando a previsão do Open-Meteo falhou: nunca se
+ * inventa número. Os alertas do INMET continuam valendo.
+ */
 export const TempoSchema = z
   .object({
-    minC: z.number().min(-60).max(60),
-    maxC: z.number().min(-60).max(60),
-    chuvaPct: z.number().int().min(0).max(100),
+    minC: z.number().min(-60).max(60).nullable(),
+    maxC: z.number().min(-60).max(60).nullable(),
+    chuvaPct: z.number().int().min(0).max(100).nullable(),
     resumo: z.string().min(1),
     alertas: z.array(AlertaSchema),
   })
-  .refine((tempo) => tempo.minC <= tempo.maxC, {
+  .refine((tempo) => tempo.minC === null || tempo.maxC === null || tempo.minC <= tempo.maxC, {
     message: "a mínima não pode ser maior que a máxima",
     path: ["minC"],
   });

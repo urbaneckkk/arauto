@@ -68,6 +68,8 @@ export type TemaEscolhido = z.infer<typeof TemaEscolhidoSchema>;
 export const SinaisDoTemaSchema = z.object({
   perdaDeVidas: z.boolean(),
   vitimasConfirmadas: z.number().int().nonnegative().nullable(),
+  /** Massacre, atentado ou chacina: conta como luto com qualquer número de mortos. */
+  atentadoOuMassacre: z.boolean(),
   escaladaMilitar: z.boolean(),
   armaOuInstalacaoNuclear: z.boolean(),
   animalEmSofrimento: z.boolean(),

@@ -1,0 +1,18 @@
+# Postgres só para desenvolvimento local. Sobe com: docker compose up -d
+#
+# Escuta apenas em 127.0.0.1 (nunca na rede) e não tem senha: é um banco de testes, sem dados
+# reais. O banco de produção fica no Railway, com senha e rede privada.
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: arauto
+      POSTGRES_DB: arauto
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - arauto-pg:/var/lib/postgresql/data
+
+volumes:
+  arauto-pg: {}

@@ -71,6 +71,7 @@ export function sinaisNeutros() {
   return {
     perdaDeVidas: false,
     vitimasConfirmadas: null,
+    atentadoOuMassacre: false,
     escaladaMilitar: false,
     armaOuInstalacaoNuclear: false,
     animalEmSofrimento: false,

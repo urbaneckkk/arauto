@@ -69,3 +69,46 @@ Detalhes e a lista do que fica para o servidor na Etapa 2: [PLAN.md](../PLAN.md)
 
 - Publicada em <https://github.com/urbaneckkk/arauto>. O CI passou no GitHub (23 s).
 - **Falta você testar** (`pnpm verificar` na sua máquina) antes de abrir a Etapa 1.
+
+---
+
+## Etapa 1: cérebro, sem interface (04/11/2026)
+
+### O que foi feito
+
+- **Pipeline completo** em `packages/server`: coleta de 38 feeds, previsão (Open-Meteo) e alertas (INMET); termômetro do mundo; apuração com busca web; redação; verificação de fontes; tema; publicação.
+- **Custo sob controle**: tabela de preços em código, livro-caixa por chamada e três travas (por execução, por mês e o interruptor `GASTOS_PAUSADOS`), checadas **antes** de cada chamada, pelo pior caso, e **depois**, pelo uso real.
+- **Três repositórios** com o mesmo contrato de testes: memória, arquivo local (`--sem-banco`) e Postgres com migrações.
+- **Gravar e repetir**: `--gravar` guarda a internet e as respostas do modelo; `--replay` repete de graça.
+- **Comandos**: `brief:gerar`, `brief:ver` (com `--links` e `--passos`), `db:migrar`, `tema:testar`.
+- **Regras de tema** no `core`, com vetos por manchetes para luto, nuclear e animal ferido.
+
+### Por que essa solução
+
+- **O modelo escreve texto; o código decide o que importa.** Pontuação, alertas, números do tempo, tema final, lista de fontes e limites do contrato são código. O redator cita fontes por identificador (`i042`) e não por URL, então link inventado não tem como existir.
+- **Duas camadas na segurança de tema.** A ficha de sinais que o modelo preenche e, independente dela, vetos por palavras nas manchetes. Teste com um modelo **hostil** (sempre `ternura_animal`, ficha toda falsa) prova que luto, nuclear e animal ferido ficam em 100% mesmo assim.
+- **Apuração e redação em chamadas separadas.** A busca web devolve citações, e a documentação avisa que citações são incompatíveis com saída estruturada. Separar evita um erro 400 que eu só descobriria com a sua chave.
+- **Uma interface `Transporte` para toda a internet.** É o que torna possível gravar, repetir e testar sem rede.
+
+### Alternativas descartadas
+
+- **Busca web como única fonte de notícia.** O RSS já entrega fonte, URL, data e resumo de graça; a busca ficou só para confirmar e completar (PLAN.md, seção 3.3).
+- **GDELT como peça central.** Ver abaixo: não é confiável. Virou sinal opcional com disjuntor.
+- **Docker obrigatório para testar o Postgres.** O Docker Desktop não subiu aqui. Validei contra um Postgres 17 de verdade rodando temporário, fora do repositório; o CI usa um serviço do GitHub Actions.
+- **`fallbacks: "default"` já ligado.** Exige a API beta e não dava para testar sem a chave; fica para depois da primeira execução real.
+
+### O que aprendi (surpresas)
+
+- **Teste com dados reais acha o que o teste sintético não acha.** A coleta real mostrou a Folha passando por `redir.folha.com.br` (216 links que a lista branca descartaria), o Plural bloqueando o robô (403) e um feed do g1 parado desde 2024.
+- **GDELT**: 12 a 16 s por chamada e 429 mesmo com mais de 18 s entre as chamadas. O "limite de 1 chamada a cada 5 s" não é o problema; o serviço está instável.
+- **Um teste de contrato pegou um bug de verdade.** O repositório em memória somava o gasto do mês pelo texto da data em UTC; um gasto às 23h de 30/11 em São Paulo caía em dezembro e embaralharia a trava mensal. O Postgres já fazia certo.
+- **Teste de mutação.** Quebrei o código de propósito em 6 pontos críticos (fonte velha aceita, trava de custo frouxa, veto de tragédia removido...) e conferi que a suíte falhava em todos.
+- **O corretor automático do Biome sugeriu `Math.max` sobre textos**, que devolveria `NaN`. Corretor automático sugere; quem decide é você.
+- **`renameSync` no Windows** pode falhar de vez em quando (antivírus segurando o arquivo). O repositório em arquivo repete e, no último caso, grava direto.
+- **Vetos por palavras precisam de testes dos dois lados.** "Cai 10%" não são 10 mortos, "acordo nuclear" não é arma nuclear, "filhote resgatado" não é animal ferido. Cada veto tem casos que acusam e casos que não acusam.
+
+### Pendente para fechar a Etapa 1
+
+- **3 execuções reais** (precisam da chave da Anthropic), com links abrindo, datas em até 36 h e leitura de 5 a 7 minutos.
+- **`pnpm tema:testar`** com o modelo real (os casos de tema).
+- Você testar. Depois disso, a Etapa 2.

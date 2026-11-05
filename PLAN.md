@@ -72,7 +72,7 @@ Se você responder só "ok", sigo com a recomendação marcada em cada linha.
 - **Sonnet 5.5** (`claude-sonnet-5-5`): US$ 2 / 10 por milhão. Passos 3 e 4.
 - Busca web: US$ 10 por 1.000 buscas, mais os tokens. Usar `web_search_20260209` (com filtragem dinâmica) e `web_fetch_20260209`, com `max_uses: 8` e `allowed_domains`. Esse parâmetro não pode ser combinado com `blocked_domains`.
 - **Diferenças dos modelos novos que mudam o código**: `temperature` e similares não podem ser alterados (dão erro 400); `tool_choice` forçado dá 400, então a saída JSON vem de **saída estruturada** (`output_config.format`) e não de ferramenta forçada; o raciocínio vem ligado por padrão e conta como tokens de saída, então defino `effort` explicitamente por passo e meço.
-- **Recusas por classificador de segurança**: o Sonnet 5.5 pode terminar com `stop_reason: "refusal"` em assuntos sensíveis (armas nucleares, ataques cibernéticos, armas biológicas), justamente o tipo de notícia que o Arauto trata. Plano: ativar o `fallbacks: "default"` do servidor (recomendado pela documentação para esse modelo) e tratar `refusal` como falha de passo, nunca como texto. O Haiku 5.5 não tem esse fallback: recusa vira tema `neutro` por código.
+- **Recusas por classificador de segurança**: o Sonnet 5.5 pode terminar com `stop_reason: "refusal"` em assuntos sensíveis (armas nucleares, ataques cibernéticos, armas biológicas), justamente o tipo de notícia que o Arauto trata. **Decisão da Etapa 1:** `refusal` é tratado como falha do passo (até 3 tentativas), nunca como texto, e a chamada recusada entra no custo. O `fallbacks: "default"` do servidor (recomendado pela documentação) fica **desligado por enquanto**: exige a API beta e eu não conseguia testá-lo sem a sua chave. Liga-se depois da primeira execução real, se houver recusa. O Haiku 5.5 não tem esse fallback: recusa vira tema `neutro` por código.
 
 ### 2.2 Coleta (passo 1) e verificação de saúde
 Feeds em `packages/server/config/feeds.json`, com `ultimoStatus`, `ultimoItem` e `falhasSeguidas`. Resultado do teste de hoje:
@@ -108,7 +108,10 @@ O modelo devolve `id`, `intensidade`, `confianca`, `motivo`, texto do aviso **e 
 1. Id fora do catálogo ou `confianca` < 0,7 → `neutro`.
 2. Prioridade: **luto** (perda de vidas, pelo limite da Q3) > **nuclear** (sinal nuclear concreto) > **conflito** (escalada sem nuclear) > escolha do modelo.
 3. `animalEmSofrimento` → `ternura_animal` proibido (cai em `neutro`).
-4. Veto lexical independente: se as manchetes do acontecimento do dia trazem termo de morte (PT/EN: mortos, vítimas, killed, death toll…) com número ou "dezenas/centenas", e a ficha disse que não há perda de vidas, o código força `luto`.
+4. Vetos lexicais independentes do modelo, sobre as manchetes do acontecimento do dia:
+   - **luto**: termo de morte (PT/EN: mortos, vítimas, killed, death toll…) perto de um número ≥ 5 ou de "dezenas/centenas", ou massacre/atentado/chacina junto de termo de morte.
+   - **nuclear**: arma, teste, ataque ou acidente nuclear **concretos** ("míssil nuclear", "teste nuclear", "ataque a usina nuclear"). "Acordo nuclear", "energia nuclear" e "usina retoma obras" não contam.
+   - **animal em sofrimento**: animal (cão, gato, filhote…) junto de ferido, maltratado, abandonado, atropelado ou morto. Impede `ternura_animal`.
 5. `luto`: sem som e sem animação além de fade, aplicado no motor de temas e não no tema.
 6. O limite de caracteres do aviso (40/110) é validado por Zod; falhou, uma nova tentativa; falhou de novo, texto-padrão do tema.
 
@@ -125,7 +128,7 @@ O modelo devolve `id`, `intensidade`, `confianca`, `motivo`, texto do aviso **e 
 - **Falhas**: 2 novas tentativas por passo, tempo-limite global às 06:25; passou disso, mostra o de ontem com aviso claro. Nunca preenche lacuna com texto inventado.
 - **Fuso**: `America/Sao_Paulo` por identificador IANA, nunca deslocamento fixo. A `data` do contrato é a data em São Paulo.
 - **Execução repetida**: `pipeline_runs` com chave `(data, tipo)`, passos gravados com entrada resumida, saída, tokens e custo.
-- **Teste sem gastar API**: gravações de RSS, GDELT e respostas do modelo em `fixtures/`; flag `--replay` reproduz uma execução inteira de graça.
+- **Teste sem gastar API**: `pnpm brief:gerar --gravar <nome>` grava a internet e as respostas do modelo em `gravacoes/<nome>`; `--replay <nome>` reproduz uma execução inteira de graça. As gravações ficam **fora do Git** (têm texto de veículos, direitos autorais); o que vai ao repositório são dados sintéticos.
 
 ### 2.8 Defesa de custo: quem abre ou recarrega a página não gasta nada
 
@@ -223,7 +226,7 @@ Sobre "notícias legais": o que decide isso é o prompt editorial e a curadoria 
 | # | Risco | Prob. | Impacto | Mitigação |
 |---|---|---|---|---|
 | R1 | Feeds quebram ou mudam (já aconteceu com 5 URLs) | Alta | Médio | Lista versionada, teste de saúde diário, alerta quando um feed passa de 3 falhas seguidas, nenhum feed é indispensável. |
-| R2 | GDELT lento ou fora | Alta | Médio | Sinal opcional, pontuação parcial marcada, spike inicial de um dia. |
+| R2 | GDELT lento ou fora | **Certa** (spike de 04/11: 12–16 s por chamada, 2 de 3 deram 429 mesmo com mais de 18 s entre elas, a que respondeu trouxe 2 artigos) | Médio | Sinal opcional com disjuntor (desiste após 2 falhas seguidas). A pontuação parcial, só com o RSS, é o caminho normal. |
 | R3 | Custo acima do previsto | Média | Alto | Travas por execução e por mês, reserva do briefing diário, atualização incremental, medição na Etapa 1. |
 | R4 | Recusa do classificador em notícia sensível | Média | Médio | `fallbacks: "default"` no Sonnet; recusa tratada como falha; Haiku cai em `neutro`. |
 | R5 | Link inventado ou não verificável | Média | Alto | Proveniência obrigatória mais checagem HTTP (seção 2.4). |
@@ -256,6 +259,49 @@ Sobre "notícias legais": o que decide isso é o prompt editorial e a curadoria 
 **Fora da Etapa 0:** regras de tema (Etapa 1), qualquer chamada de API paga, Postgres.
 
 **Resultado (04/11/2026):** entregas 1 a 6 feitas e publicadas em <https://github.com/urbaneckkk/arauto>. `pnpm verificar` passa na máquina local e **o CI passou no GitHub** (23 s): verificador de segredos, build, typecheck, lint e **65 testes** no `core`, com instalação por lockfile congelado. Falta só o seu teste. Onde o contrato era vago, o código fixou uma interpretação; a tabela está em [docs/aprendizado.md](docs/aprendizado.md). Ajuste em relação ao plano: o Biome ficou na 2.6.4, não na mais recente, por causa da proteção de idade mínima de versão do pnpm 12.
+
+### Etapa 1 (04/11/2026): cérebro, sem interface
+
+**Construído** (pacote `packages/server`): coleta (38 feeds, previsão, alertas do INMET), termômetro (Haiku agrupa, código pontua), apuração (Sonnet com busca web), redação (Sonnet, saída estruturada), verificação de fontes sem IA, tema (Haiku + regras de segurança em código), publicação, livro-caixa de custos com as três travas, repositórios em memória, em arquivo e em Postgres (com migrações), gravar/replay, e os comandos `brief:gerar`, `brief:ver`, `db:migrar` e `tema:testar`. **175 testes no server e 136 no core**, mais 8 do verificador de segredos; o repositório Postgres foi validado contra um Postgres 17 real.
+
+**O que a coleta real (04/11) mudou em relação ao plano:**
+
+| O quê | Mudança |
+|---|---|
+| Folha | Todos os 216 links passam por `redir.folha.com.br`. A verificação segue o redirecionamento e a lista branca vale para a URL **final** (que é a publicada). |
+| Plural Curitiba | Responde 403 ao nosso robô (que se identifica como ArautoBot). **Removido**: o bloqueio é respeitado. |
+| g1 Ciência e saúde | Parado desde 2024. Removido. |
+| GDELT | Ver R2. O termômetro consulta só os 5 candidatos e desiste após 2 falhas. |
+| Previsão do tempo | `minC`, `maxC` e `chuvaPct` do contrato passaram a aceitar nulo: se o Open-Meteo falhar, o briefing sai sem números (nunca inventados) e os alertas continuam. |
+| Números do tempo e alertas | **Nunca passam pelo modelo.** Vêm do Open-Meteo e do INMET direto para o briefing; o redator escreve só o resumo em texto. |
+| Fontes | O redator cita por **identificador** do material (`i042`, `w03`), nunca por URL. Link inventado é impossível por construção; a verificação confere o resto (lista branca, 36 h, link abre, texto não copiado). |
+| Apuração com falha | Não derruba o briefing: o RSS basta, e o aviso fica registrado. |
+| Tema com falha | Publica com o tema neutro, mas os vetos por manchetes continuam valendo (tragédia ainda vira luto). |
+| Vetos de nuclear e de animal ferido | Novos (seção 2.5): o critério "100%" não pode depender só da ficha que o modelo preenche. |
+| Fallback de recusa | Ver seção 2.1: desligado até a primeira execução real. |
+
+**Aceite da Etapa 1: o que já está provado e o que precisa da sua chave**
+
+| Critério | Estado |
+|---|---|
+| Pipeline completo, `brief:gerar` e `brief:ver` | ✅ Funcionam. Verificado ponta a ponta em replay. |
+| Matérias gravadas para testar sem gastar API | ✅ `--gravar` e `--replay`, com teste de que o replay reproduz o mesmo briefing. |
+| Casos fictícios de tema (os 8 do briefing) | ✅ Nas regras (determinístico, inclusive todas as combinações de sinais) e no pipeline. ⏳ Contra o **modelo real**: `pnpm tema:testar`. |
+| 100% em luto, nuclear e animal ferido | ✅ Garantido por código, com vetos que não dependem do modelo: um modelo hostil que erra de propósito ainda passa (teste). ⏳ Confirmar com o modelo real. |
+| 3 execuções reais, links abrindo, datas em 36 h, leitura de 5 a 7 min, custo registrado | ⏳ **Precisa da chave da Anthropic.** `pnpm brief:ver --links` confere links e datas. |
+
+**Como rodar** (a chave vai só no `.env`, que o Git ignora):
+
+```bash
+cp .env.example .env            # e preencha ANTHROPIC_API_KEY
+pnpm tema:testar                # ~US$ 0,15: casos de tema contra o modelo real
+pnpm brief:gerar --sem-banco --gravar real-1   # execução real (até US$ 1), gravando
+pnpm brief:ver --sem-banco
+pnpm brief:ver --sem-banco --links
+pnpm brief:gerar --sem-banco --replay real-1   # repete de graça
+```
+
+**Pontos em aberto da Etapa 1:** pesos da pontuação (provisórios), tamanho real do briefing (meta de 5 a 7 min, só se mede com a execução real), custo real contra a estimativa da seção 3, perfil Econômico contra Padrão (seção 3.3) e se o modelo recusa notícias sensíveis. O `tema:testar` não entra no total do mês do livro-caixa (custa centavos).
 
 ---
 

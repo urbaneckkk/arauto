@@ -162,3 +162,23 @@ describe("tempo e alertas", () => {
     expect(AlertaSchema.safeParse(invalido).success).toBe(false);
   });
 });
+
+describe("previsão indisponível", () => {
+  const tempo = briefingValido().tempo;
+
+  it("aceita previsão nula (nunca se inventa número), mantendo os alertas", () => {
+    const semPrevisao = {
+      ...tempo,
+      minC: null,
+      maxC: null,
+      chuvaPct: null,
+      resumo: "A previsão do tempo não está disponível hoje.",
+      alertas: [alertaValido()],
+    };
+    expect(TempoSchema.safeParse(semPrevisao).success).toBe(true);
+  });
+
+  it("com só uma das temperaturas, não compara", () => {
+    expect(TempoSchema.safeParse({ ...tempo, minC: 30, maxC: null }).success).toBe(true);
+  });
+});

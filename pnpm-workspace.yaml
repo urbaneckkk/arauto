@@ -3,11 +3,17 @@ packages:
 
 # Versões declaradas uma vez só; cada pacote usa "catalog:" no package.json.
 #
-# O Biome está fixado na 2.6.4 (publicada em 28/10/2026) de propósito: o pnpm 12 não instala
-# versões muito recentes sem abrir uma exceção na própria proteção contra pacote comprometido,
-# e a 2.6.5 tinha só 11 horas. Subir a versão aqui quando ela completar alguns dias.
+# Pacotes publicados há poucos dias ficam com versão EXATA (sem ^): o pnpm 12 só instala
+# versão recém-publicada abrindo uma exceção na própria proteção contra pacote comprometido,
+# e com "^" ele abre essa exceção sozinho. Subir a versão quando ela completar alguns dias.
+# - Biome: 2.6.4 (a 2.6.5 tinha 11 horas em 04/11/2026).
+# - SDK da Anthropic: 1.4.0 (a 1.5.0 tinha 5 horas em 04/11/2026).
 catalog:
+  "@anthropic-ai/sdk": 1.4.0
   "@biomejs/biome": 2.6.4
+  "@types/node": 24.19.2
+  fast-xml-parser: 5.11.2
+  postgres: 4.0.0
   typescript: ^7.0.2
   vitest: ^5.1.0
   zod: ^4.6.7

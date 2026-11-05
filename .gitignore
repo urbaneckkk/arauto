@@ -28,10 +28,17 @@ service-account*.json
 *.sqlite3
 *.db
 
+# gerados pelo pipeline: gravações de notícias (direitos autorais) e briefings locais
+gravacoes/
+saida/
+
 # sistema e editores
 .DS_Store
 Thumbs.db
 *.log
 .idea/
+.vs/
+*.suo
+*.user
 .vscode/*
 !.vscode/extensions.json
