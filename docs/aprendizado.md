@@ -54,7 +54,18 @@ Uma entrada por etapa, escrita quando a etapa fecha. Cada entrada responde três
 | `historiaDoDia` | Campo extra `pontuacaoParcial` (padrão falso) | Marca o dia em que o GDELT falhou (PLAN.md, seção 0.1, item 3). |
 | Passo do pipeline | Até 3 tentativas (1 inicial + 2 repetições) | "Tente de novo 2 vezes por passo." |
 
-### Pendente para fechar a Etapa 0
+### Publicação: o que quase deu errado
 
-- O CI ainda não rodou: depende do repositório no GitHub.
-- Você testar (`pnpm verificar` na sua máquina).
+Na hora de publicar, a auditoria achou o que um olhar apressado deixaria passar:
+
+- **O e-mail pessoal iria para o histórico público.** O git global tinha o Gmail do autor. Commit publicado não se apaga de verdade, então o repositório usa o e-mail *noreply* do GitHub, configurado só nele (`git config --local`).
+- **Rotina pessoal na cópia do briefing** (horário de acordar, trajeto de ônibus). A seção foi omitida da cópia pública.
+- **Nada impedia um segredo futuro.** Entrou o verificador `pnpm segredos`, testado de verdade: plantei uma chave falsa fora do repositório e ele acusou, sem imprimir o valor.
+- **Ordem importa.** O repositório foi criado vazio, as proteções do GitHub (*secret scanning* e *push protection*) foram ligadas e lidas de volta, e só então o código subiu.
+
+Detalhes e a lista do que fica para o servidor na Etapa 2: [PLAN.md](../PLAN.md), seção 2.9.
+
+### Estado da Etapa 0
+
+- Publicada em <https://github.com/urbaneckkk/arauto>. O CI passou no GitHub (23 s).
+- **Falta você testar** (`pnpm verificar` na sua máquina) antes de abrir a Etapa 1.

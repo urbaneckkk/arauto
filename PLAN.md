@@ -1,6 +1,6 @@
 # ARAUTO — PLAN.md
 
-**Status:** aprovado por André em 04/11/2026 (respostas Q1–Q7: recomendações adotadas). Etapa 0 em execução.
+**Status:** aprovado por André em 04/11/2026 (respostas Q1–Q7: recomendações adotadas). Etapa 0 entregue e publicada; aguardando o teste dele para abrir a Etapa 1.
 **Data:** 04/11/2026 · **Etapa:** 0 (fundação) · **Fonte de requisitos:** [docs/briefing.md](docs/briefing.md) (cópia fiel do seu briefing)
 
 Legenda das verificações: ✅ testei hoje na rede ou li na documentação oficial · ⚠️ não consegui confirmar, fica como tarefa da etapa indicada.
@@ -255,7 +255,7 @@ Sobre "notícias legais": o que decide isso é o prompt editorial e a curadoria 
 
 **Fora da Etapa 0:** regras de tema (Etapa 1), qualquer chamada de API paga, Postgres.
 
-**Resultado (04/11/2026):** entregas 1 a 6 feitas. `pnpm verificar` passa: build, typecheck, lint e **65 testes** no `core`, com instalação por lockfile congelado. Falta o CI no GitHub (depende do repositório) e o seu teste. Onde o contrato era vago, o código fixou uma interpretação; a tabela está em [docs/aprendizado.md](docs/aprendizado.md). Ajuste em relação ao plano: o Biome ficou na 2.6.4, não na mais recente, por causa da proteção de idade mínima de versão do pnpm 12.
+**Resultado (04/11/2026):** entregas 1 a 6 feitas e publicadas em <https://github.com/urbaneckkk/arauto>. `pnpm verificar` passa na máquina local e **o CI passou no GitHub** (23 s): verificador de segredos, build, typecheck, lint e **65 testes** no `core`, com instalação por lockfile congelado. Falta só o seu teste. Onde o contrato era vago, o código fixou uma interpretação; a tabela está em [docs/aprendizado.md](docs/aprendizado.md). Ajuste em relação ao plano: o Biome ficou na 2.6.4, não na mais recente, por causa da proteção de idade mínima de versão do pnpm 12.
 
 ---
 
