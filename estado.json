@@ -1,6 +1,128 @@
 {
  "execucoes": [
   {
+   "id": "7d8a4e3f-cb30-47ad-b2e6-52929eb9a012",
+   "data": "2026-11-05",
+   "tipo": "diaria",
+   "status": "ok",
+   "criadaEm": "2026-11-05T04:48:46.243Z",
+   "passos": [
+    {
+     "passo": "coleta",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T04:48:46.246Z",
+     "terminadoEm": "2026-11-05T04:48:49.864Z",
+     "resumoEntrada": "feeds, previsão do tempo e alertas do INMET",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "termometro",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T04:48:49.866Z",
+     "terminadoEm": "2026-11-05T04:50:08.330Z",
+     "resumoEntrada": "705 manchetes",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 36814,
+       "tokensSaida": 11232,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.009297
+      }
+     ]
+    },
+    {
+     "passo": "apuracao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T04:50:08.332Z",
+     "terminadoEm": "2026-11-05T04:50:23.019Z",
+     "resumoEntrada": "história do dia, até 3 buscas",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 22445,
+       "tokensSaida": 654,
+       "tokensCacheLeitura": 0,
+       "buscas": 3,
+       "usd": 0.08143
+      }
+     ]
+    },
+    {
+     "passo": "redacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T04:50:23.035Z",
+     "terminadoEm": "2026-11-05T04:51:04.199Z",
+     "resumoEntrada": "material do dia",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 30155,
+       "tokensSaida": 6410,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.12441
+      }
+     ]
+    },
+    {
+     "passo": "verificacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T04:51:04.201Z",
+     "terminadoEm": "2026-11-05T04:51:06.520Z",
+     "resumoEntrada": "7 seções",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "tema",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T04:51:06.528Z",
+     "terminadoEm": "2026-11-05T04:51:08.778Z",
+     "resumoEntrada": "Tornados e temporais atingem Santa Catarina, Rio Grande do Sul e Paraná",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 2895,
+       "tokensSaida": 226,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.000403
+      }
+     ]
+    },
+    {
+     "passo": "publicacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T04:51:08.789Z",
+     "terminadoEm": "2026-11-05T04:51:08.789Z",
+     "resumoEntrada": "briefing validado pelo contrato",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    }
+   ]
+  },
+  {
    "id": "bbbeb92c-6a2b-4abd-b743-6a44e46811a1",
    "data": "2026-11-04",
    "tipo": "diaria",
@@ -1045,9 +1167,556 @@
     "usd": 0.000408
    },
    "quando": "2026-11-05T02:33:54.319Z"
+  },
+  {
+   "execucaoId": "7d8a4e3f-cb30-47ad-b2e6-52929eb9a012",
+   "passo": "termometro",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 36814,
+    "tokensSaida": 11232,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.009297
+   },
+   "quando": "2026-11-05T04:49:37.569Z"
+  },
+  {
+   "execucaoId": "7d8a4e3f-cb30-47ad-b2e6-52929eb9a012",
+   "passo": "apuracao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 22445,
+    "tokensSaida": 654,
+    "tokensCacheLeitura": 0,
+    "buscas": 3,
+    "usd": 0.08143
+   },
+   "quando": "2026-11-05T04:50:23.017Z"
+  },
+  {
+   "execucaoId": "7d8a4e3f-cb30-47ad-b2e6-52929eb9a012",
+   "passo": "redacao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 30155,
+    "tokensSaida": 6410,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.12441
+   },
+   "quando": "2026-11-05T04:51:04.196Z"
+  },
+  {
+   "execucaoId": "7d8a4e3f-cb30-47ad-b2e6-52929eb9a012",
+   "passo": "tema",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 2895,
+    "tokensSaida": 226,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.000403
+   },
+   "quando": "2026-11-05T04:51:08.775Z"
   }
  ],
  "briefings": [
+  {
+   "data": "2026-11-05",
+   "execucaoId": "7d8a4e3f-cb30-47ad-b2e6-52929eb9a012",
+   "tipo": "diaria",
+   "criadoEm": "2026-11-05T04:51:08.787Z",
+   "briefing": {
+    "data": "2026-11-05",
+    "historiaDoDia": {
+     "titulo": "Tornados e temporais atingem Santa Catarina, Rio Grande do Sul e Paraná",
+     "resumo": "A Defesa Civil de Santa Catarina confirmou dois tornados no oeste do estado, em Chapecó e Xanxerê, e o Paraná segue em alerta para tempestades. Curitiba tem alerta amarelo do INMET para hoje.",
+     "veiculos": 7,
+     "paises": 1,
+     "pontuacao": 0.811,
+     "pontuacaoParcial": true
+    },
+    "tema": {
+     "id": "clima_extremo",
+     "intensidade": 2,
+     "confianca": 0.95,
+     "motivo": "Tornados e temporais atingem o Sul, com danos e feridos, o fato central é clima extremo.",
+     "notificacao": {
+      "titulo": "Tornados atingem o Sul",
+      "corpo": "Defesa Civil confirma dois tornados em SC e temporais avançam para o PR e o RS."
+     }
+    },
+    "emTrintaSegundos": [
+     "Curitiba tem alerta amarelo de tempestade e chuva forte hoje.",
+     "Tornados no oeste de Santa Catarina e temporais no Paraná motivam FGTS e crédito para atingidos.",
+     "Copom manteve a Selic em 13,75% e o governo publicou a MP do imposto seletivo."
+    ],
+    "tempo": {
+     "minC": 14.7,
+     "maxC": 25.8,
+     "chuvaPct": 98,
+     "resumo": "Dia de chuva em Curitiba, com pancadas e alta chance de precipitação. Há alerta amarelo do INMET para tempestade, com risco de ventos fortes e granizo. Vale evitar ficar sob árvores e redobrar a atenção no trânsito.",
+     "alertas": [
+      {
+       "fonte": "inmet",
+       "tipo": "Tempestade",
+       "nivel": "amarelo",
+       "inicio": "2026-11-05T00:01:00-03:00",
+       "fim": "2026-11-05T23:59:00-03:00",
+       "url": "https://apiprevmet3.inmet.gov.br/avisos/rss/28616"
+      }
+     ]
+    },
+    "secoes": [
+     {
+      "id": "politica",
+      "noticias": [
+       {
+        "titulo": "Senado retira da pauta a redução da maioridade penal",
+        "oQueAconteceu": "O presidente do Senado, Davi Alcolumbre, tirou da pauta a PEC que reduz a maioridade penal de 18 para 16 anos. Ele disse ter atendido a um pedido do presidente da Câmara, Hugo Motta. Agora o tema será discutido numa comissão especial da Câmara, sem data para votação.",
+        "porQueImporta": "A mudança só vale se passar pelas duas Casas, então o assunto segue em debate e ainda não altera a lei penal.",
+        "lados": [
+         {
+          "quem": "Hugo Motta (presidente da Câmara)",
+          "posicao": "Diz que é preciso aguardar o trabalho da comissão especial antes de definir data de votação."
+         },
+         {
+          "quem": "Davi Alcolumbre (presidente do Senado)",
+          "posicao": "Afirma que retirou a proposta da pauta a pedido de Motta e que a Câmara deve debater primeiro."
+         }
+        ],
+        "continuaDeOntem": "A proposta, que já havia saído da pauta do Senado, agora segue para a comissão especial da Câmara, sem data para votar.",
+        "fontes": [
+         {
+          "titulo": "Alcolumbre retira maioridade penal da pauta e vai aguardar Câmara",
+          "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-11/alcolumbre-retira-maioridade-penal-da-pauta-e-vai-aguardar-camara",
+          "publicadoEm": "2026-11-04T23:54:00.000Z"
+         },
+         {
+          "titulo": "Motta diz que não há data acordada para votar redução da maioridade penal na Casa",
+          "url": "https://valor.globo.com/politica/noticia/2026/11/04/motta-diz-que-no-h-data-acordada-para-votar-reduo-da-maioridade-penal-na-casa.ghtml",
+          "publicadoEm": "2026-11-04T23:37:28.000Z"
+         },
+         {
+          "titulo": "Alcolumbre segura votação de PEC da maioridade penal após disputa entre Câmara e Senado",
+          "url": "https://www1.folha.uol.com.br/cotidiano/2026/11/alcolumbre-segura-votacao-de-pec-da-maioridade-penal-apos-disputa-entre-camara-e-senado.shtml",
+          "publicadoEm": "2026-11-04T21:20:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Voto remoto de Flávio Bolsonaro na PEC da Segurança é questionado",
+        "oQueAconteceu": "O senador Flávio Bolsonaro registrou presença e votou de forma remota na sessão de terça (3), que aprovou por unanimidade a PEC da Segurança Pública, estando nos Estados Unidos. Randolfe Rodrigues pediu a anulação do voto. Alcolumbre afirmou que vai analisar a questão de ordem apresentada.",
+        "porQueImporta": "A decisão define se o voto de um senador fora do país vale e pode criar precedente para as sessões do Senado.",
+        "lados": [
+         {
+          "quem": "Randolfe Rodrigues (PT-AP)",
+          "posicao": "Pede a anulação do voto de Flávio Bolsonaro, que está nos EUA."
+         },
+         {
+          "quem": "Davi Alcolumbre",
+          "posicao": "Diz que analisará a questão de ordem antes de decidir."
+         }
+        ],
+        "continuaDeOntem": "Alcolumbre disse que vai analisar o pedido de anulação do voto.",
+        "fontes": [
+         {
+          "titulo": "Alcolumbre diz que analisará situação de Flávio Bolsonaro, que votou em sessão estando nos EUA",
+          "url": "https://www1.folha.uol.com.br/poder/2026/11/alcolumbre-diz-que-analisara-situacao-de-flavio-bolsonaro-que-votou-em-sessao-estando-nos-eua.shtml",
+          "publicadoEm": "2026-11-05T02:36:00.000Z"
+         },
+         {
+          "titulo": "Randolfe Rodrigues pede anulação de voto de Flávio Bolsonaro na PEC da Segurança",
+          "url": "https://valor.globo.com/politica/noticia/2026/11/04/randolfe-rodrigues-pede-anulacao-de-voto-de-flavio-bolsonaro-na-pec-da-seguranca.ghtml",
+          "publicadoEm": "2026-11-04T22:49:15.000Z"
+         },
+         {
+          "titulo": "Nos EUA, Flávio Bolsonaro vota remotamente a favor da PEC da Segurança",
+          "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-11/nos-eua-flavio-bolsonaro-vota-remotamente-favor-da-pec-da-seguranca",
+          "publicadoEm": "2026-11-04T20:29:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Lula deve falar à nação sobre responsabilidade fiscal",
+        "oQueAconteceu": "O presidente Lula deve fazer pronunciamento em rede de TV, o primeiro após a reeleição, para agradecer os votos e reforçar o compromisso com as contas públicas. Segundo assessores, ele deve prometer ajuste fiscal para cumprir as metas e dizer que não haverá estelionato eleitoral. O recado mira também o mercado financeiro.",
+        "porQueImporta": "Sinais sobre as contas do governo influenciam juros, dólar e preços, que chegam ao bolso de todo mundo.",
+        "lados": [],
+        "continuaDeOntem": "Reportagens indicam que o pronunciamento deve ocorrer no domingo (8), com foco em ajuste fiscal.",
+        "fontes": [
+         {
+          "titulo": "Na TV, Lula reforçará compromisso com responsabilidade fiscal",
+          "url": "https://valor.globo.com/politica/noticia/2026/11/04/lula-vai-se-comprometer-com-responsabilidade-fiscal-e-manifestar-preocupacao-com-juros-altos-em-pronunciamento.ghtml",
+          "publicadoEm": "2026-11-04T22:43:33.000Z"
+         },
+         {
+          "titulo": "Lula deve defender cuidado com contas públicas e agradecer por votos em 1º pronunciamento na TV após reeleição",
+          "url": "https://www1.folha.uol.com.br/poder/2026/11/lula-deve-defender-cuidado-com-contas-publicas-e-agradecer-por-votos-em-1o-pronunciamento-na-tv-apos-reeleicao.shtml",
+          "publicadoEm": "2026-11-04T20:04:00.000Z"
+         },
+         {
+          "titulo": "Lula deve fazer pronunciamento no domingo, garantir que não haverá estelionato eleitoral e que fará ajuste fiscal",
+          "url": "https://g1.globo.com/politica/blog/valdo-cruz/post/2026/11/04/lula-deve-fazer-pronunciamento-no-domingo-garantir-que-nao-havera-estelionato-eleitoral-e-que-fara-ajuste-fiscal.ghtml",
+          "publicadoEm": "2026-11-04T14:54:05.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "economia",
+      "noticias": [
+       {
+        "titulo": "Copom mantém a Selic em 13,75% e interrompe cortes",
+        "oQueAconteceu": "O Copom, comitê do Banco Central que define a Selic (taxa básica de juros), manteve a taxa em 13,75% ao ano e interrompeu a sequência de cortes. Segundo uma economista ouvida pelo Valor, pesou a piora nas expectativas de inflação. Indústria e comércio criticaram a decisão, alegando prejuízo ao crédito e aos investimentos.",
+        "porQueImporta": "Juros altos por mais tempo mantêm caros financiamentos, cartão e crédito para empresas, e seguram a queda do custo de dívidas.",
+        "lados": [
+         {
+          "quem": "CNI e entidades do comércio",
+          "posicao": "Dizem que a manutenção prejudica atividade, crédito e investimentos."
+         },
+         {
+          "quem": "Analistas citados pelo Estadão",
+          "posicao": "Afirmam que o Banco Central resistiu a pressões políticas diante do cenário pior para a inflação."
+         }
+        ],
+        "continuaDeOntem": "Os primeiros reflexos da decisão aparecem agora nas críticas do setor produtivo e na análise sobre o papel do governo.",
+        "fontes": [
+         {
+          "titulo": "Setor produtivo critica manutenção da Selic em 13,75% ao ano",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/setor-produtivo-critica-manutencao-da-selic-em-1375-ao-ano",
+          "publicadoEm": "2026-11-04T22:34:00.000Z"
+         },
+         {
+          "titulo": "Copom deu peso à piora das expectativas ao manter Selic em 13,75%, avalia Canvas Capital",
+          "url": "https://valor.globo.com/financas/noticia/2026/11/04/copom-deu-peso-piora-das-expectativas-ao-manter-selic-em-1375-pontos-percentuais-avalia-canvas-capital.ghtml",
+          "publicadoEm": "2026-11-04T23:13:22.000Z"
+         },
+         {
+          "titulo": "Banco Central não se dobra a pressões políticas e mantém juros com piora do cenário para a inflação",
+          "url": "https://www.estadao.com.br/economia/alvaro-gribel/banco-central-nao-se-dobra-a-pressoes-politicas-e-mantem-juros-com-piora-do-cenario-para-a-inflacao/",
+          "publicadoEm": "2026-11-04T23:00:00.000Z"
+         },
+         {
+          "titulo": "Futuro da Selic depende do governo Lula após Copom manter taxa em 13,75%, dizem analistas",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/11/futuro-da-selic-depende-do-governo-lula-apos-copom-manter-taxa-em-1375-dizem-analistas.shtml",
+          "publicadoEm": "2026-11-05T02:00:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Governo publica MP do imposto seletivo, o 'imposto do pecado'",
+        "oQueAconteceu": "Lula assinou e enviou ao Congresso a medida provisória que define regras e alíquotas do Imposto Seletivo, tributo criado pela reforma tributária para encarecer produtos prejudiciais à saúde ou ao meio ambiente, como bebidas alcoólicas. A cobrança começa em 2 de fevereiro de 2027, com transição até o fim do ano.",
+        "porQueImporta": "Alguns produtos tendem a ficar mais caros a partir do ano que vem, o que pode pesar no orçamento das famílias.",
+        "lados": [],
+        "continuaDeOntem": "Saiu a medida provisória com alíquotas e transição, que já era esperada.",
+        "fontes": [
+         {
+          "titulo": "'Imposto do pecado': o que é e como vai funcionar a tributação sobre produtos prejudiciais à saúde",
+          "url": "https://g1.globo.com/economia/noticia/2026/11/05/imposto-do-pecado-o-que-e-e-como-vai-funcionar.ghtml",
+          "publicadoEm": "2026-11-05T03:00:02.000Z"
+         },
+         {
+          "titulo": "Governo edita MP do Imposto Seletivo com previsão de transição até 2028",
+          "url": "https://valor.globo.com/brasil/noticia/2026/11/04/governo-edita-mp-do-imposto-seletivo-com-previso-de-transio-at-2028.ghtml",
+          "publicadoEm": "2026-11-05T02:15:23.000Z"
+         },
+         {
+          "titulo": "Governo define alíquotas do 'imposto do pecado' para 2027 e propõe manutenção do IPI em janeiro",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/11/governo-define-aliquotas-do-imposto-do-pecado-para-2027-e-propoe-manutencao-do-ipi-em-janeiro.shtml",
+          "publicadoEm": "2026-11-05T02:03:00.000Z"
+         },
+         {
+          "titulo": "Governo publica MP do ‘imposto do pecado’, que terá transição em 2027; veja produtos e alíquotas",
+          "url": "https://www.estadao.com.br/economia/governo-lula-publica-mp-do-imposto-do-pecado-que-tera-transicao-em-2027-veja-produtos-atingidos/",
+          "publicadoEm": "2026-11-05T01:53:17.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Indústria e comércio vão ao STF contra o fim da escala 6x1",
+        "oQueAconteceu": "A CNI e a CNC entraram com ações no Supremo para suspender ou adiar o fim da escala 6x1, previsto na Emenda Constitucional 141, promulgada em outubro. A CNI alega risco à segurança jurídica e à livre iniciativa. O ministro Marinho disse que o decreto de regulamentação deve sair na segunda-feira.",
+        "porQueImporta": "O resultado define quando e como a jornada com mais folga chega a quem trabalha seis dias por semana.",
+        "lados": [
+         {
+          "quem": "CNI e CNC",
+          "posicao": "Pedem suspensão ou mais prazo para implementar a escala 5x2."
+         },
+         {
+          "quem": "Governo (ministro Luiz Marinho)",
+          "posicao": "Prevê publicar o decreto regulamentando o fim da 6x1 na segunda-feira."
+         }
+        ],
+        "continuaDeOntem": "Além das ações no STF, o governo agora prevê o decreto de regulamentação para segunda.",
+        "fontes": [
+         {
+          "titulo": "Entidades da indústria e do comércio recorrem ao STF contra fim da 6x1",
+          "url": "https://agenciabrasil.ebc.com.br/justica/noticia/2026-11/entidades-da-industria-e-do-comercio-recorrem-ao-stf-contra-fim-da-6x1",
+          "publicadoEm": "2026-11-04T23:23:00.000Z"
+         },
+         {
+          "titulo": "Indústria e comércio vão ao STF com ações que questionam fim da 6x1; veja o que pode mudar",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/11/empresarios-do-comercio-vao-ao-stf-para-adiar-fim-da-escala-6x1-para-2027.shtml",
+          "publicadoEm": "2026-11-04T19:17:00.000Z"
+         },
+         {
+          "titulo": "Marinho diz que decreto que regulamenta fim da escala 6x1 deve sair na próxima segunda-feira",
+          "url": "https://www.estadao.com.br/economia/marinho-diz-que-decreto-que-regulamenta-fim-da-escala-6x1-deve-sair-na-proxima-segunda-feira/",
+          "publicadoEm": "2026-11-04T20:53:30.000Z"
+         },
+         {
+          "titulo": "Confederação do comércio pede mais prazo para implementar a escala 5x2",
+          "url": "https://g1.globo.com/economia/noticia/2026/11/04/confederacao-do-comercio-pede-mais-prazo-para-implementar-a-escala-5x2.ghtml",
+          "publicadoEm": "2026-11-04T19:55:54.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Brasil cria 121 mil empregos formais em setembro",
+        "oQueAconteceu": "O Caged mostrou saldo de 121,3 mil vagas com carteira assinada em setembro, resultado de 2,21 milhões de contratações e 2,09 milhões de demissões. O número ficou abaixo do de setembro de 2025, com queda de cerca de 43%, e é o pior para o mês desde 2020.",
+        "porQueImporta": "O ritmo mais fraco de contratações indica um mercado de trabalho menos aquecido, o que afeta as chances de quem procura emprego.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Brasil cria 121 mil empregos formais em setembro, pior resultado para o mês desde 2020",
+          "url": "https://g1.globo.com/economia/noticia/2026/11/04/brasil-cria-1213-mil-empregos-formais-em-setembro-queda-de-43percent-na-comparacao-com-mesmo-mes-de-2025.ghtml",
+          "publicadoEm": "2026-11-04T17:30:01.000Z"
+         },
+         {
+          "titulo": "Brasil registra pior setembro na criação de empregos formais desde o início da série histórica, diz Caged",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/11/brasil-registra-pior-setembro-na-criacao-de-empregos-formais-desde-o-inicio-da-serie-historica-diz-caged.shtml",
+          "publicadoEm": "2026-11-04T18:01:00.000Z"
+         },
+         {
+          "titulo": "Brasil cria 121,3 mil postos de trabalho em setembro, aponta Caged",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/brasil-cria-1213-mil-postos-de-trabalho-em-setembro-aponta-caged",
+          "publicadoEm": "2026-11-04T19:33:00.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "agro",
+      "noticias": [
+       {
+        "titulo": "Doença de Newcastle chega ao quarto foco em Santa Catarina",
+        "oQueAconteceu": "O Ministério da Agricultura confirmou o quarto foco da doença de Newcastle em granja de Nova Erechim, no oeste catarinense. Desde 18 de outubro há restrições a exportações. O ministério também investiga três suspeitas de síndromes respiratórias em aves, duas delas em Chapecó.",
+        "porQueImporta": "O avanço da doença pode afetar o setor de aves, as exportações e, adiante, o preço da carne de frango.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "SC confirma 4° foco da doença de Newcastle e reforça medidas de controle em granjas",
+          "url": "https://g1.globo.com/sc/santa-catarina/noticia/2026/11/04/sc-confirma-quarto-foco-da-doenca-de-newcastle.ghtml",
+          "publicadoEm": "2026-11-04T18:35:52.000Z"
+         },
+         {
+          "titulo": "Ministério da Agricultura investiga três suspeitas de síndromes respiratórias em aves no Sul e Sudeste",
+          "url": "https://globorural.globo.com/pecuaria/aves/noticia/2026/11/ministerio-da-agricultura-investiga-tres-suspeitas-de-sindromes-respiratorias-em-aves-no-sul-e-sudeste.ghtml",
+          "publicadoEm": "2026-11-05T00:37:10.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Paraná mantém boas projeções para a safra de soja apesar da chuva",
+        "oQueAconteceu": "As chuvas fortes e até um tornado causaram alerta entre produtores de soja, milho e feijão no Paraná. Ainda assim, não há perdas relevantes na produção, especialmente da soja, embora o excesso de água possa elevar custos com tratos culturais. A saca em Paranaguá chegou perto de R$ 160.",
+        "porQueImporta": "A safra paranaense sustenta a renda do campo e a economia de muitas cidades do estado, além de influenciar preços de alimentos.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Apesar das fortes chuvas, Paraná mantém boas projeções da safra de soja",
+          "url": "https://globorural.globo.com/agricultura/soja/noticia/2026/11/apesar-das-fortes-chuvas-parana-mantem-boas-projecoes-da-safra-de-soja.ghtml",
+          "publicadoEm": "2026-11-04T21:18:08.000Z"
+         },
+         {
+          "titulo": "Soja tem nova alta em Paranaguá e saca se aproxima de R$ 160",
+          "url": "https://globorural.globo.com/cotacoes/noticia/2026/11/soja-tem-nova-alta-em-paranagua-e-saca-se-aproxima-de-r-160.ghtml",
+          "publicadoEm": "2026-11-04T09:22:00.000Z"
+         },
+         {
+          "titulo": "Clima favorece o plantio, dólar impulsiona as vendas e safra de soja é revisada; ouça o comentário",
+          "url": "https://globorural.globo.com/podcasts/cbn-agro/noticia/2026/11/clima-favorece-o-plantio-dolar-impulsiona-as-vendas-e-safra-de-soja-e-revisada-ouca-o-comentario.ghtml",
+          "publicadoEm": "2026-11-04T16:19:17.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "tecnologia",
+      "noticias": [
+       {
+        "titulo": "Anatel publica novas regras contra golpes por SMS",
+        "oQueAconteceu": "A Anatel publicou regras para dificultar golpes por mensagem de texto. As operadoras ficam obrigadas a bloquear SMS enviados por códigos curtos não registrados, e cada código deverá estar ligado a uma única empresa identificada em cadastro público. As medidas valem para a telefonia móvel.",
+        "porQueImporta": "Tende a reduzir mensagens falsas de bancos e entregas, mas continue desconfiando de links e pedidos de dados por SMS.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Anatel publica novas regras para prevenir fraudes por meio de SMS",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/anatel-publica-novas-regras-para-prevenir-fraudes-por-meio-de-sms",
+          "publicadoEm": "2026-11-04T23:42:00.000Z"
+         },
+         {
+          "titulo": "Governo publica novas regras para combater golpes por SMS; veja o que muda",
+          "url": "https://g1.globo.com/tecnologia/ciberseguranca/noticia/2026/11/04/governo-publica-novas-regras-para-combater-golpes-por-sms-veja-o-que-muda.ghtml",
+          "publicadoEm": "2026-11-04T12:39:12.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Binance retoma saques após ataque hacker de US$ 6,3 bilhões",
+        "oQueAconteceu": "A Binance começa a liberar de forma gradual os saques de criptomoedas a partir das 4h desta quinta, após o roubo de US$ 6,3 bilhões. Segundo a empresa, hackers usaram uma falsa entrevista de emprego para invadir um computador. No Brasil, o Mercado Bitcoin, também atacado, reabre o acesso às contas na segunda.",
+        "porQueImporta": "O caso mostra o risco de golpes de engenharia social, como ofertas de emprego falsas, e a fragilidade de dinheiro guardado em corretoras.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Após ataque hacker, Binance libera saques de mais criptomoedas",
+          "url": "https://g1.globo.com/tecnologia/ciberseguranca/noticia/2026/11/05/apos-ataque-hacker-binance-libera-saques-de-mais-criptomoedas.ghtml",
+          "publicadoEm": "2026-11-05T04:06:31.000Z"
+         },
+         {
+          "titulo": "Hackers usaram entrevista de emprego falsa para invadir sistema e roubar US$ 6,3 bi da Binance",
+          "url": "https://g1.globo.com/tecnologia/ciberseguranca/noticia/2026/11/03/hackers-binance-entrevista-de-emprego.ghtml",
+          "publicadoEm": "2026-11-03T16:58:54.000Z"
+         },
+         {
+          "titulo": "Após ataque hacker, Mercado Bitcoin reabre acesso gradual a contas a partir de 2ª feira",
+          "url": "https://valor.globo.com/financas/criptomoedas/noticia/2026/11/04/aps-ataque-hacker-mercado-bitcoin-reabre-acesso-gradual-a-contas-a-partir-de-2-feira.ghtml",
+          "publicadoEm": "2026-11-04T22:32:43.000Z"
+         },
+         {
+          "titulo": "Mercado Bitcoin afirma ter bloqueado US$ 15 milhões em criptomoedas após ataque hacker",
+          "url": "https://c-level.folha.uol.com.br/financas/2026/11/mercado-bitcoin-afirma-ter-bloqueado-us-15-milhoes-em-criptomoedas-apos-ataque-hacker.shtml",
+          "publicadoEm": "2026-11-04T22:43:00.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "parana",
+      "noticias": [
+       {
+        "titulo": "Paraná tem alerta de supercélulas após tornado em Maringá",
+        "oQueAconteceu": "O Paraná segue em alerta para tempestades com formação de supercélulas, que podem trazer vento forte e granizo. O Simepar classificou como F2 o tornado que passou por Maringá, derrubou mais de 300 árvores e deixou mais de 48 mil imóveis sem energia. É o 14º tornado do estado em 2026.",
+        "porQueImporta": "Com alerta amarelo em Curitiba hoje, vale evitar abrigo sob árvores e ficar atento a quedas de energia e de galhos.",
+        "lados": [],
+        "continuaDeOntem": "Os temporais seguem em alerta no estado, com o balanço de estragos em Maringá, ligado ao tornado F2, agora detalhado.",
+        "fontes": [
+         {
+          "titulo": "Paraná segue em alerta para a formação de supercélulas que podem provocar tempestades",
+          "url": "https://www.bemparana.com.br/noticias/parana/parana-segue-em-alerta-para-a-formacao-de-supercelulas-que-podem-provocar-tempestades/",
+          "publicadoEm": "2026-11-05T01:00:00.000Z"
+         },
+         {
+          "titulo": "Rota dos estragos: mapa mostra caminho que tornado percorreu por Maringá; fenômeno é o 14º no Paraná em 2026",
+          "url": "https://g1.globo.com/pr/norte-noroeste/noticia/2026/11/04/mapa-rota-tornado-maringa-estragos.ghtml",
+          "publicadoEm": "2026-11-04T20:45:00.000Z"
+         },
+         {
+          "titulo": "Tornado F2 atinge Maringá e deixa rastro de destruição em imóveis e na rede elétrica",
+          "url": "https://www.gazetadopovo.com.br/parana/tornado-f2-atinge-maringa-e-deixa-rastro-de-destruicao-em-imoveis-e-na-rede-eletrica/",
+          "publicadoEm": "2026-11-04T12:01:45.000Z"
+         },
+         {
+          "titulo": "Tornado que passou por Maringá é classificado como F2 pelo Simepar: o que isso significa",
+          "url": "https://g1.globo.com/pr/norte-noroeste/noticia/2026/11/04/tornado-maringa-f2-o-que-significa.ghtml",
+          "publicadoEm": "2026-11-04T11:03:32.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Paraná tem saque do FGTS e R$ 175 milhões em crédito após temporais",
+        "oQueAconteceu": "Moradores de mais oito cidades paranaenses atingidas por tempestades podem pedir o saque calamidade do FGTS, de até R$ 6.220 por conta, pelo aplicativo, sem ir à Caixa. O governo estadual também anunciou R$ 175 milhões em linhas de crédito para empresas afetadas.",
+        "porQueImporta": "O dinheiro ajuda famílias e empresas atingidas a reconstruir casas e retomar o trabalho depois dos estragos.",
+        "lados": [],
+        "continuaDeOntem": "O governo estadual divulgou o valor do crédito, e mais oito cidades entraram na lista do saque do FGTS.",
+        "fontes": [
+         {
+          "titulo": "Moradores de oito cidades do Paraná podem sacar até R$ 6,2 mil do FGTS após tempestades; veja quais e como pedir",
+          "url": "https://g1.globo.com/pr/oeste-sudoeste/noticia/2026/11/04/moradores-de-oito-cidades-do-parana-podem-sacar-fgts.ghtml",
+          "publicadoEm": "2026-11-04T19:57:07.000Z"
+         },
+         {
+          "titulo": "Governo do Paraná anuncia R$ 175 milhões em crédito para empresas afetadas por temporais no Estado",
+          "url": "https://cbncuritiba.com.br/materias/governo-do-parana-anuncia-r-175-milhoes-em-credito-para-empresas-afetadas-por-temporais-no-estado/",
+          "publicadoEm": "2026-11-04T20:17:35.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "mundo",
+      "noticias": [
+       {
+        "titulo": "Democratas conquistam Câmara e Senado nos EUA",
+        "oQueAconteceu": "Nas eleições de meio de mandato, os democratas conquistaram a maioria na Câmara e no Senado dos Estados Unidos, com vitórias até em redutos republicanos. O resultado limita o poder do presidente Donald Trump no Congresso. O presidente da Câmara, Mike Johnson, anunciou que vai deixar o cargo.",
+        "porQueImporta": "Um Congresso de oposição pode travar projetos de Trump e mudar a política americana, que afeta dólar, comércio e o Brasil.",
+        "lados": [],
+        "continuaDeOntem": "Saiu o balanço de maioria nas duas Casas e Mike Johnson confirmou que deixará a presidência da Câmara.",
+        "fontes": [
+         {
+          "titulo": "Eleições nos EUA: democratas conquistam maioria no Senado e na Câmara; SIGA",
+          "url": "https://g1.globo.com/mundo/ao-vivo/eleicoes-nos-eua-2026-acompanhe-as-ultimas-noticias-sobre-as-midterms.ghtml",
+          "publicadoEm": "2026-11-04T20:10:05.000Z"
+         },
+         {
+          "titulo": "Democratas conquistam Congresso em esmagadora rejeição a Trump",
+          "url": "https://agenciabrasil.ebc.com.br/internacional/noticia/2026-11/democratas-conquistam-congresso-em-esmagadora-rejeicao-trump",
+          "publicadoEm": "2026-11-04T11:08:00.000Z"
+         },
+         {
+          "titulo": "Tsunami azul: o tamanho da vitória histórica dos democratas nas midterms dos EUA",
+          "url": "https://g1.globo.com/mundo/noticia/2026/11/05/tsunami-azul-o-tamanho-da-vitoria-historica-dos-democratas-nas-midterms-dos-eua.ghtml",
+          "publicadoEm": "2026-11-05T03:00:01.000Z"
+         },
+         {
+          "titulo": "Presidente da Câmara dos EUA decide renunciar após derrota republicana",
+          "url": "https://g1.globo.com/mundo/noticia/2026/11/04/presidente-da-camara-dos-representantes-decide-renunciar-apos-derrota-republicana.ghtml",
+          "publicadoEm": "2026-11-04T22:38:56.000Z"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "curiosidade": {
+     "titulo": "Cadeado de naufrágio de 400 anos é aberto com escaneamento",
+     "oQueAconteceu": "Especialistas decifraram um código de quatro letras e abriram um cadeado de latão achado na areia perto de Port Talbot, no País de Gales. A peça faz parte de tesouros de um navio que naufragou em 1583. Eles usaram tecnologia moderna de escaneamento.",
+     "porQueImporta": "A descoberta mostra como a tecnologia ajuda a resolver mistérios históricos sem danificar objetos antigos.",
+     "lados": [],
+     "continuaDeOntem": null,
+     "fontes": [
+      {
+       "titulo": "Descoberta de segredo de cadeado encontrado em naufrágio desvenda mistério de 400 anos",
+       "url": "https://www1.folha.uol.com.br/ciencia/2026/11/descoberta-de-segredo-de-cadeado-encontrado-em-naufragio-desvenda-misterio-de-400-anos.shtml",
+       "publicadoEm": "2026-11-04T16:00:00.000Z"
+      },
+      {
+       "titulo": "Descoberta de segredo de cadeado encontrado em naufrágio desvenda mistério de 400 anos",
+       "url": "https://www.bbc.com/portuguese/articles/cm5ynje4n4e0o?at_medium=RSS&at_campaign=rss",
+       "publicadoEm": "2026-11-04T14:09:03.000Z"
+      }
+     ]
+    },
+    "custo": {
+     "usd": 0.21554,
+     "buscas": 3
+    }
+   },
+   "avisos": [
+    "Pontuação parcial: o GDELT não respondeu e a história do dia foi escolhida só com o RSS.",
+    "4 item(ns) descartado(s) na verificação de fontes."
+   ],
+   "versao": 1
+  },
   {
    "data": "2026-11-04",
    "execucaoId": "bbbeb92c-6a2b-4abd-b743-6a44e46811a1",
