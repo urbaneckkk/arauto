@@ -1,0 +1,1610 @@
+{
+ "execucoes": [
+  {
+   "id": "bbbeb92c-6a2b-4abd-b743-6a44e46811a1",
+   "data": "2026-11-04",
+   "tipo": "diaria",
+   "status": "ok",
+   "criadaEm": "2026-11-05T02:30:34.688Z",
+   "passos": [
+    {
+     "passo": "coleta",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:30:34.691Z",
+     "terminadoEm": "2026-11-05T02:30:38.925Z",
+     "resumoEntrada": "feeds, previsão do tempo e alertas do INMET",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "termometro",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:30:38.931Z",
+     "terminadoEm": "2026-11-05T02:33:00.442Z",
+     "resumoEntrada": "718 manchetes",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 36534,
+       "tokensSaida": 26524,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.016915
+      }
+     ]
+    },
+    {
+     "passo": "apuracao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:33:00.445Z",
+     "terminadoEm": "2026-11-05T02:33:14.915Z",
+     "resumoEntrada": "história do dia, até 3 buscas",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 22427,
+       "tokensSaida": 567,
+       "tokensCacheLeitura": 0,
+       "buscas": 3,
+       "usd": 0.080524
+      }
+     ]
+    },
+    {
+     "passo": "redacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:33:14.930Z",
+     "terminadoEm": "2026-11-05T02:33:49.451Z",
+     "resumoEntrada": "material do dia",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 31527,
+       "tokensSaida": 5332,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.116374
+      }
+     ]
+    },
+    {
+     "passo": "verificacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:33:49.456Z",
+     "terminadoEm": "2026-11-05T02:33:52.522Z",
+     "resumoEntrada": "6 seções",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "tema",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:33:52.532Z",
+     "terminadoEm": "2026-11-05T02:33:54.324Z",
+     "resumoEntrada": "Banco Central mantém a Selic em 13,75% e interrompe cortes de juros",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 2843,
+       "tokensSaida": 247,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.000408
+      }
+     ]
+    },
+    {
+     "passo": "publicacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:33:54.338Z",
+     "terminadoEm": "2026-11-05T02:33:54.338Z",
+     "resumoEntrada": "briefing validado pelo contrato",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    }
+   ]
+  },
+  {
+   "id": "79c12fe1-f74d-4e6d-ae9d-6f68ae6ad835",
+   "data": "2026-11-04",
+   "tipo": "diaria",
+   "status": "ok",
+   "criadaEm": "2026-11-05T02:27:37.030Z",
+   "passos": [
+    {
+     "passo": "coleta",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:27:37.033Z",
+     "terminadoEm": "2026-11-05T02:27:39.992Z",
+     "resumoEntrada": "feeds, previsão do tempo e alertas do INMET",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "termometro",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:27:39.994Z",
+     "terminadoEm": "2026-11-05T02:29:08.607Z",
+     "resumoEntrada": "719 manchetes",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 36548,
+       "tokensSaida": 15272,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.011291
+      }
+     ]
+    },
+    {
+     "passo": "apuracao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:29:08.612Z",
+     "terminadoEm": "2026-11-05T02:29:37.495Z",
+     "resumoEntrada": "história do dia, até 8 buscas",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 40117,
+       "tokensSaida": 1271,
+       "tokensCacheLeitura": 0,
+       "buscas": 8,
+       "usd": 0.172944
+      }
+     ]
+    },
+    {
+     "passo": "redacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:29:37.513Z",
+     "terminadoEm": "2026-11-05T02:30:12.155Z",
+     "resumoEntrada": "material do dia",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 38436,
+       "tokensSaida": 4841,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.125282
+      }
+     ]
+    },
+    {
+     "passo": "verificacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:30:12.158Z",
+     "terminadoEm": "2026-11-05T02:30:14.026Z",
+     "resumoEntrada": "5 seções",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "tema",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:30:14.033Z",
+     "terminadoEm": "2026-11-05T02:30:15.560Z",
+     "resumoEntrada": "Tornados e temporais atingem Santa Catarina e Rio Grande do Sul",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 2870,
+       "tokensSaida": 229,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.000402
+      }
+     ]
+    },
+    {
+     "passo": "publicacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:30:15.583Z",
+     "terminadoEm": "2026-11-05T02:30:15.583Z",
+     "resumoEntrada": "briefing validado pelo contrato",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    }
+   ]
+  },
+  {
+   "id": "f1ab5f41-70d9-4470-923a-3dcb9098dec0",
+   "data": "2026-11-04",
+   "tipo": "diaria",
+   "status": "ok",
+   "criadaEm": "2026-11-05T02:23:13.954Z",
+   "passos": [
+    {
+     "passo": "coleta",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:23:13.956Z",
+     "terminadoEm": "2026-11-05T02:23:17.642Z",
+     "resumoEntrada": "feeds, previsão do tempo e alertas do INMET",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "termometro",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:23:17.645Z",
+     "terminadoEm": "2026-11-05T02:24:57.154Z",
+     "resumoEntrada": "719 manchetes",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 36545,
+       "tokensSaida": 19067,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.013188
+      }
+     ]
+    },
+    {
+     "passo": "apuracao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:24:57.157Z",
+     "terminadoEm": "2026-11-05T02:25:17.606Z",
+     "resumoEntrada": "história do dia, até 8 buscas",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 41476,
+       "tokensSaida": 2085,
+       "tokensCacheLeitura": 0,
+       "buscas": 4,
+       "usd": 0.143802
+      }
+     ]
+    },
+    {
+     "passo": "redacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:25:17.620Z",
+     "terminadoEm": "2026-11-05T02:25:59.292Z",
+     "resumoEntrada": "material do dia",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 35634,
+       "tokensSaida": 6278,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.134048
+      }
+     ]
+    },
+    {
+     "passo": "verificacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:25:59.296Z",
+     "terminadoEm": "2026-11-05T02:26:01.432Z",
+     "resumoEntrada": "7 seções",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "tema",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:26:01.440Z",
+     "terminadoEm": "2026-11-05T02:26:03.817Z",
+     "resumoEntrada": "Tornados atingem o oeste de Santa Catarina e temporais afetam o Sul",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 2874,
+       "tokensSaida": 234,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.000404
+      }
+     ]
+    },
+    {
+     "passo": "publicacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:26:03.831Z",
+     "terminadoEm": "2026-11-05T02:26:03.831Z",
+     "resumoEntrada": "briefing validado pelo contrato",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    }
+   ]
+  },
+  {
+   "id": "134db10f-1f9e-4577-870e-1130798272e6",
+   "data": "2026-11-04",
+   "tipo": "diaria",
+   "status": "ok",
+   "criadaEm": "2026-11-05T02:17:14.711Z",
+   "passos": [
+    {
+     "passo": "coleta",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:17:14.714Z",
+     "terminadoEm": "2026-11-05T02:17:18.319Z",
+     "resumoEntrada": "feeds, previsão do tempo e alertas do INMET",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "termometro",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:17:18.323Z",
+     "terminadoEm": "2026-11-05T02:18:58.655Z",
+     "resumoEntrada": "719 manchetes",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 37222,
+       "tokensSaida": 16079,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.011762
+      }
+     ]
+    },
+    {
+     "passo": "apuracao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:18:58.657Z",
+     "terminadoEm": "2026-11-05T02:19:22.065Z",
+     "resumoEntrada": "história do dia, até 8 buscas",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 61607,
+       "tokensSaida": 2008,
+       "tokensCacheLeitura": 0,
+       "buscas": 3,
+       "usd": 0.173294
+      }
+     ]
+    },
+    {
+     "passo": "redacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:19:22.080Z",
+     "terminadoEm": "2026-11-05T02:20:07.588Z",
+     "resumoEntrada": "material do dia",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 40610,
+       "tokensSaida": 7050,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.15172
+      }
+     ]
+    },
+    {
+     "passo": "verificacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:20:07.591Z",
+     "terminadoEm": "2026-11-05T02:20:11.412Z",
+     "resumoEntrada": "7 seções",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "tema",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:20:11.421Z",
+     "terminadoEm": "2026-11-05T02:20:13.002Z",
+     "resumoEntrada": "Banco Central mantém Selic em 13,75% e interrompe cortes",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 2850,
+       "tokensSaida": 232,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.000401
+      }
+     ]
+    },
+    {
+     "passo": "publicacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:20:13.014Z",
+     "terminadoEm": "2026-11-05T02:20:13.014Z",
+     "resumoEntrada": "briefing validado pelo contrato",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    }
+   ]
+  },
+  {
+   "id": "f8b4852c-2806-42c2-ad55-69bb731459a7",
+   "data": "2026-11-04",
+   "tipo": "diaria",
+   "status": "ok",
+   "criadaEm": "2026-11-05T02:02:38.544Z",
+   "passos": [
+    {
+     "passo": "coleta",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:02:38.546Z",
+     "terminadoEm": "2026-11-05T02:02:41.423Z",
+     "resumoEntrada": "feeds, previsão do tempo e alertas do INMET",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "termometro",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:02:41.425Z",
+     "terminadoEm": "2026-11-05T02:03:08.272Z",
+     "resumoEntrada": "720 manchetes",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 37215,
+       "tokensSaida": 3096,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.00527
+      }
+     ]
+    },
+    {
+     "passo": "apuracao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:03:08.274Z",
+     "terminadoEm": "2026-11-05T02:03:36.121Z",
+     "resumoEntrada": "história do dia, até 8 buscas",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 39386,
+       "tokensSaida": 1113,
+       "tokensCacheLeitura": 0,
+       "buscas": 8,
+       "usd": 0.169902
+      }
+     ]
+    },
+    {
+     "passo": "redacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:03:36.127Z",
+     "terminadoEm": "2026-11-05T02:03:55.850Z",
+     "resumoEntrada": "material do dia",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 8360,
+       "tokensSaida": 2435,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.04107
+      }
+     ]
+    },
+    {
+     "passo": "verificacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:03:55.851Z",
+     "terminadoEm": "2026-11-05T02:03:56.593Z",
+     "resumoEntrada": "3 seções",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "tema",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:03:56.599Z",
+     "terminadoEm": "2026-11-05T02:03:58.751Z",
+     "resumoEntrada": "Senado aprova a PEC da Segurança Pública",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 2862,
+       "tokensSaida": 228,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.0004
+      }
+     ]
+    },
+    {
+     "passo": "publicacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:03:58.759Z",
+     "terminadoEm": "2026-11-05T02:03:58.759Z",
+     "resumoEntrada": "briefing validado pelo contrato",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    }
+   ]
+  },
+  {
+   "id": "8c4e35b6-0eeb-4be7-af7e-e26198c49db5",
+   "data": "2026-11-04",
+   "tipo": "diaria",
+   "status": "ok",
+   "criadaEm": "2026-11-05T01:58:21.118Z",
+   "passos": [
+    {
+     "passo": "coleta",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T01:58:21.120Z",
+     "terminadoEm": "2026-11-05T01:58:25.010Z",
+     "resumoEntrada": "feeds, previsão do tempo e alertas do INMET",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "termometro",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T01:58:25.011Z",
+     "terminadoEm": "2026-11-05T01:59:32.808Z",
+     "resumoEntrada": "721 manchetes",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 37243,
+       "tokensSaida": 9917,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.008683
+      }
+     ]
+    },
+    {
+     "passo": "apuracao",
+     "status": "falha",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T01:59:32.810Z",
+     "terminadoEm": "2026-11-05T01:59:33.147Z",
+     "resumoEntrada": "história do dia, até 8 buscas",
+     "saida": null,
+     "erro": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The following domains are not accessible to our user agent: ['apnews.com', 'bbc.co.uk', 'bbc.com', 'estadao.com.br', 'reuters.com']. Read more: https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler\"},\"request_id\":\"req_011CgixJwbGTDY6AJAqdDBjj\"}",
+     "usos": []
+    },
+    {
+     "passo": "apuracao",
+     "status": "falha",
+     "tentativa": 2,
+     "iniciadoEm": "2026-11-05T01:59:35.158Z",
+     "terminadoEm": "2026-11-05T01:59:35.429Z",
+     "resumoEntrada": "história do dia, até 8 buscas",
+     "saida": null,
+     "erro": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The following domains are not accessible to our user agent: ['apnews.com', 'bbc.co.uk', 'bbc.com', 'estadao.com.br', 'reuters.com']. Read more: https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler\"},\"request_id\":\"req_011CgixK7KR4KppmdkJqbewt\"}",
+     "usos": []
+    },
+    {
+     "passo": "apuracao",
+     "status": "falha",
+     "tentativa": 3,
+     "iniciadoEm": "2026-11-05T01:59:39.438Z",
+     "terminadoEm": "2026-11-05T01:59:39.722Z",
+     "resumoEntrada": "história do dia, até 8 buscas",
+     "saida": null,
+     "erro": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The following domains are not accessible to our user agent: ['apnews.com', 'bbc.co.uk', 'bbc.com', 'estadao.com.br', 'reuters.com']. Read more: https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler\"},\"request_id\":\"req_011CgixKRgiJhRpvTdPygXyw\"}",
+     "usos": []
+    },
+    {
+     "passo": "redacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T01:59:39.750Z",
+     "terminadoEm": "2026-11-05T02:00:07.133Z",
+     "resumoEntrada": "material do dia",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-sonnet-5-5",
+       "tokensEntrada": 21499,
+       "tokensSaida": 4051,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.083508
+      }
+     ]
+    },
+    {
+     "passo": "verificacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:00:07.135Z",
+     "terminadoEm": "2026-11-05T02:00:09.947Z",
+     "resumoEntrada": "4 seções",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    },
+    {
+     "passo": "tema",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:00:09.957Z",
+     "terminadoEm": "2026-11-05T02:00:11.862Z",
+     "resumoEntrada": "Temporais e tornados atingem Santa Catarina, Rio Grande do Sul e Paraná",
+     "saida": null,
+     "erro": null,
+     "usos": [
+      {
+       "modelo": "claude-haiku-5-5",
+       "tokensEntrada": 2893,
+       "tokensSaida": 226,
+       "tokensCacheLeitura": 0,
+       "buscas": 0,
+       "usd": 0.000402
+      }
+     ]
+    },
+    {
+     "passo": "publicacao",
+     "status": "ok",
+     "tentativa": 1,
+     "iniciadoEm": "2026-11-05T02:00:11.869Z",
+     "terminadoEm": "2026-11-05T02:00:11.869Z",
+     "resumoEntrada": "briefing validado pelo contrato",
+     "saida": null,
+     "erro": null,
+     "usos": []
+    }
+   ]
+  }
+ ],
+ "usos": [
+  {
+   "execucaoId": "8c4e35b6-0eeb-4be7-af7e-e26198c49db5",
+   "passo": "termometro",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 37243,
+    "tokensSaida": 9917,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.008683
+   },
+   "quando": "2026-11-05T01:59:06.749Z"
+  },
+  {
+   "execucaoId": "8c4e35b6-0eeb-4be7-af7e-e26198c49db5",
+   "passo": "redacao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 21499,
+    "tokensSaida": 4051,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.083508
+   },
+   "quando": "2026-11-05T02:00:07.128Z"
+  },
+  {
+   "execucaoId": "8c4e35b6-0eeb-4be7-af7e-e26198c49db5",
+   "passo": "tema",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 2893,
+    "tokensSaida": 226,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.000402
+   },
+   "quando": "2026-11-05T02:00:11.855Z"
+  },
+  {
+   "execucaoId": "f8b4852c-2806-42c2-ad55-69bb731459a7",
+   "passo": "termometro",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 37215,
+    "tokensSaida": 3096,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.00527
+   },
+   "quando": "2026-11-05T02:02:57.621Z"
+  },
+  {
+   "execucaoId": "f8b4852c-2806-42c2-ad55-69bb731459a7",
+   "passo": "apuracao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 39386,
+    "tokensSaida": 1113,
+    "tokensCacheLeitura": 0,
+    "buscas": 8,
+    "usd": 0.169902
+   },
+   "quando": "2026-11-05T02:03:36.118Z"
+  },
+  {
+   "execucaoId": "f8b4852c-2806-42c2-ad55-69bb731459a7",
+   "passo": "redacao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 8360,
+    "tokensSaida": 2435,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.04107
+   },
+   "quando": "2026-11-05T02:03:55.847Z"
+  },
+  {
+   "execucaoId": "f8b4852c-2806-42c2-ad55-69bb731459a7",
+   "passo": "tema",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 2862,
+    "tokensSaida": 228,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.0004
+   },
+   "quando": "2026-11-05T02:03:58.748Z"
+  },
+  {
+   "execucaoId": "134db10f-1f9e-4577-870e-1130798272e6",
+   "passo": "termometro",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 37222,
+    "tokensSaida": 16079,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.011762
+   },
+   "quando": "2026-11-05T02:18:26.714Z"
+  },
+  {
+   "execucaoId": "134db10f-1f9e-4577-870e-1130798272e6",
+   "passo": "apuracao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 61607,
+    "tokensSaida": 2008,
+    "tokensCacheLeitura": 0,
+    "buscas": 3,
+    "usd": 0.173294
+   },
+   "quando": "2026-11-05T02:19:22.063Z"
+  },
+  {
+   "execucaoId": "134db10f-1f9e-4577-870e-1130798272e6",
+   "passo": "redacao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 40610,
+    "tokensSaida": 7050,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.15172
+   },
+   "quando": "2026-11-05T02:20:07.582Z"
+  },
+  {
+   "execucaoId": "134db10f-1f9e-4577-870e-1130798272e6",
+   "passo": "tema",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 2850,
+    "tokensSaida": 232,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.000401
+   },
+   "quando": "2026-11-05T02:20:12.995Z"
+  },
+  {
+   "execucaoId": "f1ab5f41-70d9-4470-923a-3dcb9098dec0",
+   "passo": "termometro",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 36545,
+    "tokensSaida": 19067,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.013188
+   },
+   "quando": "2026-11-05T02:24:29.640Z"
+  },
+  {
+   "execucaoId": "f1ab5f41-70d9-4470-923a-3dcb9098dec0",
+   "passo": "apuracao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 41476,
+    "tokensSaida": 2085,
+    "tokensCacheLeitura": 0,
+    "buscas": 4,
+    "usd": 0.143802
+   },
+   "quando": "2026-11-05T02:25:17.600Z"
+  },
+  {
+   "execucaoId": "f1ab5f41-70d9-4470-923a-3dcb9098dec0",
+   "passo": "redacao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 35634,
+    "tokensSaida": 6278,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.134048
+   },
+   "quando": "2026-11-05T02:25:59.286Z"
+  },
+  {
+   "execucaoId": "f1ab5f41-70d9-4470-923a-3dcb9098dec0",
+   "passo": "tema",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 2874,
+    "tokensSaida": 234,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.000404
+   },
+   "quando": "2026-11-05T02:26:03.812Z"
+  },
+  {
+   "execucaoId": "79c12fe1-f74d-4e6d-ae9d-6f68ae6ad835",
+   "passo": "termometro",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 36548,
+    "tokensSaida": 15272,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.011291
+   },
+   "quando": "2026-11-05T02:28:41.439Z"
+  },
+  {
+   "execucaoId": "79c12fe1-f74d-4e6d-ae9d-6f68ae6ad835",
+   "passo": "apuracao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 40117,
+    "tokensSaida": 1271,
+    "tokensCacheLeitura": 0,
+    "buscas": 8,
+    "usd": 0.172944
+   },
+   "quando": "2026-11-05T02:29:37.490Z"
+  },
+  {
+   "execucaoId": "79c12fe1-f74d-4e6d-ae9d-6f68ae6ad835",
+   "passo": "redacao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 38436,
+    "tokensSaida": 4841,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.125282
+   },
+   "quando": "2026-11-05T02:30:12.150Z"
+  },
+  {
+   "execucaoId": "79c12fe1-f74d-4e6d-ae9d-6f68ae6ad835",
+   "passo": "tema",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 2870,
+    "tokensSaida": 229,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.000402
+   },
+   "quando": "2026-11-05T02:30:15.555Z"
+  },
+  {
+   "execucaoId": "bbbeb92c-6a2b-4abd-b743-6a44e46811a1",
+   "passo": "termometro",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 36534,
+    "tokensSaida": 26524,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.016915
+   },
+   "quando": "2026-11-05T02:32:29.211Z"
+  },
+  {
+   "execucaoId": "bbbeb92c-6a2b-4abd-b743-6a44e46811a1",
+   "passo": "apuracao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 22427,
+    "tokensSaida": 567,
+    "tokensCacheLeitura": 0,
+    "buscas": 3,
+    "usd": 0.080524
+   },
+   "quando": "2026-11-05T02:33:14.910Z"
+  },
+  {
+   "execucaoId": "bbbeb92c-6a2b-4abd-b743-6a44e46811a1",
+   "passo": "redacao",
+   "uso": {
+    "modelo": "claude-sonnet-5-5",
+    "tokensEntrada": 31527,
+    "tokensSaida": 5332,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.116374
+   },
+   "quando": "2026-11-05T02:33:49.445Z"
+  },
+  {
+   "execucaoId": "bbbeb92c-6a2b-4abd-b743-6a44e46811a1",
+   "passo": "tema",
+   "uso": {
+    "modelo": "claude-haiku-5-5",
+    "tokensEntrada": 2843,
+    "tokensSaida": 247,
+    "tokensCacheLeitura": 0,
+    "buscas": 0,
+    "usd": 0.000408
+   },
+   "quando": "2026-11-05T02:33:54.319Z"
+  }
+ ],
+ "briefings": [
+  {
+   "data": "2026-11-04",
+   "execucaoId": "bbbeb92c-6a2b-4abd-b743-6a44e46811a1",
+   "tipo": "diaria",
+   "criadoEm": "2026-11-05T02:33:54.334Z",
+   "briefing": {
+    "data": "2026-11-04",
+    "historiaDoDia": {
+     "titulo": "Banco Central mantém a Selic em 13,75% e interrompe cortes de juros",
+     "resumo": "O Copom manteve a taxa básica de juros em 13,75% ao ano, após cinco cortes seguidos. Foi a primeira decisão desde a reeleição de Lula e gerou críticas do setor produtivo e de políticos governistas.",
+     "veiculos": 6,
+     "paises": 1,
+     "pontuacao": 0.787,
+     "pontuacaoParcial": true
+    },
+    "tema": {
+     "id": "politica",
+     "intensidade": 2,
+     "confianca": 0.8,
+     "motivo": "Decisão de política monetária com reação política e do setor produtivo, sem mortes, conflito ou elemento de mercado em queda ou alta forte.",
+     "notificacao": {
+      "titulo": "Selic mantida em 13,75%",
+      "corpo": "Copom mantém a taxa básica após cinco cortes seguidos. Setor produtivo e governistas criticam a decisão."
+     }
+    },
+    "emTrintaSegundos": [
+     "Curitiba tem alerta de tempestade, com chuva forte, vento e granizo, e o Paraná segue em alerta para tornados.",
+     "O Banco Central parou de cortar juros e manteve a Selic em 13,75% ao ano.",
+     "Governo publicou a MP do Imposto Seletivo, e indústria e comércio foram ao STF contra o fim da escala 6x1."
+    ],
+    "tempo": {
+     "minC": 17.8,
+     "maxC": 26.1,
+     "chuvaPct": 85,
+     "resumo": "Dia instável em Curitiba, com tempestade, trovoadas e chance alta de chuva. O INMET mantém alerta laranja para hoje, com risco de vento forte, granizo e queda de energia, e o aviso amarelo continua amanhã.",
+     "alertas": [
+      {
+       "fonte": "inmet",
+       "tipo": "Tempestade",
+       "nivel": "amarelo",
+       "inicio": "2026-11-04T09:00:00-03:00",
+       "fim": "2026-11-04T23:59:00-03:00",
+       "url": "https://apiprevmet3.inmet.gov.br/avisos/rss/28614"
+      },
+      {
+       "fonte": "inmet",
+       "tipo": "Tempestade",
+       "nivel": "laranja",
+       "inicio": "2026-11-04T00:00:00-03:00",
+       "fim": "2026-11-04T23:59:00-03:00",
+       "url": "https://apiprevmet3.inmet.gov.br/avisos/rss/28611"
+      },
+      {
+       "fonte": "inmet",
+       "tipo": "Tempestade",
+       "nivel": "amarelo",
+       "inicio": "2026-11-05T00:01:00-03:00",
+       "fim": "2026-11-05T23:59:00-03:00",
+       "url": "https://apiprevmet3.inmet.gov.br/avisos/rss/28616"
+      }
+     ]
+    },
+    "secoes": [
+     {
+      "id": "economia",
+      "noticias": [
+       {
+        "titulo": "Banco Central mantém a Selic em 13,75% ao ano",
+        "oQueAconteceu": "O Copom, comitê do Banco Central que define a taxa básica de juros (a Selic), manteve a taxa em 13,75% ao ano. Depois de cinco cortes seguidos, o ciclo foi interrompido. Foi a primeira decisão após a reeleição de Lula, e o mercado esperava outro desfecho.",
+        "porQueImporta": "Juros altos por mais tempo mantêm caros o financiamento, o cartão e o crédito para empresas, e adiam o alívio no orçamento das famílias.",
+        "lados": [
+         {
+          "quem": "Setor produtivo (CNI e entidades do comércio)",
+          "posicao": "Segundo as entidades, a decisão prejudica a atividade econômica, o crédito e os investimentos."
+         },
+         {
+          "quem": "Lindbergh Farias (PT-RJ)",
+          "posicao": "Chamou a decisão de vergonha e disse que ela só veio porque Lula foi reeleito."
+         },
+         {
+          "quem": "Analistas citados pela Folha e pelo Estadão",
+          "posicao": "Dizem que o futuro dos juros depende do governo, e que o BC resistiu a pressões diante da piora do cenário para a inflação."
+         }
+        ],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Após cinco cortes seguidos, Banco Central mantém taxa de juros em 13,75% ao ano",
+          "url": "https://g1.globo.com/jornal-nacional/noticia/2026/11/04/apos-cinco-cortes-seguidos-banco-central-mantem-taxa-de-juros-em-1375percent-ao-ano.ghtml",
+          "publicadoEm": "2026-11-05T00:17:27.000Z"
+         },
+         {
+          "titulo": "Futuro da Selic depende do governo Lula após Copom manter taxa em 13,75%, dizem analistas",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/11/futuro-da-selic-depende-do-governo-lula-apos-copom-manter-taxa-em-1375-dizem-analistas.shtml",
+          "publicadoEm": "2026-11-05T02:00:00.000Z"
+         },
+         {
+          "titulo": "Banco Central não se dobra a pressões políticas e mantém juros com piora do cenário para a inflação",
+          "url": "https://www.estadao.com.br/economia/alvaro-gribel/banco-central-nao-se-dobra-a-pressoes-politicas-e-mantem-juros-com-piora-do-cenario-para-a-inflacao/",
+          "publicadoEm": "2026-11-04T23:00:00.000Z"
+         },
+         {
+          "titulo": "Setor produtivo critica manutenção da Selic em 13,75% ao ano",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/setor-produtivo-critica-manutencao-da-selic-em-1375-ao-ano",
+          "publicadoEm": "2026-11-04T22:34:00.000Z"
+         },
+         {
+          "titulo": "Copom surpreende mercado e mantém Selic em 13,75% ao ano",
+          "url": "https://agenciabrasil.ebc.com.br/radioagencia-nacional/economia/audio/2026-11/copom-surpreende-mercado-e-mantem-selic-em-1375-ao-ano",
+          "publicadoEm": "2026-11-05T02:33:00.445Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Governo publica MP do Imposto Seletivo, o 'imposto do pecado'",
+        "oQueAconteceu": "O governo federal publicou a medida provisória que define as regras e as alíquotas do Imposto Seletivo, criado pela reforma tributária para desestimular produtos nocivos à saúde e ao meio ambiente. A cobrança começa em 2 de fevereiro de 2027, com regime de transição que mantém a carga atual do IPI.",
+        "porQueImporta": "O imposto pode encarecer produtos considerados nocivos a partir de 2028, quando a ideia é que a taxação aumente, e isso chegaria ao preço nas prateleiras.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Governo edita MP do Imposto Seletivo com previsão de transição até 2028",
+          "url": "https://valor.globo.com/brasil/noticia/2026/11/04/governo-edita-mp-do-imposto-seletivo-com-previso-de-transio-at-2028.ghtml",
+          "publicadoEm": "2026-11-05T02:15:23.000Z"
+         },
+         {
+          "titulo": "Governo edita medida provisória que define alíquotas do 'imposto do pecado'",
+          "url": "https://g1.globo.com/economia/noticia/2026/11/04/governo-edita-medida-provisoria-que-define-aliquotas-do-imposto-do-pecado.ghtml",
+          "publicadoEm": "2026-11-05T01:16:39.000Z"
+         },
+         {
+          "titulo": "Governo define alíquotas do 'imposto do pecado' para 2027 e propõe manutenção do IPI em janeiro",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/11/governo-define-aliquotas-do-imposto-do-pecado-para-2027-e-propoe-manutencao-do-ipi-em-janeiro.shtml",
+          "publicadoEm": "2026-11-05T02:03:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Brasil cria 121,3 mil empregos formais em setembro",
+        "oQueAconteceu": "O Caged, cadastro do Ministério do Trabalho, mostrou saldo de 121,3 mil vagas com carteira assinada em setembro, resultado das 2,21 milhões de contratações menos 2,09 milhões de demissões. Foi o pior setembro da série iniciada em 2020, com queda de cerca de 43% sobre setembro de 2025.",
+        "porQueImporta": "O ritmo mais fraco de contratações sinaliza um mercado de trabalho menos aquecido, o que pesa para quem procura emprego ou negocia salário.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Brasil cria 121 mil empregos formais em setembro, pior resultado para o mês desde 2020",
+          "url": "https://g1.globo.com/economia/noticia/2026/11/04/brasil-cria-1213-mil-empregos-formais-em-setembro-queda-de-43percent-na-comparacao-com-mesmo-mes-de-2025.ghtml",
+          "publicadoEm": "2026-11-04T17:30:01.000Z"
+         },
+         {
+          "titulo": "Brasil registra pior setembro na criação de empregos formais desde o início da série histórica, diz Caged",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/11/brasil-registra-pior-setembro-na-criacao-de-empregos-formais-desde-o-inicio-da-serie-historica-diz-caged.shtml",
+          "publicadoEm": "2026-11-04T18:01:00.000Z"
+         },
+         {
+          "titulo": "Brasil cria 121,3 mil postos de trabalho em setembro, aponta Caged",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/brasil-cria-1213-mil-postos-de-trabalho-em-setembro-aponta-caged",
+          "publicadoEm": "2026-11-04T19:33:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "GPA e Dexco registram prejuízo no terceiro trimestre",
+        "oQueAconteceu": "O GPA, dono do Pão de Açúcar, teve prejuízo líquido de R$ 731 milhões no terceiro trimestre, contra lucro de R$ 134 milhões um ano antes. A Dexco também fechou no vermelho, com prejuízo de R$ 161,9 milhões, ligado ao fechamento de uma fábrica em Pernambuco.",
+        "porQueImporta": "Os resultados mostram empresas conhecidas do consumidor sob pressão e reestruturando operações, o que pode afetar empregos e a oferta de produtos.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "GPA, dono do Pão de Açúcar, registra prejuízo de R$ 731 milhões no terceiro trimestre",
+          "url": "https://valor.globo.com/empresas/noticia/2026/11/04/gpa-dono-do-pao-de-acucar-registra-prejuizo-de-r-731-milhoes-no-terceiro-trimestre.ghtml",
+          "publicadoEm": "2026-11-05T00:04:31.000Z"
+         },
+         {
+          "titulo": "GPA amplia prejuízo no trimestre, mas avança com plano de eficiência",
+          "url": "https://c-level.folha.uol.com.br/negocios/2026/11/gpa-amplia-prejuizo-no-trimestre-mas-avanca-com-plano-de-eficiencia.shtml",
+          "publicadoEm": "2026-11-04T23:01:00.000Z"
+         },
+         {
+          "titulo": "Dexco reverte lucro e tem prejuízo no 3º trimestre, com fechamento de unidade em PE",
+          "url": "https://valor.globo.com/empresas/noticia/2026/11/04/dexco-reverte-lucro-e-tem-prejuizo-no-3o-trimestre-com-fechamento-de-unidade-em-pe.ghtml",
+          "publicadoEm": "2026-11-04T23:03:33.000Z"
+         },
+         {
+          "titulo": "Dexco termina ajustes na operação após fechar cinco fábricas no Brasil",
+          "url": "https://www.estadao.com.br/economia/coluna-da-broad/dexco-termina-ajustes-na-operacao-apos-fechar-cinco-fabricas-no-brasil/",
+          "publicadoEm": "2026-11-05T01:00:00.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "politica",
+      "noticias": [
+       {
+        "titulo": "Indústria e comércio vão ao STF contra o fim da escala 6x1",
+        "oQueAconteceu": "A CNI e a CNC entraram com ação no Supremo para suspender o fim da escala 6x1, previsto na emenda constitucional promulgada em outubro. A CNI alega insegurança jurídica e ofensa à livre iniciativa. O ministro Luiz Marinho disse que o decreto de regulamentação deve sair na segunda-feira.",
+        "porQueImporta": "A decisão do Supremo e o decreto vão definir quando e como muda a jornada de milhões de trabalhadores, com folga maior na semana.",
+        "lados": [
+         {
+          "quem": "CNI e CNC",
+          "posicao": "Pedem suspensão ou mais prazo, alegando insegurança jurídica e falta de tempo para adaptação."
+         },
+         {
+          "quem": "Ministério do Trabalho",
+          "posicao": "Mantém a regulamentação por decreto e conversa com setores como o transporte de cargas."
+         }
+        ],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Entidades da indústria e do comércio recorrem ao STF contra fim da 6x1",
+          "url": "https://agenciabrasil.ebc.com.br/justica/noticia/2026-11/entidades-da-industria-e-do-comercio-recorrem-ao-stf-contra-fim-da-6x1",
+          "publicadoEm": "2026-11-04T23:23:00.000Z"
+         },
+         {
+          "titulo": "Confederação do comércio pede mais prazo para implementar a escala 5x2",
+          "url": "https://g1.globo.com/economia/noticia/2026/11/04/confederacao-do-comercio-pede-mais-prazo-para-implementar-a-escala-5x2.ghtml",
+          "publicadoEm": "2026-11-04T19:55:54.000Z"
+         },
+         {
+          "titulo": "Marinho diz que decreto que regulamenta fim da escala 6x1 deve sair na próxima segunda-feira",
+          "url": "https://www.estadao.com.br/economia/marinho-diz-que-decreto-que-regulamenta-fim-da-escala-6x1-deve-sair-na-proxima-segunda-feira/",
+          "publicadoEm": "2026-11-04T20:53:30.000Z"
+         },
+         {
+          "titulo": "Ministro do Trabalho se reúne com transportadores de cargas após fim da escala 6x1",
+          "url": "https://www1.folha.uol.com.br/colunas/painel/2026/11/ministro-do-trabalho-se-reune-com-transportadores-de-cargas-apos-fim-da-escala-6x1.shtml",
+          "publicadoEm": "2026-11-05T00:01:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Senado retira da pauta a redução da maioridade penal",
+        "oQueAconteceu": "O presidente do Senado, Davi Alcolumbre, tirou da pauta a PEC que reduz a maioridade penal de 18 para 16 anos, atendendo a pedido do presidente da Câmara, Hugo Motta. O tema agora será discutido em comissão especial na Câmara, e Motta disse que não há data para votar.",
+        "porQueImporta": "O assunto, que mexe com a segurança e a legislação sobre adolescentes, só avança depois do trabalho da comissão, sem prazo definido.",
+        "lados": [
+         {
+          "quem": "Defensores da redução",
+          "posicao": "Argumentam que a mudança responde à sensação de insegurança."
+         },
+         {
+          "quem": "Críticos (editorial da Folha)",
+          "posicao": "Dizem que dados oficiais mostram que adolescentes não cometem os crimes mais graves."
+         }
+        ],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Alcolumbre retira maioridade penal da pauta e vai aguardar Câmara",
+          "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-11/alcolumbre-retira-maioridade-penal-da-pauta-e-vai-aguardar-camara",
+          "publicadoEm": "2026-11-04T23:54:00.000Z"
+         },
+         {
+          "titulo": "Motta diz que não há data acordada para votar redução da maioridade penal na Casa",
+          "url": "https://valor.globo.com/politica/noticia/2026/11/04/motta-diz-que-no-h-data-acordada-para-votar-reduo-da-maioridade-penal-na-casa.ghtml",
+          "publicadoEm": "2026-11-04T23:37:28.000Z"
+         },
+         {
+          "titulo": "Por que a redução da maioridade penal não foi votada no Senado",
+          "url": "https://www.estadao.com.br/brasil/por-que-a-reducao-da-maioridade-penal-nao-foi-votada-no-senado/",
+          "publicadoEm": "2026-11-05T00:49:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Lula fará pronunciamento sobre responsabilidade fiscal",
+        "oQueAconteceu": "Segundo assessores, Lula fará pronunciamento na TV no domingo (8) para agradecer os mais de 64 milhões de votos. Ele deve prometer pacificação, manter políticas sociais, evitar estelionato eleitoral e cumprir as metas fiscais, em recado ao mercado após a decisão do Copom.",
+        "porQueImporta": "O compromisso com as contas públicas influencia juros, dólar e preços, que afetam o custo de vida.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Lula deve fazer pronunciamento no domingo, garantir que não haverá estelionato eleitoral e que fará ajuste fiscal",
+          "url": "https://g1.globo.com/politica/blog/valdo-cruz/post/2026/11/04/lula-deve-fazer-pronunciamento-no-domingo-garantir-que-nao-havera-estelionato-eleitoral-e-que-fara-ajuste-fiscal.ghtml",
+          "publicadoEm": "2026-11-04T14:54:05.000Z"
+         },
+         {
+          "titulo": "Na TV, Lula reforçará compromisso com responsabilidade fiscal",
+          "url": "https://valor.globo.com/politica/noticia/2026/11/04/lula-vai-se-comprometer-com-responsabilidade-fiscal-e-manifestar-preocupacao-com-juros-altos-em-pronunciamento.ghtml",
+          "publicadoEm": "2026-11-04T22:43:33.000Z"
+         },
+         {
+          "titulo": "Lula deve defender cuidado com contas públicas e agradecer por votos em 1º pronunciamento na TV após reeleição",
+          "url": "https://www1.folha.uol.com.br/poder/2026/11/lula-deve-defender-cuidado-com-contas-publicas-e-agradecer-por-votos-em-1o-pronunciamento-na-tv-apos-reeleicao.shtml",
+          "publicadoEm": "2026-11-04T20:04:00.000Z"
+         },
+         {
+          "titulo": "Lula fará pronunciamento para tentar acalmar o mercado e demonstrar preocupação com a dívida pública",
+          "url": "https://www.estadao.com.br/economia/lula-fara-pronunciamento-neste-fim-de-semana-para-acalmar-o-mercado/",
+          "publicadoEm": "2026-11-04T18:44:38.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Voto remoto de Flávio Bolsonaro na PEC da Segurança gera pedido de anulação",
+        "oQueAconteceu": "O senador Flávio Bolsonaro (PL-RJ), que está nos EUA desde 28 de outubro, registrou presença e votou remotamente na PEC da Segurança, aprovada por unanimidade. Ele saiu do país contrariando decisão judicial sobre a entrega de passaportes. Randolfe Rodrigues pediu a anulação do voto, e Alcolumbre disse que vai analisar.",
+        "porQueImporta": "A decisão de Alcolumbre define se o voto de um senador fora do país vale, e abre precedente sobre participação remota.",
+        "lados": [
+         {
+          "quem": "Randolfe Rodrigues (PT-AP)",
+          "posicao": "Pede a anulação do voto de Flávio."
+         },
+         {
+          "quem": "Alcolumbre",
+          "posicao": "Disse que analisará a situação."
+         }
+        ],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Nos EUA, Flávio Bolsonaro vota remotamente a favor da PEC da Segurança",
+          "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-11/nos-eua-flavio-bolsonaro-vota-remotamente-favor-da-pec-da-seguranca",
+          "publicadoEm": "2026-11-04T20:29:00.000Z"
+         },
+         {
+          "titulo": "Randolfe Rodrigues pede anulação de voto de Flávio Bolsonaro na PEC da Segurança",
+          "url": "https://valor.globo.com/politica/noticia/2026/11/04/randolfe-rodrigues-pede-anulacao-de-voto-de-flavio-bolsonaro-na-pec-da-seguranca.ghtml",
+          "publicadoEm": "2026-11-04T22:49:15.000Z"
+         },
+         {
+          "titulo": "Alcolumbre diz que analisará situação de Flávio Bolsonaro, que registrou presença e voto dos EUA",
+          "url": "https://www.estadao.com.br/politica/alcolumbre-diz-que-analisara-situacao-de-flavio-bolsonaro-que-registrou-presenca-e-voto-dos-eua/",
+          "publicadoEm": "2026-11-04T23:08:39.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "seguranca_saude",
+      "noticias": [
+       {
+        "titulo": "Tornados e temporais atingem Santa Catarina e Rio Grande do Sul",
+        "oQueAconteceu": "A Defesa Civil de SC confirmou tornados em Chapecó e Xanxerê. Desde domingo, chuva, vento e granizo atingiram 86 municípios catarinenses e 4.441 casas. Treze cidades decretaram emergência, e um trecho da BR-282 foi interditado. No Rio Grande do Sul, mais de 100 municípios tiveram estragos.",
+        "porQueImporta": "O mesmo sistema de tempo ameaça o Paraná, e quem viaja para o Sul deve checar rodovias e alertas antes de sair.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Tornados e temporais atingem Santa Catarina e Rio Grande do Sul",
+          "url": "https://agenciabrasil.ebc.com.br/meio-ambiente/noticia/2026-11/tornados-e-temporais-atingem-santa-catarina-e-rio-grande-do-sul",
+          "publicadoEm": "2026-11-04T22:16:00.000Z"
+         },
+         {
+          "titulo": "No Rio Grande do Sul, temporais causam estragos em mais de 100 municípios",
+          "url": "https://g1.globo.com/jornal-nacional/noticia/2026/11/04/no-rio-grande-do-sul-temporais-causam-estragos-em-mais-de-100-municipios.ghtml",
+          "publicadoEm": "2026-11-05T00:47:44.000Z"
+         },
+         {
+          "titulo": "VÍDEO! Trecho da BR-282 “parte ao meio” após chuva e deixa rodovia totalmente interditada em Santa Catarina",
+          "url": "https://www.bandab.com.br/nacional/video-trecho-da-br-282-parte-ao-meio-apos-chuva-e-deixa-rodovia-totalmente-interditada-em-santa-catarina/",
+          "publicadoEm": "2026-11-04T23:51:20.000Z"
+         },
+         {
+          "titulo": "Avião da Azul é atingido por tornado em aeroporto de SC: ‘Está chacoalhando muito’",
+          "url": "https://www.estadao.com.br/brasil/aviao-azul-atingido-tornado-aeroporto-sc-esta-chacoalhando-muito-npr/",
+          "publicadoEm": "2026-11-05T01:11:42.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "parana",
+      "noticias": [
+       {
+        "titulo": "Paraná segue em alerta para tempestades e tornados",
+        "oQueAconteceu": "O Paraná está sob alerta laranja, e a região sul recebeu alerta vermelho. A Defesa Civil fala no segundo pior cenário do ano, com risco de vento forte, granizo e tornados. Na Grande Curitiba, o Simepar registrou rajadas de 57 km/h e até 30 mm de chuva.",
+        "porQueImporta": "Em Curitiba, vale evitar sair durante temporais, não se abrigar sob árvores e ter atenção a quedas de energia e alagamentos.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Paraná sob alerta vermelho de tempestades: veja orientações sobre como se cuidar durante temporais e telefones de emergência",
+          "url": "https://g1.globo.com/pr/campos-gerais-sul/noticia/2026/11/04/parana-alerta-tempestades-como-se-cuidar-e-telefones-de-emergencia.ghtml",
+          "publicadoEm": "2026-11-04T13:17:48.000Z"
+         },
+         {
+          "titulo": "Defesa Civil aponta segundo pior cenário do ano e coloca PR em alerta máximo para novos tornados",
+          "url": "https://www.gazetadopovo.com.br/parana/defesa-civil-aponta-segundo-pior-cenario-do-ano-e-coloca-pr-em-alerta-maximo-para-novos-tornados/",
+          "publicadoEm": "2026-11-04T12:31:52.000Z"
+         },
+         {
+          "titulo": "Grande Curitiba registra ventos de 57km/h e até 30 milímetros de chuva nesta quarta (04), aponta Simepar",
+          "url": "https://cbncuritiba.com.br/materias/grande-curitiba-registra-ventos-de-57km-h-e-ate-30-milimetros-de-chuva-nesta-quarta-04-aponta-simepar/",
+          "publicadoEm": "2026-11-04T21:44:49.000Z"
+         },
+         {
+          "titulo": "Paraná segue em alerta para a formação de supercélulas que podem provocar tempestades",
+          "url": "https://www.bemparana.com.br/noticias/parana/parana-segue-em-alerta-para-a-formacao-de-supercelulas-que-podem-provocar-tempestades/",
+          "publicadoEm": "2026-11-05T01:00:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Paraná oferece crédito e FGTS a atingidos pelos temporais",
+        "oQueAconteceu": "O governo estadual anunciou R$ 175 milhões em linhas de crédito para empresas afetadas pelos temporais. Moradores de mais oito cidades do Paraná podem sacar o FGTS calamidade, de até R$ 6.220 por conta, pelo aplicativo do FGTS, sem ir à agência.",
+        "porQueImporta": "Quem teve prejuízo com as tempestades tem acesso a dinheiro para reconstruir casa ou negócio, desde que a cidade esteja na lista.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Governo do Paraná anuncia R$ 175 milhões em crédito para empresas afetadas por temporais no Estado",
+          "url": "https://cbncuritiba.com.br/materias/governo-do-parana-anuncia-r-175-milhoes-em-credito-para-empresas-afetadas-por-temporais-no-estado/",
+          "publicadoEm": "2026-11-04T20:17:35.000Z"
+         },
+         {
+          "titulo": "Moradores de oito cidades do Paraná podem sacar até R$ 6,2 mil do FGTS após tempestades; veja quais e como pedir",
+          "url": "https://g1.globo.com/pr/oeste-sudoeste/noticia/2026/11/04/moradores-de-oito-cidades-do-parana-podem-sacar-fgts.ghtml",
+          "publicadoEm": "2026-11-04T19:57:07.000Z"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "mundo",
+      "noticias": [
+       {
+        "titulo": "Democratas vencem as eleições de meio de mandato nos EUA",
+        "oQueAconteceu": "O Partido Democrata conquistou a maioria na Câmara e no Senado nas eleições de meio de mandato, as midterms, em derrota de Donald Trump. O resultado limita o poder do presidente nos últimos dois anos de governo e deu vitórias a candidatos jovens e de minorias, como James Talarico no Texas.",
+        "porQueImporta": "Com o Congresso dividido, a política americana de tarifas e de guerra pode mudar, o que afeta dólar, comércio e exportações brasileiras.",
+        "lados": [
+         {
+          "quem": "Democratas",
+          "posicao": "Celebram o resultado como rejeição às políticas de Trump."
+         },
+         {
+          "quem": "Trump e republicanos",
+          "posicao": "Trocam acusações após a derrota, segundo o Estadão."
+         }
+        ],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Eleições nos EUA: democratas conquistam maioria no Senado e na Câmara; SIGA",
+          "url": "https://g1.globo.com/mundo/ao-vivo/eleicoes-nos-eua-2026-acompanhe-as-ultimas-noticias-sobre-as-midterms.ghtml",
+          "publicadoEm": "2026-11-04T20:10:05.000Z"
+         },
+         {
+          "titulo": "Com maioria no Congresso dos EUA, democratas podem fazer vida de Trump até 2028 um inferno",
+          "url": "https://www1.folha.uol.com.br/mundo/2026/11/com-maioria-no-congresso-dos-eua-democratas-podem-fazer-vida-de-trump-ate-2028-um-inferno.shtml",
+          "publicadoEm": "2026-11-05T02:00:00.000Z"
+         },
+         {
+          "titulo": "Trump e os republicanos começam a trocar acusações após derrota esmagadora nas eleições",
+          "url": "https://www.estadao.com.br/internacional/trump-e-os-republicanos-comecam-a-trocar-acusacoes-apos-derrota-esmagadora-nas-eleicoes/",
+          "publicadoEm": "2026-11-04T19:06:27.000Z"
+         },
+         {
+          "titulo": "Conheça James Talarico, evangélico que derrotou nome de Trump no Texas",
+          "url": "https://agenciabrasil.ebc.com.br/internacional/noticia/2026-11/conheca-james-talarico-evangelico-que-derrotou-nome-de-trump-no-texas",
+          "publicadoEm": "2026-11-04T17:05:00.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Irã diz que americanos votaram 'não à guerra'",
+        "oQueAconteceu": "O principal negociador iraniano, Mohammad Bagher Ghalibaf, afirmou que os americanos votaram contra a guerra. O líder supremo, Mojtaba Khamenei, alertou que o conflito no Oriente Médio pode se ampliar se os EUA retomarem ataques, e descartou mudança na política americana.",
+        "porQueImporta": "Uma escalada no Oriente Médio pressiona petróleo e combustíveis, com reflexo no preço da gasolina e no custo do frete.",
+        "lados": [
+         {
+          "quem": "Irã",
+          "posicao": "Interpreta a derrota republicana como rejeição à guerra."
+         },
+         {
+          "quem": "Trump",
+          "posicao": "Reconheceu que o conflito pesou na derrota, segundo a BBC."
+         }
+        ],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Após derrota de partido de Trump nas eleições, Irã descarta mudança na política americana",
+          "url": "https://g1.globo.com/mundo/noticia/2026/11/04/apos-derrota-de-partido-de-trump-nas-eleicoes-ira-descarta-mudanca-na-politica-americana.ghtml",
+          "publicadoEm": "2026-11-04T17:04:05.000Z"
+         },
+         {
+          "titulo": "Iran's chief negotiator says Americans voted 'no to war'",
+          "url": "https://www.bbc.co.uk/news/articles/c6d934npl9y8o?at_medium=RSS&at_campaign=rss",
+          "publicadoEm": "2026-11-04T16:59:15.000Z"
+         },
+         {
+          "titulo": "Irã diz que os EUA votaram 'não à guerra' após vitória esmagadora dos democratas em eleições para o Congresso",
+          "url": "https://www1.folha.uol.com.br/mundo/2026/11/ira-diz-que-os-eua-votaram-nao-a-guerra-apos-vitoria-esmagadora-dos-democratas-em-eleicoes-para-o-congresso.shtml",
+          "publicadoEm": "2026-11-04T11:32:00.000Z"
+         },
+         {
+          "titulo": "Irã diz que os EUA votaram ‘não à guerra’ após vitória esmagadora dos democratas",
+          "url": "https://www.estadao.com.br/internacional/ira-diz-que-os-eua-votaram-nao-a-guerra-apos-vitoria-esmagadora-dos-democratas-npr/",
+          "publicadoEm": "2026-11-04T15:07:12.000Z"
+         }
+        ]
+       },
+       {
+        "titulo": "Crise do Ueno Bank abala o Paraguai",
+        "oQueAconteceu": "O governo paraguaio interveio no Ueno, banco digital com cerca de 3 milhões de clientes, e congelou recursos. O presidente do Banco Central, Carlos Carvallo, renunciou. Santiago Peña anunciou ressarcimento e indicou novo nome para o cargo, e o BC adiantará dinheiro do fundo de garantia.",
+        "porQueImporta": "Brasileiros que vivem, viajam ou fazem negócios no Paraguai podem sentir efeitos, em um vizinho importante para o comércio no Paraná.",
+        "lados": [],
+        "continuaDeOntem": null,
+        "fontes": [
+         {
+          "titulo": "Presidente do Paraguai anuncia ressarcimento de clientes de banco e indica novo chefe para o BC",
+          "url": "https://g1.globo.com/economia/noticia/2026/11/04/presidente-paraguai-anuncia-medidas-crise-bancaria.ghtml",
+          "publicadoEm": "2026-11-04T17:51:09.000Z"
+         },
+         {
+          "titulo": "Paraguai intervém em um dos maiores bancos do país e congela dinheiro de milhões de pessoas",
+          "url": "https://www.bbc.com/portuguese/articles/cjy56zrrnn25o?at_medium=RSS&at_campaign=rss",
+          "publicadoEm": "2026-11-04T14:49:05.000Z"
+         },
+         {
+          "titulo": "BC do Paraguai diz que adiantará recursos do Fundo de Garantia de Depósitos a clientes do Ueno Bank",
+          "url": "https://www.estadao.com.br/economia/negocios/bc-do-paraguai-diz-que-adiantara-recursos-do-fundo-de-garantia-de-depositos-a-clientes-do-ueno-bank/",
+          "publicadoEm": "2026-11-04T23:53:05.000Z"
+         },
+         {
+          "titulo": "Entenda a intervenção no Ueno Bank e a crise política que ela provoca no Paraguai",
+          "url": "https://c-level.folha.uol.com.br/financas/2026/11/entenda-a-intervencao-no-ueno-bank-e-a-crise-politica-que-ela-provoca-no-paraguai.shtml",
+          "publicadoEm": "2026-11-05T02:00:00.000Z"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "curiosidade": {
+     "titulo": "Cientistas decifram código de cadeado de naufrágio de 1583",
+     "oQueAconteceu": "Especialistas abriram um cadeado de latão de um navio naufragado em 1583, encontrado na areia perto de Port Talbot, no País de Gales. Com tecnologia moderna de escaneamento, decifraram o código de quatro letras e resolveram um mistério de 400 anos.",
+     "porQueImporta": "É um exemplo de como a tecnologia atual revela segredos guardados há séculos sem destruir o objeto.",
+     "lados": [],
+     "continuaDeOntem": null,
+     "fontes": [
+      {
+       "titulo": "Descoberta de segredo de cadeado encontrado em naufrágio desvenda mistério de 400 anos",
+       "url": "https://www1.folha.uol.com.br/ciencia/2026/11/descoberta-de-segredo-de-cadeado-encontrado-em-naufragio-desvenda-misterio-de-400-anos.shtml",
+       "publicadoEm": "2026-11-04T16:00:00.000Z"
+      },
+      {
+       "titulo": "Descoberta de segredo de cadeado encontrado em naufrágio desvenda mistério de 400 anos",
+       "url": "https://www.bbc.com/portuguese/articles/cm5ynje4n4e0o?at_medium=RSS&at_campaign=rss",
+       "publicadoEm": "2026-11-04T14:09:03.000Z"
+      }
+     ]
+    },
+    "custo": {
+     "usd": 0.214221,
+     "buscas": 3
+    }
+   },
+   "avisos": [
+    "Pontuação parcial: o GDELT não respondeu e a história do dia foi escolhida só com o RSS.",
+    "1 item(ns) descartado(s) na verificação de fontes."
+   ],
+   "versao": 6
+  }
+ ]
+}
