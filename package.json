@@ -20,9 +20,6 @@
     "brief:gerar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/gerar.js",
     "brief:ver": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/ver.js",
     "db:migrar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/migrar.js",
-    "servidor": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/servidor.js",
-    "pareamento:gerar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/pareamento.js",
-    "dispositivos": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/dispositivos.js",
     "tema:testar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/tema-testar.js"
   },
   "devDependencies": {

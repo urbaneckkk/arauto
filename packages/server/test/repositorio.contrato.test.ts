@@ -7,15 +7,11 @@ import { RepositorioEmArquivo } from "../src/repo/arquivo.js";
 import { RepositorioEmMemoria } from "../src/repo/memoria.js";
 import { migrar } from "../src/repo/migrar.js";
 import { conectar, RepositorioPostgres } from "../src/repo/postgres.js";
-import {
-  ExecucaoEmAndamento,
-  MAX_TENTATIVAS_DE_CODIGO,
-  type RepositorioDoServico,
-} from "../src/repo/repositorio.js";
+import type { Repositorio } from "../src/repo/repositorio.js";
 import { briefingExemplo } from "./briefing-exemplo.js";
 
 interface Ambiente {
-  repo: RepositorioDoServico;
+  repo: Repositorio;
   limpar(): Promise<void>;
 }
 
@@ -48,7 +44,7 @@ const passo = (nome: "coleta" | "redacao", extras: object = {}) => ({
 function contrato(nome: string, criar: () => Promise<Ambiente>) {
   describe(`repositório: ${nome}`, () => {
     let ambiente: Ambiente;
-    let repo: RepositorioDoServico;
+    let repo: Repositorio;
     beforeEach(async () => {
       ambiente = await criar();
       await ambiente.limpar();
@@ -150,237 +146,6 @@ function contrato(nome: string, criar: () => Promise<Ambiente>) {
     it("sem nenhum briefing, o último é nulo", async () => {
       expect(await repo.ultimoBriefing()).toBeNull();
     });
-
-    // --- Etapa 2: uma execução por vez, limites, histórico e acesso por dispositivo ---
-
-    const executar = async (
-      id: string,
-      criadaEm: string,
-      extras: {
-        tipo?: "diaria" | "atualizacao";
-        status?: "ok" | "falhou" | "rodando";
-        data?: string;
-      } = {},
-    ) => {
-      const data = extras.data ?? criadaEm.slice(0, 10);
-      await repo.criarExecucao({ id, data, tipo: extras.tipo ?? "diaria", criadaEm });
-      if (extras.status !== "rodando") await repo.atualizarStatus(id, extras.status ?? "ok");
-      return id;
-    };
-
-    describe("uma execução paga por vez", () => {
-      it("com uma rodando, a segunda é recusada; ao terminar, outra pode começar", async () => {
-        const primeira = await executar(randomUUID(), "2026-11-05T09:00:00.000Z", {
-          status: "rodando",
-        });
-        await expect(
-          repo.criarExecucao({
-            id: randomUUID(),
-            data: "2026-11-05",
-            tipo: "atualizacao",
-            criadaEm: "2026-11-05T09:05:00.000Z",
-          }),
-        ).rejects.toBeInstanceOf(ExecucaoEmAndamento);
-        expect((await repo.execucaoEmAndamento())?.id).toBe(primeira);
-
-        await repo.atualizarStatus(primeira, "ok");
-        expect(await repo.execucaoEmAndamento()).toBeNull();
-        await executar(randomUUID(), "2026-11-05T09:10:00.000Z", { status: "rodando" });
-      });
-
-      it("execuções simultâneas: só uma entra", async () => {
-        const resultados = await Promise.allSettled(
-          Array.from({ length: 8 }, () =>
-            repo.criarExecucao({
-              id: randomUUID(),
-              data: "2026-11-05",
-              tipo: "atualizacao",
-              criadaEm: "2026-11-05T09:00:00.000Z",
-            }),
-          ),
-        );
-        expect(resultados.filter((r) => r.status === "fulfilled")).toHaveLength(1);
-        for (const r of resultados) {
-          if (r.status === "rejected") expect(r.reason).toBeInstanceOf(ExecucaoEmAndamento);
-        }
-      });
-
-      it("execução órfã (mais de 30 minutos) vira falha e não prende a trava", async () => {
-        const orfa = await executar(randomUUID(), "2026-11-05T09:00:00.000Z", {
-          status: "rodando",
-        });
-        await executar(randomUUID(), "2026-11-05T09:31:00.000Z", { status: "rodando" });
-        expect((await repo.buscarExecucao(orfa))?.status).toBe("falhou");
-      });
-
-      it("encerrarOrfas só pega as rodando criadas antes do instante", async () => {
-        const velha = await executar(randomUUID(), "2026-11-05T09:00:00.000Z", {
-          status: "rodando",
-        });
-        expect(await repo.encerrarOrfas("2026-11-05T08:59:00.000Z")).toBe(0);
-        expect(await repo.encerrarOrfas("2026-11-05T09:01:00.000Z")).toBe(1);
-        expect((await repo.buscarExecucao(velha))?.status).toBe("falhou");
-        expect(await repo.encerrarOrfas("2026-11-05T12:00:00.000Z")).toBe(0);
-      });
-    });
-
-    it("execucoesDaData devolve só a data pedida, da mais antiga à mais nova", async () => {
-      const b = await executar(randomUUID(), "2026-11-05T09:40:00.000Z", { tipo: "atualizacao" });
-      const a = await executar(randomUUID(), "2026-11-05T09:00:00.000Z");
-      await executar(randomUUID(), "2026-11-06T09:00:00.000Z");
-      const lista = await repo.execucoesDaData("2026-11-05");
-      expect(lista.map((e) => e.id)).toEqual([a, b]);
-      expect(lista[1]).toMatchObject({ tipo: "atualizacao", status: "ok", data: "2026-11-05" });
-      expect(await repo.execucoesDaData("2026-01-01")).toEqual([]);
-    });
-
-    it("histórico: a última versão de cada data, da mais recente, com limite", async () => {
-      const id = await executar(randomUUID(), "2026-11-05T09:00:00.000Z");
-      const base = briefingExemplo();
-      const gravar = (data: string, titulo: string) =>
-        repo.gravarBriefing({
-          data,
-          execucaoId: id,
-          tipo: "diaria",
-          criadoEm: `${data}T09:30:00.000Z`,
-          briefing: { ...base, data, historiaDoDia: { ...base.historiaDoDia, titulo } },
-          avisos: [],
-        });
-      await gravar("2026-11-03", "dia 3");
-      await gravar("2026-11-04", "dia 4 v1");
-      await gravar("2026-11-04", "dia 4 v2");
-      await gravar("2026-11-05", "dia 5");
-      const todos = await repo.historico(30);
-      expect(todos.map((r) => [r.data, r.briefing.historiaDoDia.titulo])).toEqual([
-        ["2026-11-05", "dia 5"],
-        ["2026-11-04", "dia 4 v2"],
-        ["2026-11-03", "dia 3"],
-      ]);
-      expect((await repo.historico(2)).map((r) => r.data)).toEqual(["2026-11-05", "2026-11-04"]);
-      await repo.atualizarStatus(id, "ok");
-    });
-
-    it("custo médio diário: média das diárias ok mais recentes; ignora atualização e falha", async () => {
-      expect(await repo.custoMedioDiarioUsd(7)).toBeNull();
-      const gastar = async (id: string, usd: number) =>
-        repo.gravarUso(id, "redacao", uso(usd), "2026-11-04T12:00:00.000Z");
-      await gastar(await executar(randomUUID(), "2026-11-01T09:00:00.000Z"), 0.9);
-      await gastar(await executar(randomUUID(), "2026-11-02T09:00:00.000Z"), 0.3);
-      await gastar(await executar(randomUUID(), "2026-11-03T09:00:00.000Z"), 0.5);
-      await gastar(
-        await executar(randomUUID(), "2026-11-03T15:00:00.000Z", { tipo: "atualizacao" }),
-        9,
-      );
-      await gastar(
-        await executar(randomUUID(), "2026-11-04T09:00:00.000Z", { status: "falhou" }),
-        7,
-      );
-      expect(await repo.custoMedioDiarioUsd(7)).toBeCloseTo((0.9 + 0.3 + 0.5) / 3, 6);
-      // Só as 2 mais recentes: 11/03 (0,5) e 11/02 (0,3).
-      expect(await repo.custoMedioDiarioUsd(2)).toBeCloseTo(0.4, 6);
-    });
-
-    describe("códigos de pareamento", () => {
-      const agora = "2026-11-05T09:00:00.000Z";
-      const guardar = (hash = "h-codigo", expiraEm = "2026-11-05T09:10:00.000Z") =>
-        repo.guardarCodigo({ codigoHash: hash, criadoEm: agora, expiraEm });
-
-      it("vale uma vez só", async () => {
-        await guardar();
-        expect(await repo.consumirCodigo("h-codigo", agora)).toBe(true);
-        expect(await repo.consumirCodigo("h-codigo", agora)).toBe(false);
-      });
-
-      it("simultâneos com o mesmo código: só um consome", async () => {
-        await guardar();
-        const resultados = await Promise.all(
-          Array.from({ length: 6 }, () => repo.consumirCodigo("h-codigo", agora)),
-        );
-        expect(resultados.filter(Boolean)).toHaveLength(1);
-      });
-
-      it("expira, e código desconhecido não consome nada", async () => {
-        await guardar();
-        expect(await repo.consumirCodigo("h-codigo", "2026-11-05T09:10:00.000Z")).toBe(false);
-        expect(await repo.consumirCodigo("outro", agora)).toBe(false);
-      });
-
-      it("depois de 5 tentativas erradas, o código morre mesmo sendo o certo", async () => {
-        await guardar();
-        for (let i = 0; i < MAX_TENTATIVAS_DE_CODIGO; i++) {
-          await repo.registrarFalhaDePareamento(agora);
-        }
-        expect(await repo.consumirCodigo("h-codigo", agora)).toBe(false);
-      });
-
-      it("com 4 tentativas erradas ainda funciona", async () => {
-        await guardar();
-        for (let i = 0; i < MAX_TENTATIVAS_DE_CODIGO - 1; i++) {
-          await repo.registrarFalhaDePareamento(agora);
-        }
-        expect(await repo.consumirCodigo("h-codigo", agora)).toBe(true);
-      });
-
-      it("as tentativas erradas só queimam os códigos ainda válidos", async () => {
-        await guardar("expirado", "2026-11-05T08:59:00.000Z");
-        await guardar("valido");
-        for (let i = 0; i < MAX_TENTATIVAS_DE_CODIGO; i++) {
-          await repo.registrarFalhaDePareamento(agora);
-        }
-        expect(await repo.consumirCodigo("valido", agora)).toBe(false);
-      });
-    });
-
-    describe("dispositivos", () => {
-      const novo = (nome: string, hash: string) => ({
-        id: randomUUID(),
-        nome,
-        tokenHash: hash,
-        criadoEm: "2026-11-05T09:00:00.000Z",
-      });
-
-      it("cria, busca pelo hash do token e nunca mistura tokens", async () => {
-        const celular = novo("Celular", "hash-a");
-        await repo.criarDispositivo(celular);
-        await repo.criarDispositivo(novo("Notebook", "hash-b"));
-        const achado = await repo.buscarDispositivoPorToken("hash-a");
-        expect(achado).toMatchObject({
-          id: celular.id,
-          nome: "Celular",
-          tokenHash: "hash-a",
-          ultimoUsoEm: null,
-          revogadoEm: null,
-        });
-        expect(await repo.buscarDispositivoPorToken("hash-z")).toBeNull();
-      });
-
-      it("não aceita dois dispositivos com o mesmo hash", async () => {
-        await repo.criarDispositivo(novo("A", "mesmo"));
-        await expect(repo.criarDispositivo(novo("B", "mesmo"))).rejects.toThrow();
-      });
-
-      it("a listagem nunca traz o hash do token", async () => {
-        await repo.criarDispositivo(novo("Celular", "segredo-do-hash"));
-        const lista = await repo.listarDispositivos();
-        expect(lista).toHaveLength(1);
-        expect(JSON.stringify(lista)).not.toContain("segredo-do-hash");
-      });
-
-      it("registra o último uso e revoga uma vez só", async () => {
-        const d = novo("Celular", "hash-a");
-        await repo.criarDispositivo(d);
-        await repo.registrarUsoDoDispositivo(d.id, "2026-11-06T10:00:00.000Z");
-        expect((await repo.buscarDispositivoPorToken("hash-a"))?.ultimoUsoEm).toBe(
-          "2026-11-06T10:00:00.000Z",
-        );
-        expect(await repo.revogarDispositivo(d.id, "2026-11-07T10:00:00.000Z")).toBe(true);
-        expect(await repo.revogarDispositivo(d.id, "2026-11-08T10:00:00.000Z")).toBe(false);
-        expect(await repo.revogarDispositivo(randomUUID(), "2026-11-08T10:00:00.000Z")).toBe(false);
-        expect((await repo.buscarDispositivoPorToken("hash-a"))?.revogadoEm).toBe(
-          "2026-11-07T10:00:00.000Z",
-        );
-      });
-    });
   });
 }
 
@@ -409,7 +174,7 @@ if (urlDeTeste) {
     return {
       repo: new RepositorioPostgres(sql),
       limpar: async () => {
-        await sql`truncate briefings, uso_modelo, passos, execucoes, dispositivos, codigos_pareamento restart identity cascade`;
+        await sql`truncate briefings, uso_modelo, passos, execucoes restart identity cascade`;
       },
     };
   });
@@ -421,15 +186,7 @@ if (urlDeTeste) {
       const tabelas = await sql<{ table_name: string }[]>`
         select table_name from information_schema.tables where table_schema = 'public'`;
       expect(tabelas.map((t) => t.table_name)).toEqual(
-        expect.arrayContaining([
-          "execucoes",
-          "passos",
-          "uso_modelo",
-          "briefings",
-          "dispositivos",
-          "codigos_pareamento",
-          "_migracoes",
-        ]),
+        expect.arrayContaining(["execucoes", "passos", "uso_modelo", "briefings", "_migracoes"]),
       );
     });
 

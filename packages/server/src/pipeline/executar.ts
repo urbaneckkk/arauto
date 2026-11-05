@@ -50,13 +50,6 @@ export interface DependenciasDoPipeline {
   perfil: Perfil;
   pausa: Pausa;
   gerarId?: () => string;
-  /**
-   * Chamado assim que a execução existe no banco, antes do trabalho pesado. A API usa para
-   * responder "iniciada" já com o id, sem esperar o briefing ficar pronto.
-   */
-  aoIniciar?: (execucaoId: string) => void;
-  /** Verba do mês reservada aos briefings diários que ainda vão rodar (só atualizações usam). */
-  reservaUsd?: number;
 }
 
 export type StatusFinal = "ok" | "falhou" | "abortado_por_custo";
@@ -89,13 +82,11 @@ export async function executarPipeline(
   const data = dataEmSaoPaulo(inicio);
 
   await repo.criarExecucao({ id: execucaoId, data, tipo, criadaEm: inicio.toISOString() });
-  deps.aoIniciar?.(execucaoId);
   const orcamento = new Orcamento({
     maxExecucaoUsd: env.MAX_USD_POR_EXECUCAO,
     maxMesUsd: env.MAX_USD_MES,
     gastoDoMesAntesUsd: await repo.gastoDoMesUsd(mesEmSaoPaulo(inicio)),
     pausado: env.GASTOS_PAUSADOS,
-    reservaUsd: deps.reservaUsd ?? 0,
   });
   const cliente = new ClienteComOrcamento(clienteBase, orcamento, repo, execucaoId, relogio);
 

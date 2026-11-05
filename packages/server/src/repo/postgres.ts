@@ -2,20 +2,7 @@ import type { Execucao, Passo, ResultadoPasso, StatusExecucao, UsoDeModelo } fro
 import { BriefingSchema, ExecucaoSchema } from "@arauto/core";
 import postgres from "postgres";
 import { FUSO } from "../util/tempo.js";
-import {
-  type Dispositivo,
-  type DispositivoComHash,
-  ExecucaoEmAndamento,
-  LIMITE_DE_EXECUCAO_ORFA_MS,
-  MAX_TENTATIVAS_DE_CODIGO,
-  type NovaExecucao,
-  type NovoBriefing,
-  type NovoCodigo,
-  type NovoDispositivo,
-  type RegistroDeBriefing,
-  type RepositorioDoServico,
-  type ResumoDeExecucao,
-} from "./repositorio.js";
+import type { NovaExecucao, NovoBriefing, RegistroDeBriefing, Repositorio } from "./repositorio.js";
 
 export type Sql = ReturnType<typeof postgres>;
 
@@ -53,66 +40,13 @@ function paraRegistro(linha: LinhaDeBriefing): RegistroDeBriefing {
 const COLUNAS_DO_BRIEFING = (sql: Sql) => sql`
   to_char(data, 'YYYY-MM-DD') as data, versao, execucao_id, tipo, criado_em, briefing, avisos`;
 
-interface LinhaDeExecucao {
-  id: string;
-  data: string;
-  tipo: string;
-  status: string;
-  criada_em: Date;
-}
-
-const paraResumo = (linha: LinhaDeExecucao): ResumoDeExecucao => ({
-  id: linha.id,
-  data: linha.data,
-  tipo: linha.tipo as ResumoDeExecucao["tipo"],
-  status: linha.status as ResumoDeExecucao["status"],
-  criadaEm: linha.criada_em.toISOString(),
-});
-
-interface LinhaDeDispositivo {
-  id: string;
-  nome: string;
-  token_hash: string;
-  criado_em: Date;
-  ultimo_uso_em: Date | null;
-  revogado_em: Date | null;
-}
-
-const paraDispositivo = (linha: LinhaDeDispositivo): DispositivoComHash => ({
-  id: linha.id,
-  nome: linha.nome,
-  tokenHash: linha.token_hash,
-  criadoEm: linha.criado_em.toISOString(),
-  ultimoUsoEm: linha.ultimo_uso_em?.toISOString() ?? null,
-  revogadoEm: linha.revogado_em?.toISOString() ?? null,
-});
-
-const violouIndiceDeUmaSo = (erro: unknown): boolean =>
-  typeof erro === "object" &&
-  erro !== null &&
-  (erro as { code?: string }).code === "23505" &&
-  (erro as { constraint_name?: string }).constraint_name === "execucoes_uma_rodando";
-
-export class RepositorioPostgres implements RepositorioDoServico {
+export class RepositorioPostgres implements Repositorio {
   constructor(private readonly sql: Sql) {}
 
   async criarExecucao(nova: NovaExecucao): Promise<void> {
-    try {
-      await this.sql.begin(async (tx) => {
-        // Órfã (processo morto no meio) não pode prender a trava para sempre.
-        await tx`
-          update execucoes set status = 'falhou', atualizada_em = now()
-          where status = 'rodando'
-            and criada_em < ${nova.criadaEm}::timestamptz - make_interval(secs => ${LIMITE_DE_EXECUCAO_ORFA_MS / 1000})`;
-        await tx`
-          insert into execucoes (id, data, tipo, status, criada_em)
-          values (${nova.id}, ${nova.data}, ${nova.tipo}, 'rodando', ${nova.criadaEm})`;
-      });
-    } catch (erro) {
-      // O índice único 'execucoes_uma_rodando' é quem garante "uma execução paga por vez".
-      if (violouIndiceDeUmaSo(erro)) throw new ExecucaoEmAndamento();
-      throw erro;
-    }
+    await this.sql`
+      insert into execucoes (id, data, tipo, status, criada_em)
+      values (${nova.id}, ${nova.data}, ${nova.tipo}, 'rodando', ${nova.criadaEm})`;
   }
 
   async atualizarStatus(id: string, status: StatusExecucao): Promise<void> {
@@ -225,110 +159,5 @@ export class RepositorioPostgres implements RepositorioDoServico {
         usos: p.usos,
       })),
     });
-  }
-
-  // --- Serviço: limites e histórico ---
-
-  async execucaoEmAndamento(): Promise<ResumoDeExecucao | null> {
-    const [linha] = await this.sql<LinhaDeExecucao[]>`
-      select id, to_char(data, 'YYYY-MM-DD') as data, tipo, status, criada_em
-      from execucoes where status = 'rodando' limit 1`;
-    return linha ? paraResumo(linha) : null;
-  }
-
-  async encerrarOrfas(antesDe: string): Promise<number> {
-    const afetadas = await this.sql`
-      update execucoes set status = 'falhou', atualizada_em = now()
-      where status = 'rodando' and criada_em < ${antesDe}::timestamptz
-      returning id`;
-    return afetadas.length;
-  }
-
-  async execucoesDaData(data: string): Promise<ResumoDeExecucao[]> {
-    const linhas = await this.sql<LinhaDeExecucao[]>`
-      select id, to_char(data, 'YYYY-MM-DD') as data, tipo, status, criada_em
-      from execucoes where data = ${data}::date order by criada_em`;
-    return linhas.map(paraResumo);
-  }
-
-  async historico(limite: number): Promise<RegistroDeBriefing[]> {
-    const linhas = await this.sql<LinhaDeBriefing[]>`
-      select * from (
-        select distinct on (data) ${COLUNAS_DO_BRIEFING(this.sql)}
-        from briefings order by data, versao desc
-      ) ultimas
-      order by data desc limit ${limite}`;
-    return linhas.map(paraRegistro);
-  }
-
-  async custoMedioDiarioUsd(ultimas: number): Promise<number | null> {
-    const [linha] = await this.sql<{ media: string | null }[]>`
-      select avg(total)::text as media from (
-        select coalesce(sum(u.usd), 0) as total
-        from execucoes e left join uso_modelo u on u.execucao_id = e.id
-        where e.tipo = 'diaria' and e.status = 'ok'
-        group by e.id, e.criada_em
-        order by e.criada_em desc limit ${ultimas}
-      ) recentes`;
-    if (!linha || linha.media === null) return null;
-    return Math.round(Number(linha.media) * 1_000_000) / 1_000_000;
-  }
-
-  // --- Serviço: acesso por dispositivo ---
-
-  async guardarCodigo(codigo: NovoCodigo): Promise<void> {
-    await this.sql`
-      insert into codigos_pareamento (codigo_hash, criado_em, expira_em)
-      values (${codigo.codigoHash}, ${codigo.criadoEm}, ${codigo.expiraEm})`;
-  }
-
-  async consumirCodigo(codigoHash: string, agora: string): Promise<boolean> {
-    // Uma só instrução: duas tentativas simultâneas com o mesmo código nunca passam as duas.
-    const consumidos = await this.sql`
-      update codigos_pareamento set usado_em = ${agora}
-      where codigo_hash = ${codigoHash} and usado_em is null
-        and expira_em > ${agora}::timestamptz and tentativas < ${MAX_TENTATIVAS_DE_CODIGO}
-      returning codigo_hash`;
-    return consumidos.length === 1;
-  }
-
-  async registrarFalhaDePareamento(agora: string): Promise<void> {
-    await this.sql`
-      update codigos_pareamento set tentativas = tentativas + 1
-      where usado_em is null and expira_em > ${agora}::timestamptz`;
-  }
-
-  async criarDispositivo(novo: NovoDispositivo): Promise<void> {
-    await this.sql`
-      insert into dispositivos (id, nome, token_hash, criado_em)
-      values (${novo.id}, ${novo.nome}, ${novo.tokenHash}, ${novo.criadoEm})`;
-  }
-
-  async buscarDispositivoPorToken(tokenHash: string): Promise<DispositivoComHash | null> {
-    const [linha] = await this.sql<LinhaDeDispositivo[]>`
-      select id, nome, token_hash, criado_em, ultimo_uso_em, revogado_em
-      from dispositivos where token_hash = ${tokenHash}`;
-    return linha ? paraDispositivo(linha) : null;
-  }
-
-  async registrarUsoDoDispositivo(id: string, quando: string): Promise<void> {
-    await this.sql`update dispositivos set ultimo_uso_em = ${quando} where id = ${id}`;
-  }
-
-  async listarDispositivos(): Promise<Dispositivo[]> {
-    const linhas = await this.sql<LinhaDeDispositivo[]>`
-      select id, nome, token_hash, criado_em, ultimo_uso_em, revogado_em
-      from dispositivos order by criado_em`;
-    return linhas.map((linha) => {
-      const { tokenHash: _tokenHash, ...dispositivo } = paraDispositivo(linha);
-      return dispositivo;
-    });
-  }
-
-  async revogarDispositivo(id: string, quando: string): Promise<boolean> {
-    const revogados = await this.sql`
-      update dispositivos set revogado_em = ${quando}
-      where id = ${id} and revogado_em is null returning id`;
-    return revogados.length === 1;
   }
 }

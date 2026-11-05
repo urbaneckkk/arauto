@@ -11,7 +11,7 @@ Um "Jarvis da informação" pessoal: todo dia às 06:30, e quando você pedir, u
 | Pacote | Função | Etapa |
 |---|---|---|
 | `packages/core` | Esquemas Zod, tipos e catálogo de temas | 0 (pronto) |
-| `packages/server` | Pipeline do briefing e comandos de linha (Etapa 1); API, agendador e travas de custo (Etapa 2, fatia A) | 1 (falta a execução real) e 2 (servidor pronto) |
+| `packages/server` | Pipeline do briefing e comandos de linha (Etapa 1); API e agendador na Etapa 2 | 1 (falta a execução real) e 2 |
 | `packages/web` | App web e PWA | 2 |
 | `packages/desktop` | Casca Windows (Tauri 2) | 3 |
 | `packages/mobile` | Casca Android (Capacitor) | 4 |
@@ -41,14 +41,3 @@ pnpm brief:gerar --sem-banco --replay real-1   # repete a gravação: sem intern
 ```
 
 As travas de custo (`MAX_USD_POR_EXECUCAO`, `MAX_USD_MES`, `GASTOS_PAUSADOS`) ficam no `.env`. Com Postgres local: `docker compose up -d` e `DATABASE_URL` no `.env`; sem banco, use `--sem-banco`.
-
-## Subir o servidor (Etapa 2, fatia A)
-
-```bash
-pnpm servidor --sem-banco --codigo   # API + agendador; imprime um código de pareamento (10 min, uma vez)
-pnpm pareamento:gerar                # com Postgres: outro código, de outro terminal
-pnpm dispositivos listar             # aparelhos pareados
-pnpm dispositivos revogar <id>       # tira o acesso de um aparelho
-```
-
-Sem `ANTHROPIC_API_KEY` o servidor só lê e serve; não gera briefing. `AGENDADOR_LIGADO=0` desliga o das 06:00. Todas as rotas que mostram dados exigem token; só `/api/saude` e `/api/pareamento` são públicas. Rotas e travas: [PLAN.md](PLAN.md), "Etapa 2, fatia A".

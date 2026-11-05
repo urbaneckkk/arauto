@@ -5,24 +5,6 @@ export type PerfilDeCusto = (typeof PERFIS_DE_CUSTO)[number];
 
 const TextoOpcional = z.string().min(1).optional();
 
-/** "1"/"true" liga, "0"/"false" desliga; o padrão vale quando a variável não existe. */
-const Interruptor = (padrao: "0" | "1") =>
-  z
-    .enum(["0", "1", "true", "false"])
-    .default(padrao)
-    .transform((valor) => valor === "1" || valor === "true");
-
-/** Lista separada por vírgulas ("a,b,c") → ["a", "b", "c"], sem itens vazios. */
-const Lista = z
-  .string()
-  .default("")
-  .transform((texto) =>
-    texto
-      .split(",")
-      .map((item) => item.trim())
-      .filter((item) => item !== ""),
-  );
-
 const EnvSchema = z.object({
   ANTHROPIC_API_KEY: TextoOpcional,
   DATABASE_URL: TextoOpcional,
@@ -32,31 +14,12 @@ const EnvSchema = z.object({
   MAX_USD_MES: z.coerce.number().positive().default(25),
   PERFIL_CUSTO: z.enum(PERFIS_DE_CUSTO).default("padrao"),
   /** Interruptor geral: com 1, nenhuma chamada paga é feita (PLAN.md, seção 2.8). */
-  GASTOS_PAUSADOS: Interruptor("0"),
+  GASTOS_PAUSADOS: z
+    .enum(["0", "1", "true", "false"])
+    .default("0")
+    .transform((valor) => valor === "1" || valor === "true"),
   MODELO_BARATO: z.string().min(1).default("claude-haiku-5-5"),
   MODELO_REDATOR: z.string().min(1).default("claude-sonnet-5-5"),
-
-  // --- Servidor (Etapa 2) ---
-  /** O Railway define PORT sozinho. */
-  PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-  HOST: z.string().min(1).default("0.0.0.0"),
-  /** Pasta do build da web, servida como arquivos estáticos. Padrão: packages/web/dist. */
-  WEB_DIST: TextoOpcional,
-  /** Origens extras aceitas pelo CORS, além das cascas do Tauri e do Capacitor. */
-  ORIGENS_PERMITIDAS: Lista,
-  /**
-   * Quantos proxies confiáveis existem na frente do servidor (0 em casa; no Railway, 1).
-   * Errar para mais deixa o cliente forjar o IP e fugir do limite por IP.
-   */
-  CONFIAR_PROXY_SALTOS: z.coerce.number().int().min(0).max(5).default(0),
-  /** Dias sem uso até um aparelho pareado precisar parear de novo. */
-  TOKEN_INATIVO_DIAS: z.coerce.number().int().positive().default(90),
-  /** "Atualizar agora": no máximo isto por dia, somando todos os aparelhos (briefing). */
-  ATUALIZACOES_POR_DIA: z.coerce.number().int().positive().default(3),
-  /** ...e com este intervalo mínimo entre elas, em minutos. */
-  INTERVALO_ATUALIZACAO_MIN: z.coerce.number().int().positive().default(30),
-  /** Com 0, o servidor atende a API mas não dispara o briefing das 06:00 (útil em desenvolvimento). */
-  AGENDADOR_LIGADO: Interruptor("1"),
 });
 
 export type Env = z.infer<typeof EnvSchema>;
