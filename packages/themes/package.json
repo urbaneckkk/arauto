@@ -1,0 +1,7 @@
+{
+  "name": "@arauto/themes",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Pacotes visuais dos temas (themes/<id>/). Chegam com o pacote do Claude Design, na Etapa 2.",
+  "type": "module"
+}

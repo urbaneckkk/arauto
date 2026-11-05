@@ -1,0 +1,7 @@
+{
+  "name": "@arauto/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Casca Windows (Tauri 2) sobre o build web. Entra na Etapa 3.",
+  "type": "module"
+}

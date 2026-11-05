@@ -1,0 +1,6 @@
+# Fim de linha sempre LF, para o Windows e o CI produzirem os mesmos arquivos.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.woff2 binary

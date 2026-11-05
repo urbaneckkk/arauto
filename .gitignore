@@ -1,0 +1,37 @@
+# dependências e saídas de build
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# segredos: nunca entram no repositório
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+tauri-signing*
+google-services.json
+GoogleService-Info.plist
+firebase-adminsdk*.json
+service-account*.json
+.dev.vars
+
+# bancos locais
+*.sqlite
+*.sqlite3
+*.db
+
+# sistema e editores
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,7 @@
+{
+  "name": "@arauto/mobile",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Casca Android (Capacitor) sobre o build web. Entra na Etapa 4.",
+  "type": "module"
+}

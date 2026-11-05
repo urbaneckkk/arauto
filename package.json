@@ -1,0 +1,24 @@
+{
+  "name": "arauto",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ARAUTO: briefing diário de notícias em português simples, com tema visual que muda conforme a notícia do dia.",
+  "type": "module",
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "pnpm -r --if-present build",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "pnpm -r --if-present test",
+    "segredos": "node scripts/verificar-segredos.mjs",
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
+    "verificar": "pnpm segredos && pnpm test:scripts && pnpm build && pnpm typecheck && pnpm lint && pnpm test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:"
+  }
+}

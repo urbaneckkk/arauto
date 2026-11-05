@@ -1,0 +1,13 @@
+packages:
+  - packages/*
+
+# Versões declaradas uma vez só; cada pacote usa "catalog:" no package.json.
+#
+# O Biome está fixado na 2.6.4 (publicada em 28/10/2026) de propósito: o pnpm 12 não instala
+# versões muito recentes sem abrir uma exceção na própria proteção contra pacote comprometido,
+# e a 2.6.5 tinha só 11 horas. Subir a versão aqui quando ela completar alguns dias.
+catalog:
+  "@biomejs/biome": 2.6.4
+  typescript: ^7.0.2
+  vitest: ^5.1.0
+  zod: ^4.6.7

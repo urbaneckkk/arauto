@@ -1,0 +1,20 @@
+version: 2
+
+# O "cooldown" faz o Dependabot esperar 7 dias antes de propor uma versão nova.
+# É a mesma ideia da proteção de idade mínima do pnpm: versão recém-publicada pode
+# ser um pacote comprometido que ainda não foi descoberto.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
