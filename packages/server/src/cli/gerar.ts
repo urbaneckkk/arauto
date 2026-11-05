@@ -16,7 +16,13 @@ import { ClienteGravador, ClienteReplay } from "../modelos/gravacao.js";
 import { pausaReal, semPausa } from "../passos/tipos.js";
 import { executarPipeline, type ResultadoDaExecucao } from "../pipeline/executar.js";
 import { RepositorioEmMemoria } from "../repo/memoria.js";
-import { mesEmSaoPaulo, type Relogio, relogioFixo, relogioReal } from "../util/tempo.js";
+import {
+  dataEmSaoPaulo,
+  mesEmSaoPaulo,
+  type Relogio,
+  relogioFixo,
+  relogioReal,
+} from "../util/tempo.js";
 import { abrirRepositorio } from "./ambiente.js";
 
 const AJUDA = `Uso: pnpm brief:gerar [opções]
@@ -25,6 +31,8 @@ Gera o briefing do dia (pipeline completo: coleta, termômetro, apuração, reda
 
 Opções:
   --sem-banco        guarda tudo em arquivo local, sem Postgres
+  --estado <arquivo> guarda tudo neste arquivo (vale como --sem-banco); usado na publicação automática
+  --se-faltar        não faz nada (e não gasta nada) se o briefing de hoje já existe
   --perfil <nome>    economico (até 3 buscas) ou padrao (até 8). Padrão: PERFIL_CUSTO do .env
   --gravar <nome>    roda de verdade e grava a internet e o modelo em gravacoes/<nome>
   --replay <nome>    repete uma gravação: não usa a internet, não chama o modelo, não gasta nada
@@ -105,6 +113,8 @@ async function main(): Promise<number> {
   const { values } = parseArgs({
     options: {
       "sem-banco": { type: "boolean" },
+      estado: { type: "string" },
+      "se-faltar": { type: "boolean" },
       perfil: { type: "string" },
       gravar: { type: "string" },
       replay: { type: "string" },
@@ -168,9 +178,23 @@ async function main(): Promise<number> {
   // Em replay nada é gravado em lugar nenhum: o repositório é de memória.
   const aberto = replay
     ? { repo: new RepositorioEmMemoria(), descricao: "memória (replay)", fechar: async () => {} }
-    : await abrirRepositorio(values["sem-banco"] === true, env);
+    : await abrirRepositorio(
+        values["sem-banco"] === true || values.estado !== undefined,
+        env,
+        values.estado,
+      );
 
   try {
+    if (values["se-faltar"] && !replay) {
+      const hoje = dataEmSaoPaulo(relogio.agora());
+      const existente = await aberto.repo.briefingDaData(hoje);
+      if (existente) {
+        console.log(
+          `Já existe o briefing de ${hoje} (versão ${existente.versao}). Nada a fazer e nada gasto.`,
+        );
+        return 0;
+      }
+    }
     const gastoAntes = await aberto.repo.gastoDoMesUsd(mesEmSaoPaulo(relogio.agora()));
     console.log(
       `Perfil ${perfil.nome} (até ${perfil.maxBuscas} buscas) · banco: ${aberto.descricao}\n` +
@@ -211,7 +235,7 @@ async function main(): Promise<number> {
       replay,
     });
     if (resultado.status === "ok")
-      console.log("\nPara ler: pnpm brief:ver" + (values["sem-banco"] ? " --sem-banco" : ""));
+      console.log(`\nPara ler: pnpm brief:ver${values["sem-banco"] ? " --sem-banco" : ""}`);
     return resultado.status === "ok" ? 0 : resultado.status === "abortado_por_custo" ? 2 : 1;
   } finally {
     await aberto.fechar();

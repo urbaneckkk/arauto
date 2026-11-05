@@ -323,6 +323,38 @@ pnpm brief:gerar --sem-banco --replay real-1   # repete de graça
 O Econômico saiu **31% mais barato** com qualidade equivalente nesta amostra (uma execução de cada: é pouco para afirmar). A busca web custa US$ 0,01 cada; o resto é leitura de contexto. Projeção: 30 briefings por mês ficam em ~US$ 6 (Econômico) ou ~US$ 9 (Padrão), sem contar atualizações.
 
 **Ainda em aberto:** (a) pesos da pontuação são provisórios, e o GDELT **não respondeu em nenhuma das 6 execuções**, então a pontuação foi sempre parcial (só RSS); (b) o `fallbacks: "default"` segue desligado porque **não houve nenhuma recusa** em 6 execuções e mais de 250 chamadas de teste; (c) o `tema:testar` não entra no total do mês do livro-caixa (custa centavos); (d) o briefing das 06:30 usa o dia anterior como "ontem" só se houver um registro de data anterior.
+### Etapa 2, versão enxuta (05/11/2026): o app no ar, sem servidor próprio
+
+**O que você pediu:** acordar com algo funcionando, num link que não fosse `localhost`, no iPhone e no PC, sem confirmação no meio da noite. **O que entreguei:** um PWA (site instalável) em <https://urbaneckkk.github.io/arauto/>.
+
+**Desvios do plano original (e por quê):**
+
+| Plano | Entregue | Motivo |
+|---|---|---|
+| Servidor no Railway (API, agendador, Postgres) | **GitHub Actions + GitHub Pages + branch `dados`** | Não tenho acesso à sua conta do Railway nem posso criar recurso pago sozinho. GitHub é grátis, o repositório já existe e o fluxo roda às 06:00 sem máquina ligada. O pipeline é o mesmo; só mudou onde ele roda (`gerar --estado`). |
+| Web Push (aviso com o tema) | **Não feito** | Push precisa de um servidor que guarde a inscrição do aparelho e envie. Site estático não envia. Vai com o servidor (Etapa 2 completa). |
+| "Atualizar agora" que gera um briefing novo | **"Ver se já saiu"** (só relê o arquivo publicado) | Um botão público que gaste dinheiro a cada toque é exatamente o risco da seção 2.8. Gerar sob demanda volta com o servidor, atrás de login e orçamento. |
+| Casca Windows (.exe), APK Android | **Não feitos** | Tauri precisa de Rust (não instalado) e o APK, do Android Studio e do registro de desenvolvedor. O PWA instala no PC (Chrome/Edge) e no Android, e no iPhone via Safari. |
+| Design do Claude Design (animações) | **Não consegui buscar** | O acesso exige login interativo (`/design-login`). Fiz os 15 temas em CSS/SVG seguindo a captura "C · Vigia"; 9 seguem o desenho dela e **6 são provisórios** (`nuclear`, `mercado_queda`, `tecnologia_ia`, `politica`, `esporte`, `cultura`), marcados assim no `/lab`. |
+
+**Como funciona:** `publicar.yml` (06:00 e 06:45 de Brasília, esta só de reserva) → `gerar --estado dados/estado.json --se-faltar` → `exportar-site` (um JSON por dia, `ultimo.json`, `indice.json`) → build do Vite → `conferir-publicacao` (barra `.env`, mapa de código, estado do pipeline e texto com cara de segredo) → Pages. Quem abre o app só **lê um arquivo estático**.
+
+**Defesas de custo e segurança desta etapa:**
+
+- A chave da Anthropic só existe no seu `.env` e, depois de `pnpm automacao:ativar`, como segredo do repositório. O fluxo só a entrega ao passo de geração; o resto do build não a vê. Eu **não** a enviei ao GitHub: o comando roda no seu computador, lê o `.env` e passa a chave por entrada padrão (nunca aparece na tela).
+- Sem o segredo, o fluxo só republica o app (custo zero). Com ele: perfil econômico (~US$ 0,21), `MAX_USD_MES` = 5 (variável do repositório), no máximo um briefing por dia (`--se-faltar`) e a trava por execução de US$ 1.
+- A branch `dados` é pública: o estado é podado antes de subir (sem o texto coletado das notícias, só os últimos 60 dias de briefings, 62 de gastos e 7 execuções). Teste automático garante isso.
+- Permissões do fluxo: `permissions: {}` por padrão; só a tarefa de publicação pede `contents: write`, `pages: write` e `id-token: write`. Todas as ações fixadas por hash de commit. O push na `dados` usa o token só no momento, sem salvá-lo no checkout.
+- O app valida cada briefing com o **mesmo esquema Zod do servidor**: arquivo corrompido não chega à tela e fonte que não seja `https` é recusada (impede `javascript:` num link).
+
+**Resultado medido (05/11/2026):** briefing real do dia gerado com o perfil econômico: US$ 0,2155, 3 buscas, 14 notícias, 1.582 palavras (≈ 7,2 min, **um pouco acima** do alvo de 5 a 7), tema `clima_extremo` (tornados em SC e RS). Gasto no mês: US$ 1,68 de 5. Testes: core 136, servidor 208, web 27, scripts 24; `pnpm verificar` verde.
+
+**Testado no navegador (Chrome embutido, 375×812 e desktop):** Stories (toque, botões, setas), Lista, `/lab` com os 15 temas, abertura, banner de "briefing de ontem", service worker ativo com cache do app e do briefing, **abrir offline** (servidor desligado, app abre do cache). Achei e corrigi um defeito real no offline: sem `ignoreVary` o arquivo estava no cache mas não era achado e o app abria em branco.
+
+**Não testado:** iPhone e Android reais (instalação, Wake Lock, voz do Modo Ouvir com tela apagada: continua o risco R10), Edge no PC, leitor de tela, contraste automático dos 15 temas (olho humano só nos que vi).
+
+**O que falta para a Etapa 2 "de verdade":** servidor com Web Push e "Atualizar agora" com orçamento; substituir os 6 temas provisórios pelo desenho do Claude Design; sons; `Explica melhor`. Depois, as Etapas 3 (Windows), 4 (Android) e 5 (iPhone nativo), como no roadmap abaixo.
+
 ---
 
 ## 6. Roadmap e o que verifico no início de cada etapa
@@ -330,7 +362,7 @@ O Econômico saiu **31% mais barato** com qualidade equivalente nesta amostra (u
 | Etapa | Foco | ⚠️ Verificar na documentação atual antes de depender |
 |---|---|---|
 | 1 Cérebro | Pipeline, `brief:gerar`, `brief:ver`, gravações, casos de tema | Limites da saída estruturada com Zod (restrições de tamanho de string); medir custo real; teste A/B dos perfis Econômico e Padrão e de uma API de busca com crédito grátis (seção 3.3); spike do GDELT; testar se a busca web devolve Reuters, AP e Simepar. Precisa de chave da API num `.env` local (você coloca; não cole no chat) e de um Postgres (Docker local, se você tiver, senão o do Railway). |
-| 2 Web/PWA | Motor de temas, `/lab`, Stories, Lista, Ouvir, Web Push, offline, `/instalar` | VAPID e `web-push`; plugin PWA do Vite; fontes e licenças; Modo Ouvir com tela apagada em aparelho real (R10). |
+| 2 Web/PWA | Motor de temas, `/lab`, Stories, Lista, Ouvir, Web Push, offline, `/instalar` (versão enxuta no ar em 05/11/2026; falta o Web Push, que precisa de servidor) | VAPID e `web-push`; plugin PWA do Vite; fontes e licenças; Modo Ouvir com tela apagada em aparelho real (R10). |
 | 3 Windows | Tauri 2, bandeja, início com o Windows, Ctrl+Shift+A, overlay, instalador, atualização | Versões atuais dos plugins do Tauri (updater, autostart, global-shortcut); janela transparente que não rouba foco (`WS_EX_NOACTIVATE`); detecção de jogo em tela cheia (`SHQueryUserNotificationState`) e de transmissão (lista de processos como OBS, configurável), testada com jogos reais, em tela cheia exclusiva e sem borda; teste de instalação no Windows Sandbox (recurso do Windows 11 Pro). |
 | 4 Android | Capacitor, FCM, canais, APK assinado | Spike de registro na conta de distribuição limitada (R7); versões atuais do Capacitor e do plugin de push; canais de notificação são imutáveis depois de criados (som e importância certos já na primeira versão, e `luto` sem som). |
 | 5 iPhone XR | PWA em Safari no iOS 18 | Versão exata do iOS; Declarative Web Push; áreas seguras; teste em aparelho real. |

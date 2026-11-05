@@ -18,11 +18,15 @@ export const ARQUIVO_DE_ESTADO_LOCAL = join(caminhos.saida, "estado-local.json")
  * Escolhe onde gravar: Postgres (DATABASE_URL) ou um arquivo local (`--sem-banco`).
  * No Postgres, as migrações pendentes são aplicadas na hora.
  */
-export async function abrirRepositorio(semBanco: boolean, env: Env): Promise<RepositorioAberto> {
+export async function abrirRepositorio(
+  semBanco: boolean,
+  env: Env,
+  arquivoDeEstado: string = ARQUIVO_DE_ESTADO_LOCAL,
+): Promise<RepositorioAberto> {
   if (semBanco) {
     return {
-      repo: new RepositorioEmArquivo(ARQUIVO_DE_ESTADO_LOCAL),
-      descricao: `arquivo local (${ARQUIVO_DE_ESTADO_LOCAL})`,
+      repo: new RepositorioEmArquivo(arquivoDeEstado),
+      descricao: `arquivo local (${arquivoDeEstado})`,
       async fechar() {},
     };
   }

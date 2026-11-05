@@ -31,6 +31,17 @@
       }
     }
   },
+  "overrides": [
+    {
+      "includes": ["packages/web/src/**/*.css"],
+      "linter": {
+        "rules": {
+          "style": { "noDescendingSpecificity": "off" },
+          "complexity": { "noImportantStyles": "off" }
+        }
+      }
+    }
+  ],
   "assist": {
     "actions": { "source": { "organizeImports": "on" } }
   }

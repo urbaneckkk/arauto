@@ -21,7 +21,12 @@
     "brief:ver": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/ver.js",
     "db:migrar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/migrar.js",
     "tema:testar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/tema-testar.js",
-    "hooks:instalar": "git config core.hooksPath .githooks"
+    "hooks:instalar": "git config core.hooksPath .githooks",
+    "web:dev": "pnpm --filter @arauto/web exec vite",
+    "site:exportar": "node scripts/exportar-site.mjs --estado saida/estado-local.json --saida packages/web/public/briefing",
+    "publicacao:conferir": "node scripts/conferir-publicacao.mjs packages/web/dist",
+    "automacao:ativar": "node scripts/ativar-automacao.mjs",
+    "automacao:desativar": "node scripts/ativar-automacao.mjs --desativar"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:"

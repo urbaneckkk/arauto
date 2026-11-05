@@ -1,0 +1,735 @@
+/*
+ * Temas do ARAUTO. O modelo só escolhe um id do catálogo; cores, tipografia e animação ficam aqui,
+ * em código fixo (briefing: "o modelo nunca escolhe cor, código ou animação").
+ * Cada tema é um conjunto de variáveis em [data-tema="..."], que valem para o elemento e seus filhos
+ * (por isso o /lab mostra vários temas lado a lado na mesma tela).
+ */
+
+:root,
+[data-tema="neutro"] {
+  color-scheme: dark;
+  --fundo: #070d1c;
+  --cartao: #0e1731;
+  --borda: rgba(170, 195, 255, 0.14);
+  --texto: #eef3ff;
+  --suave: #9fb0d0;
+  --acento: #9be0ff;
+  --sobre-acento: #04101f;
+  --nucleo: #131d3a;
+  --glifo: #5f7fb5;
+  --voz: "Sofia Sans Extra Condensed", "Sofia Sans", system-ui, sans-serif;
+  --voz-peso: 800;
+  --voz-caixa: none;
+  --voz-estilo: normal;
+  --voz-espaco: -0.005em;
+  --voz-altura: 1.02;
+  --fita: none;
+}
+
+[data-tema="ternura_animal"] {
+  color-scheme: light;
+  --fundo: #fff1e2;
+  --cartao: #ffe4cc;
+  --borda: rgba(90, 46, 27, 0.16);
+  --texto: #4a2512;
+  --suave: #8a5a40;
+  --acento: #c4551f;
+  --sobre-acento: #fff7ee;
+  --nucleo: #ffc4a0;
+  --glifo: #5a2e1b;
+  --voz-peso: 700;
+}
+
+[data-tema="conflito"] {
+  --fundo: #17171a;
+  --cartao: #222226;
+  --borda: rgba(255, 157, 26, 0.28);
+  --texto: #f3eee3;
+  --suave: #b6ad9b;
+  --acento: #ff9d1a;
+  --sobre-acento: #1a1100;
+  --nucleo: #2b2b2f;
+  --glifo: #ff9d1a;
+  --voz-peso: 800;
+  --voz-caixa: uppercase;
+  --voz-espaco: 0.005em;
+  --fita: repeating-linear-gradient(-45deg, #ff9d1a 0 12px, #17171a 12px 24px);
+}
+
+[data-tema="nuclear"] {
+  --fundo: #11140a;
+  --cartao: #1b2010;
+  --borda: rgba(225, 255, 40, 0.28);
+  --texto: #f1f5dc;
+  --suave: #aab58a;
+  --acento: #dcff1f;
+  --sobre-acento: #121600;
+  --nucleo: #242b13;
+  --glifo: #dcff1f;
+  --voz-peso: 800;
+  --voz-caixa: uppercase;
+  --voz-espaco: 0.005em;
+  --fita: repeating-linear-gradient(-45deg, #dcff1f 0 12px, #11140a 12px 24px);
+}
+
+[data-tema="clima_extremo"] {
+  --fundo: #1e242c;
+  --cartao: #29313b;
+  --borda: rgba(159, 216, 255, 0.2);
+  --texto: #eaf4fc;
+  --suave: #a3b6c8;
+  --acento: #9fd8ff;
+  --sobre-acento: #06121c;
+  --nucleo: #323d49;
+  --glifo: #cfd8e2;
+  --voz-peso: 800;
+}
+
+[data-tema="mercado_alta"] {
+  --fundo: #04120a;
+  --cartao: #0a1f13;
+  --borda: rgba(39, 225, 122, 0.25);
+  --texto: #e8fff1;
+  --suave: #8fc4a3;
+  --acento: #27e17a;
+  --sobre-acento: #021a0c;
+  --nucleo: #0d2a19;
+  --glifo: #27e17a;
+  --voz-peso: 800;
+}
+
+[data-tema="mercado_queda"] {
+  --fundo: #170709;
+  --cartao: #260d11;
+  --borda: rgba(255, 77, 94, 0.28);
+  --texto: #ffecee;
+  --suave: #cf9aa1;
+  --acento: #ff5266;
+  --sobre-acento: #1c0206;
+  --nucleo: #331217;
+  --glifo: #ff5266;
+  --voz-peso: 800;
+}
+
+[data-tema="ciencia_espaco"] {
+  --fundo: #080b2b;
+  --cartao: #10154a;
+  --borda: rgba(138, 162, 255, 0.28);
+  --texto: #eef0ff;
+  --suave: #a5afe0;
+  --acento: #9fb2ff;
+  --sobre-acento: #060824;
+  --nucleo: #161c63;
+  --glifo: #cdd5ff;
+  --voz-peso: 800;
+}
+
+[data-tema="tecnologia_ia"] {
+  --fundo: #07131a;
+  --cartao: #0d212c;
+  --borda: rgba(70, 240, 210, 0.26);
+  --texto: #e6fffa;
+  --suave: #8dc3bb;
+  --acento: #46f0d2;
+  --sobre-acento: #021613;
+  --nucleo: #0f2b38;
+  --glifo: #46f0d2;
+  --voz-peso: 700;
+  --voz-caixa: uppercase;
+  --voz-espaco: 0.02em;
+}
+
+[data-tema="agro_safra"] {
+  --fundo: #2b1d09;
+  --cartao: #3a280d;
+  --borda: rgba(255, 200, 61, 0.28);
+  --texto: #fff3d6;
+  --suave: #cdb17a;
+  --acento: #ffc83d;
+  --sobre-acento: #231600;
+  --nucleo: #4a330f;
+  --glifo: #ffc83d;
+  --voz-peso: 800;
+}
+
+[data-tema="politica"] {
+  color-scheme: light;
+  --fundo: #efeae0;
+  --cartao: #e3dccd;
+  --borda: rgba(27, 34, 52, 0.18);
+  --texto: #1b2234;
+  --suave: #5a6176;
+  --acento: #1f3a8a;
+  --sobre-acento: #f6f3ec;
+  --nucleo: #d3cbb8;
+  --glifo: #1f3a8a;
+  --voz-peso: 700;
+}
+
+[data-tema="saude"] {
+  color-scheme: light;
+  --fundo: #eefaf7;
+  --cartao: #d9f1ec;
+  --borda: rgba(11, 58, 53, 0.16);
+  --texto: #0b3a35;
+  --suave: #4c7a74;
+  --acento: #0d8f81;
+  --sobre-acento: #effcf9;
+  --nucleo: #ffffff;
+  --glifo: #0d8f81;
+  --voz-peso: 700;
+}
+
+[data-tema="esporte"] {
+  --fundo: #0a2a12;
+  --cartao: #123a1b;
+  --borda: rgba(255, 225, 77, 0.26);
+  --texto: #f2ffe9;
+  --suave: #9fcb9a;
+  --acento: #ffe14d;
+  --sobre-acento: #1d1700;
+  --nucleo: #17481f;
+  --glifo: #f2ffe9;
+  --voz-peso: 800;
+  --voz-caixa: uppercase;
+  --voz-espaco: 0.005em;
+}
+
+[data-tema="cultura"] {
+  --fundo: #1c0b20;
+  --cartao: #2a1230;
+  --borda: rgba(255, 184, 107, 0.26);
+  --texto: #fdeeff;
+  --suave: #c9a3d1;
+  --acento: #ffb86b;
+  --sobre-acento: #230d00;
+  --nucleo: #371842;
+  --glifo: #ffb86b;
+  --voz: "Spectral", Georgia, serif;
+  --voz-peso: 400;
+  --voz-estilo: italic;
+  --voz-altura: 1.1;
+}
+
+/* Silêncio: sem cor, sem movimento, voz serifada fina. Nunca anima nem toca som. */
+[data-tema="luto"] {
+  --fundo: #0b0b0b;
+  --cartao: #141414;
+  --borda: rgba(232, 230, 225, 0.12);
+  --texto: #e8e6e1;
+  --suave: #9b9892;
+  --acento: #e8e6e1;
+  --sobre-acento: #0b0b0b;
+  --nucleo: #0b0b0b;
+  --glifo: #e8e6e1;
+  --voz: "Spectral", Georgia, serif;
+  --voz-peso: 300;
+  --voz-altura: 1.15;
+}
+
+/* ───────────── Movimento de fundo (ambiente) ───────────── */
+
+.ambiente {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  opacity: calc(0.28 + var(--forca, 2) * 0.24);
+}
+
+.ambiente i {
+  position: absolute;
+  display: block;
+  left: var(--x);
+  top: var(--y);
+  animation-delay: var(--d);
+  animation-duration: var(--t);
+  animation-iteration-count: infinite;
+}
+
+/* neutro: pontinhos que derivam devagar */
+[data-tema="neutro"] .ambiente i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--acento);
+  opacity: 0.5;
+  animation-name: deriva;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
+
+/* ternura: patinhas subindo */
+[data-tema="ternura_animal"] .ambiente i {
+  top: 105%;
+  width: 22px;
+  height: 22px;
+  background: var(--glifo);
+  opacity: 0.16;
+  mask:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'><ellipse cx='80' cy='108' rx='30' ry='25'/><circle cx='42' cy='68' r='13'/><circle cx='64' cy='48' r='14'/><circle cx='96' cy='48' r='14'/><circle cx='118' cy='68' r='13'/></svg>")
+    center / contain no-repeat;
+  animation-name: sobe-patinha;
+  animation-timing-function: linear;
+}
+
+/* conflito e nuclear: varredura de radar */
+[data-tema="conflito"] .ambiente i,
+[data-tema="nuclear"] .ambiente i {
+  left: 50%;
+  top: 38%;
+  width: 150vmax;
+  height: 150vmax;
+  margin: -75vmax 0 0 -75vmax;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 300deg,
+    color-mix(in srgb, var(--acento) 38%, transparent) 360deg
+  );
+  animation-name: varredura;
+  animation-timing-function: linear;
+}
+[data-tema="conflito"] .ambiente i:nth-child(n + 2),
+[data-tema="nuclear"] .ambiente i:nth-child(n + 2) {
+  display: none;
+}
+
+/* clima: chuva */
+[data-tema="clima_extremo"] .ambiente i {
+  top: -80px;
+  width: 1.5px;
+  height: 56px;
+  background: linear-gradient(to bottom, transparent, var(--acento));
+  opacity: 0.55;
+  transform: rotate(12deg);
+  animation-name: chuva;
+  animation-timing-function: linear;
+}
+[data-tema="clima_extremo"] .ambiente::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  animation: relampago 7s ease-in-out 2s infinite;
+}
+
+/* mercados: partículas subindo (alta) ou caindo (queda) */
+[data-tema="mercado_alta"] .ambiente i,
+[data-tema="mercado_queda"] .ambiente i {
+  width: 3px;
+  height: 22px;
+  border-radius: 2px;
+  background: var(--acento);
+  opacity: 0.5;
+  animation-timing-function: linear;
+}
+[data-tema="mercado_alta"] .ambiente i {
+  top: 105%;
+  animation-name: sobe;
+}
+[data-tema="mercado_queda"] .ambiente i {
+  top: -30px;
+  animation-name: desce;
+}
+
+/* ciência: estrelas piscando */
+[data-tema="ciencia_espaco"] .ambiente i {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--texto);
+  animation-name: pisca;
+  animation-timing-function: ease-in-out;
+}
+
+/* tecnologia: linhas de dados correndo */
+[data-tema="tecnologia_ia"] .ambiente i {
+  width: 90px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--acento), transparent);
+  animation-name: corre;
+  animation-timing-function: linear;
+}
+
+/* agro: grãos dourados à deriva */
+[data-tema="agro_safra"] .ambiente i {
+  width: 4px;
+  height: 7px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: var(--acento);
+  opacity: 0.4;
+  animation-name: deriva-lateral;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
+
+/* política: faixas largas e lentas */
+[data-tema="politica"] .ambiente i {
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--acento), transparent);
+  opacity: 0.05;
+  animation-name: pisca-leve;
+  animation-timing-function: ease-in-out;
+}
+
+/* saúde: pulsos suaves */
+[data-tema="saude"] .ambiente i {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid var(--acento);
+  opacity: 0;
+  animation-name: pulso;
+  animation-timing-function: ease-out;
+}
+
+/* esporte: confete lento */
+[data-tema="esporte"] .ambiente i {
+  top: -20px;
+  width: 6px;
+  height: 10px;
+  background: var(--acento);
+  opacity: 0.5;
+  animation-name: confete;
+  animation-timing-function: linear;
+}
+
+/* cultura: facho de luz */
+[data-tema="cultura"] .ambiente i {
+  top: -10%;
+  width: 40vmax;
+  height: 120%;
+  margin-left: -20vmax;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--acento) 22%, transparent),
+    transparent 70%
+  );
+  clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%);
+  animation-name: facho;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
+[data-tema="cultura"] .ambiente i:nth-child(n + 3) {
+  display: none;
+}
+
+/* luto: nada se mexe. */
+[data-tema="luto"] .ambiente {
+  display: none;
+}
+
+@keyframes deriva {
+  to {
+    transform: translate(18px, -26px);
+    opacity: 0.15;
+  }
+}
+@keyframes deriva-lateral {
+  from {
+    transform: translate(-16px, 0) rotate(-20deg);
+  }
+  to {
+    transform: translate(24px, 14px) rotate(25deg);
+  }
+}
+@keyframes sobe-patinha {
+  to {
+    transform: translate(26px, -120vh) rotate(18deg);
+  }
+}
+@keyframes varredura {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes chuva {
+  to {
+    transform: translate(-30px, 120vh) rotate(12deg);
+  }
+}
+@keyframes relampago {
+  0%,
+  92%,
+  100% {
+    opacity: 0;
+  }
+  93% {
+    opacity: 0.22;
+  }
+  95% {
+    opacity: 0.02;
+  }
+  96% {
+    opacity: 0.16;
+  }
+}
+@keyframes sobe {
+  to {
+    transform: translateY(-120vh);
+  }
+}
+@keyframes desce {
+  to {
+    transform: translateY(120vh);
+  }
+}
+@keyframes pisca {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes pisca-leve {
+  0%,
+  100% {
+    opacity: 0.03;
+  }
+  50% {
+    opacity: 0.16;
+  }
+}
+@keyframes corre {
+  from {
+    transform: translateX(-120px);
+  }
+  to {
+    transform: translateX(120vw);
+  }
+}
+@keyframes pulso {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+@keyframes confete {
+  to {
+    transform: translate(40px, 120vh) rotate(360deg);
+  }
+}
+@keyframes facho {
+  from {
+    transform: rotate(-9deg);
+  }
+  to {
+    transform: rotate(9deg);
+  }
+}
+
+/* ───────────── Núcleo (o símbolo do tema) ───────────── */
+
+.nucleo {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.nucleo .fundo-do-nucleo {
+  fill: var(--nucleo);
+}
+.nucleo .traco {
+  fill: none;
+  stroke: var(--glifo);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nucleo .cheio {
+  fill: var(--glifo);
+}
+.nucleo .destaque {
+  fill: var(--acento);
+}
+.nucleo .destaque-traco {
+  fill: none;
+  stroke: var(--acento);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+[data-tema="neutro"] .nucleo .onda {
+  animation: onda 7s ease-in-out infinite alternate;
+}
+[data-tema="neutro"] .nucleo .onda:nth-of-type(2) {
+  animation-duration: 9s;
+  animation-direction: alternate-reverse;
+}
+[data-tema="ternura_animal"] .nucleo .pata {
+  transform-origin: 50% 70%;
+  transform-box: fill-box;
+  animation: balanca 3.2s ease-in-out infinite;
+}
+[data-tema="conflito"] .nucleo .varre,
+[data-tema="nuclear"] .nucleo .varre {
+  transform-origin: 80px 80px;
+  animation: varredura 4.5s linear infinite;
+}
+[data-tema="nuclear"] .nucleo .trevo {
+  transform-origin: 80px 80px;
+  animation: pulsa 2.6s ease-in-out infinite;
+}
+[data-tema="clima_extremo"] .nucleo .raio {
+  animation: raio 4.6s ease-in-out infinite;
+}
+[data-tema="mercado_alta"] .nucleo .barra,
+[data-tema="mercado_queda"] .nucleo .barra {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: cresce 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite alternate;
+}
+[data-tema="mercado_alta"] .nucleo .barra:nth-of-type(2),
+[data-tema="mercado_queda"] .nucleo .barra:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+[data-tema="mercado_alta"] .nucleo .barra:nth-of-type(3),
+[data-tema="mercado_queda"] .nucleo .barra:nth-of-type(3) {
+  animation-delay: 0.4s;
+}
+[data-tema="ciencia_espaco"] .nucleo .anel {
+  transform-origin: 80px 82px;
+  animation: gira-anel 14s ease-in-out infinite alternate;
+}
+[data-tema="tecnologia_ia"] .nucleo .miolo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulsa 2.2s ease-in-out infinite;
+}
+[data-tema="agro_safra"] .nucleo .sol {
+  animation: nasce 6s ease-in-out infinite alternate;
+}
+[data-tema="saude"] .nucleo .ecg {
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation: traca 2.6s ease-in-out infinite;
+}
+[data-tema="esporte"] .nucleo .bola {
+  transform-origin: 80px 118px;
+  animation: quica 1.5s cubic-bezier(0.3, 0, 0.4, 1) infinite;
+}
+[data-tema="cultura"] .nucleo .estrela {
+  transform-origin: 80px 88px;
+  animation: balanca 4s ease-in-out infinite;
+}
+
+@keyframes onda {
+  to {
+    transform: translateX(10px);
+  }
+}
+@keyframes balanca {
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+@keyframes pulsa {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.8;
+  }
+}
+@keyframes raio {
+  0%,
+  86%,
+  100% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.3;
+  }
+}
+@keyframes cresce {
+  from {
+    transform: scaleY(0.55);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes gira-anel {
+  from {
+    transform: rotate(-26deg);
+  }
+  to {
+    transform: rotate(-14deg);
+  }
+}
+@keyframes nasce {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+@keyframes traca {
+  0% {
+    stroke-dashoffset: 260;
+  }
+  60%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes quica {
+  0%,
+  100% {
+    transform: translateY(-14px);
+  }
+  50% {
+    transform: translateY(8px) scaleY(0.94);
+  }
+}
+
+/* Quem pede menos movimento, ou o tema luto, fica com tudo parado. */
+@media (prefers-reduced-motion: reduce) {
+  .ambiente {
+    display: none;
+  }
+  .nucleo *,
+  .abertura * {
+    animation: none !important;
+  }
+  [data-tema="saude"] .nucleo .ecg {
+    stroke-dashoffset: 0;
+  }
+}
+[data-tema="luto"] .nucleo *,
+[data-tema="luto"] .abertura-nucleo {
+  animation: none !important;
+}
+[data-sem-movimento="1"] .ambiente {
+  display: none;
+}
+[data-sem-movimento="1"] .nucleo * {
+  animation: none !important;
+}
+[data-sem-movimento="1"][data-tema="saude"] .nucleo .ecg {
+  stroke-dashoffset: 0;
+}

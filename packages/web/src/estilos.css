@@ -1,0 +1,770 @@
+/* Base do app. As cores e a "voz" (fonte das manchetes) vêm de temas.css, por tema. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--fundo);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: "Sofia Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.6s ease,
+    color 0.6s ease;
+}
+
+a {
+  color: var(--acento);
+}
+
+:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.app {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+.app.modo-stories {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ───────── barra de cima ───────── */
+
+.barra {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(10px + env(safe-area-inset-top)) 18px 8px;
+}
+.marca {
+  font-family: "Sofia Sans Extra Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.22em;
+  text-decoration: none;
+  color: var(--acento);
+}
+.barra nav {
+  display: flex;
+  gap: 4px;
+}
+.barra nav a {
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: var(--suave);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+}
+.barra nav a[aria-current="page"] {
+  color: var(--texto);
+  background: var(--cartao);
+}
+
+.aviso {
+  position: relative;
+  z-index: 2;
+  margin: 0 18px 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--borda);
+  background: var(--cartao);
+  color: var(--texto);
+  font-size: 15px;
+}
+
+/* ───────── texto ───────── */
+
+.rotulo {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+
+.manchete {
+  margin: 0 0 14px;
+  font-family: var(--voz);
+  font-weight: var(--voz-peso);
+  font-style: var(--voz-estilo);
+  text-transform: var(--voz-caixa);
+  letter-spacing: var(--voz-espaco);
+  line-height: var(--voz-altura);
+  font-size: clamp(32px, 8vw, 42px);
+  text-wrap: balance;
+}
+.manchete.grande {
+  font-size: clamp(38px, 11vw, 62px);
+}
+
+.corpo {
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+}
+.suave {
+  color: var(--suave);
+}
+.meta {
+  margin: 0 0 14px;
+  font-size: 14px;
+  color: var(--suave);
+}
+.dica {
+  margin: auto 0 0;
+  padding-top: 18px;
+  font-size: 13px;
+  color: var(--suave);
+}
+
+.botao {
+  display: inline-block;
+  padding: 11px 20px;
+  border: 1px solid var(--acento);
+  border-radius: 999px;
+  background: var(--acento);
+  color: var(--sobre-acento);
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.botao.secundario {
+  background: transparent;
+  border-color: var(--borda);
+  color: var(--texto);
+}
+.botao:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 16px;
+}
+button.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--acento);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ───────── notícia ───────── */
+
+.noticia {
+  padding: 4px 0 8px;
+}
+.importa,
+.ontem {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--acento);
+  background: color-mix(in srgb, var(--cartao) 70%, transparent);
+  border-radius: 0 12px 12px 0;
+  font-size: 1rem;
+}
+.lados {
+  margin: 0 0 14px;
+  padding-left: 20px;
+  font-size: 1rem;
+}
+.lados li {
+  margin-bottom: 6px;
+}
+.fontes {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.fontes a {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--texto);
+  font-size: 14px;
+  line-height: 1.3;
+}
+.fonte-veiculo {
+  grid-row: span 2;
+  align-self: center;
+  font-weight: 700;
+  color: var(--acento);
+  min-width: 4.5em;
+}
+.fonte-hora {
+  color: var(--suave);
+  font-size: 12px;
+}
+
+.tempo,
+.trinta {
+  padding: 4px 0 8px;
+}
+.numeros {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+.numeros div {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  text-align: center;
+}
+.numeros dt {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+.numeros dd {
+  margin: 0;
+  font-family: var(--voz);
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.alertas {
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+.alertas li {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--borda);
+  font-size: 15px;
+}
+.alertas li[data-nivel="laranja"] {
+  border-color: #ff9d1a;
+}
+.alertas li[data-nivel="vermelho"] {
+  border-color: #ff4d5e;
+}
+.trinta ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ponto;
+  display: grid;
+  gap: 14px;
+}
+.trinta li {
+  counter-increment: ponto;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-size: 1.15rem;
+}
+.trinta li::before {
+  content: counter(ponto);
+  font-family: var(--voz);
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--acento);
+}
+
+/* ───────── Stories ───────── */
+
+.stories {
+  width: min(100%, 480px);
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px calc(8px + env(safe-area-inset-bottom));
+}
+.progresso {
+  display: flex;
+  gap: 3px;
+  padding: 4px 2px 10px;
+}
+.progresso span {
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--borda);
+  transition: background-color 0.3s;
+}
+.progresso span.feito {
+  background: var(--acento);
+}
+.slide-area {
+  flex: 1;
+  min-height: 0;
+  touch-action: pan-y;
+  border: 1px solid var(--borda);
+  border-radius: 26px;
+  background: color-mix(in srgb, var(--fundo) 80%, transparent);
+  overflow: hidden;
+}
+.slide {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 24px 22px;
+  animation: slide-entra 0.28s ease both;
+}
+@keyframes slide-entra {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.gesto {
+  height: 100%;
+  touch-action: pan-y;
+}
+.so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+fieldset.acoes {
+  border: 0;
+  padding: 0;
+  min-inline-size: 0;
+}
+.stories-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 6px 0;
+  color: var(--suave);
+  font-size: 14px;
+}
+.stories-nav button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--borda);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+.stories-nav button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.capa,
+.fim {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  justify-content: center;
+}
+.capa-nucleo {
+  width: min(34vw, 130px);
+  margin: 0 0 12px;
+}
+.capa .botao {
+  align-self: flex-start;
+}
+.fita {
+  display: none;
+  height: 10px;
+  margin-bottom: 16px;
+  border-radius: 2px;
+  background: var(--fita);
+}
+[data-tema="conflito"] .fita,
+[data-tema="nuclear"] .fita {
+  display: block;
+}
+
+/* ───────── Lista ───────── */
+
+.lista {
+  width: min(100%, 780px);
+  margin: 0 auto;
+  padding: 12px 20px 140px;
+  position: relative;
+  z-index: 1;
+}
+.cabeca-lista {
+  display: grid;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.cabeca-nucleo {
+  width: 120px;
+}
+@media (min-width: 721px) {
+  .cabeca-lista {
+    grid-template-columns: 170px 1fr;
+    gap: 32px;
+  }
+  .cabeca-nucleo {
+    width: 170px;
+  }
+}
+.secao {
+  margin-top: 36px;
+}
+.secao-titulo {
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--borda);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+.lista .noticia {
+  padding: 8px 0 22px;
+}
+.rodape-lista {
+  margin-top: 40px;
+  font-size: 14px;
+}
+
+/* ───────── abertura ───────── */
+
+.abertura {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  display: grid;
+  place-items: center;
+  background: var(--fundo);
+  color: var(--texto);
+  cursor: pointer;
+  animation: abertura-vida var(--duracao, 2s) ease forwards;
+}
+.abertura-miolo {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+.abertura-nucleo {
+  display: block;
+  width: min(54vw, 230px);
+  animation: abertura-entra 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.abertura-marca {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: var(--suave);
+}
+.abertura-nome {
+  font-family: var(--voz);
+  font-weight: var(--voz-peso);
+  text-transform: var(--voz-caixa);
+  font-size: 36px;
+  line-height: 1;
+  color: var(--acento);
+}
+@keyframes abertura-vida {
+  0% {
+    opacity: 0;
+  }
+  16% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes abertura-entra {
+  from {
+    transform: scale(0.7) rotate(-6deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ───────── Ouvir ───────── */
+
+.barra-ouvir {
+  position: fixed;
+  z-index: 30;
+  left: 50%;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  width: min(calc(100% - 24px), 560px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px 10px 16px;
+  border: 1px solid var(--borda);
+  border-radius: 20px;
+  background: var(--cartao);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.barra-ouvir-texto {
+  min-width: 0;
+  display: grid;
+}
+.barra-ouvir-texto .rotulo {
+  margin: 0;
+}
+.barra-ouvir-titulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+}
+.barra-ouvir-botoes {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.barra-ouvir-botoes button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--borda);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 17px;
+  cursor: pointer;
+}
+.barra-ouvir-botoes button.principal {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: var(--sobre-acento);
+}
+
+/* ───────── telas simples ───────── */
+
+.tela-simples {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 720px);
+  margin: 0 auto;
+  padding: 16px 20px 120px;
+}
+.historico {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.historico a {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--cartao) 60%, transparent);
+  color: var(--texto);
+  text-decoration: none;
+}
+.historico-emoji {
+  font-size: 28px;
+}
+.historico-texto {
+  display: grid;
+}
+.historico-texto .rotulo {
+  margin: 0;
+}
+.historico-titulo {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.ajustes fieldset {
+  margin: 0 0 18px;
+  padding: 16px;
+  border: 1px solid var(--borda);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--cartao) 60%, transparent);
+}
+.ajustes legend {
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+.opcoes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.opcoes label {
+  padding: 8px 16px;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.opcoes label.marcada {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: var(--sobre-acento);
+  font-weight: 700;
+}
+.opcoes input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.opcoes label:focus-within {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+}
+.linha {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.linha.coluna {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+.linha input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  margin-top: 3px;
+  accent-color: var(--acento);
+}
+select,
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--acento);
+}
+select {
+  padding: 10px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--cartao);
+  color: var(--texto);
+  font: inherit;
+}
+
+.passo-a-passo {
+  margin: 0 0 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--borda);
+  border-radius: 18px;
+}
+.passo-a-passo[data-destaque="true"] {
+  border-color: var(--acento);
+  background: color-mix(in srgb, var(--cartao) 70%, transparent);
+}
+.passo-a-passo .secao-titulo {
+  border: 0;
+  padding: 0;
+}
+.passo-a-passo ol {
+  margin: 0;
+  padding-left: 22px;
+}
+.passo-a-passo li {
+  margin-bottom: 8px;
+}
+.alerta-aviso {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--acento) 18%, transparent);
+}
+
+.grade-lab {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+.cartao-lab {
+  height: 100%;
+  padding: 18px;
+  border: 1px solid var(--borda);
+  border-radius: 22px;
+  background: var(--fundo);
+  color: var(--texto);
+}
+.cartao-lab-nucleo {
+  width: 96px;
+  margin-bottom: 12px;
+}
+.cartao-lab .manchete {
+  font-size: 30px;
+}
+
+.tela-simples .fita {
+  margin-top: 0;
+}

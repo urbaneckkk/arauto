@@ -123,3 +123,37 @@ Seis execuções reais (US$ 1,46 no livro-caixa) mostraram **cinco problemas que
 
 - **Critérios de aceite cumpridos** (detalhes no PLAN.md): 88/88 nos casos de tema com o modelo real; 3 execuções reais com 5 a 7 min de leitura, todos os links abrindo e datas em até 15 h; custo registrado em cada passo.
 - **Falta você testar e dar o ok** para abrir a Etapa 2.
+
+## Etapa 2, versão enxuta: o app no ar (05/11/2026)
+
+### O que foi feito
+
+- **App web (PWA)** em `packages/web`: React 19 + Vite 8, rotas por `#` (funcionam em qualquer hospedagem estática), 15 temas em variáveis CSS, símbolos em SVG, abertura de 1,5 a 2,5 s, Stories (toque, arrasto, teclado), Lista, Modo Ouvir, histórico, ajustes, `/lab` e `/instalar`.
+- **Entrega sem servidor:** um fluxo do GitHub Actions gera o briefing, guarda o estado numa branch `dados` e publica o site no GitHub Pages. O pipeline da Etapa 1 ganhou `--estado <arquivo>` e `--se-faltar`.
+- **Barreiras de publicação:** `scripts/conferir-publicacao.mjs` olha a pasta que vai ao ar e barra o que não pode estar lá; `scripts/exportar-site.mjs` poda o estado antes de ele ir para a branch pública.
+
+### Por que essa solução
+
+- O Railway não estava ao meu alcance e o objetivo era "acordar e funcionar". O GitHub dá agendador (cron), hospedagem estática e armazenamento (uma branch) de graça. A leitura do app vira **buscar um arquivo**: nenhum toque do usuário chama a API paga, o que resolve a sua preocupação com custo de um jeito mais forte do que uma trava (não existe o que travar).
+- Rotas por `#` em vez de caminho (`/historico`): o GitHub Pages não sabe devolver o `index.html` para um endereço que não existe. Com `#`, o servidor só vê `/arauto/`.
+- Service worker escrito à mão (60 linhas) em vez de plugin: dá para ler e explicar tudo o que ele faz, e o comportamento offline é o que está no PLAN.md (briefing: rede primeiro; app: cache primeiro).
+
+### Alternativas descartadas
+
+- **Esperar o Claude Design:** o acesso pede login interativo que eu não posso fazer. Segui a captura "C · Vigia" e deixei 6 temas marcados como provisórios.
+- **Web Push agora:** impossível em site estático (precisa de um servidor para guardar a inscrição e enviar). Fica para quando houver servidor.
+- **Botão "Atualizar agora" que gera de verdade:** um botão público que gasta a cada toque é o risco que a seção 2.8 do PLAN.md existe para evitar. No app ele virou "Ver se já saiu".
+- **Guardar o estado completo na branch `dados`:** o repositório é público e o estado traz o texto coletado das notícias (direitos autorais). A poda tira isso e há teste para garantir.
+
+### O que aprendi (surpresas)
+
+- **O offline quebrou de um jeito traiçoeiro:** o arquivo estava no cache, mas o service worker não o achava, e o app abria **em branco**. Causa: o servidor responde `Vary: Origin` e o navegador pede scripts de módulo com cabeçalhos diferentes dos de `cache.add()`. A correção é `cache.match(..., { ignoreVary: true })`. Só apareceu porque eu desliguei o servidor e recarreguei: teste de offline que não desliga a rede não prova nada.
+- **Estado pelo `useEffect` vs. durante o render:** para zerar a posição dos Stories quando o briefing muda, o Biome apontou que a dependência do `useEffect` era falsa. Troquei por "ajustar estado durante a renderização" (o padrão recomendado pelo React), sem efeito extra.
+- **Acessibilidade vira lint:** o Biome barrou `role="group"` em `div` e handlers em elemento estático. Isso levou a `<fieldset>`, `<section>` e `role="presentation"` só no gesto de arrastar, com botões e teclado fazendo o mesmo: o gesto é atalho, não único caminho.
+- **GitHub Actions e segredos:** o contexto `secrets` não pode ser usado direto em `if:`. O truque é copiar `secrets.X != ''` para uma variável de ambiente do job e testar essa variável.
+- **Tema `luto`:** garantido em três camadas (o servidor escolhe, o CSS não anima nada nem mostra o ambiente, a abertura é só fade) e há teste que lê o CSS para impedir que alguém "enfeite" depois.
+
+### Estado desta etapa
+
+- **No ar:** <https://urbaneckkk.github.io/arauto/>. Para ligar a geração diária automática você precisa rodar **um comando no seu computador** (`pnpm automacao:ativar`); sem ele o site mostra o último briefing publicado.
+- **Falta (honesto):** Web Push e "Atualizar agora" de verdade (precisam de servidor), os 6 temas definitivos do Claude Design, teste em iPhone e Android reais, Windows (.exe) e APK.

@@ -12,7 +12,7 @@ Um "Jarvis da informação" pessoal: todo dia às 06:30, e quando você pedir, u
 |---|---|---|
 | `packages/core` | Esquemas Zod, tipos e catálogo de temas | 0 (pronto) |
 | `packages/server` | Pipeline do briefing e comandos de linha (Etapa 1); API e agendador na Etapa 2 | 1 (falta a execução real) e 2 |
-| `packages/web` | App web e PWA | 2 |
+| `packages/web` | App web e PWA (Stories, Lista, Ouvir, 15 temas, offline) | 2 (no ar; falta Web Push) |
 | `packages/desktop` | Casca Windows (Tauri 2) | 3 |
 | `packages/mobile` | Casca Android (Capacitor) | 4 |
 | `packages/themes` | Pacotes visuais dos temas | 2 |
@@ -29,6 +29,25 @@ pnpm verificar   # build, typecheck, lint e testes: o mesmo que o CI roda
 Comandos avulsos: `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm format`.
 
 Depois de clonar, rode uma vez `pnpm hooks:instalar`: ele liga a trava que **bloqueia commit e envio com segredo** (`.githooks/`).
+
+## O app no ar (Etapa 2, versão enxuta)
+
+**Endereço:** <https://urbaneckkk.github.io/arauto/> (público: qualquer pessoa com o link lê o briefing; não há dado pessoal nele).
+
+- **iPhone:** abra o link no **Safari** → Compartilhar → *Adicionar à Tela de Início*. Abre em tela cheia e funciona sem internet.
+- **Android:** Chrome → três pontinhos → *Instalar app*.
+- **Windows, macOS ou Linux:** Chrome ou Edge → ícone de instalar na barra de endereço. A tela `#/instalar` do app mostra o passo a passo do seu aparelho.
+
+Como funciona, sem servidor próprio: um fluxo do GitHub Actions (`.github/workflows/publicar.yml`) gera o briefing todo dia às 06:00 (horário de Brasília), guarda o resultado na branch `dados` e publica o site no GitHub Pages. Quem abre o app só **lê um arquivo**: abrir, recarregar ou atualizar a página não chama a API paga.
+
+```bash
+pnpm automacao:ativar      # guarda a chave do .env como segredo do GitHub e pede o briefing de hoje (rode no seu PC)
+pnpm automacao:desativar   # apaga o segredo: o site continua no ar, só para de gerar briefing novo
+pnpm web:dev               # app em modo de desenvolvimento (abre em http://localhost:5173/arauto/)
+pnpm site:exportar         # transforma o estado local em arquivos de briefing para o app
+```
+
+Sem o segredo configurado, o fluxo só republica o app com o último briefing guardado (custo zero). As travas: perfil econômico (3 buscas, ~US$ 0,21 por briefing), `MAX_USD_MES` = US$ 5 (variáveis do repositório em *Settings → Secrets and variables → Actions → Variables*) e no máximo um briefing por dia.
 
 ## Gerar um briefing (Etapa 1)
 

@@ -8,12 +8,22 @@ packages:
 # e com "^" ele abre essa exceção sozinho. Subir a versão quando ela completar alguns dias.
 # - Biome: 2.6.4 (a 2.6.5 tinha 11 horas em 04/11/2026).
 # - SDK da Anthropic: 1.4.0 (a 1.5.0 tinha 5 horas em 04/11/2026).
+# - @vitejs/plugin-react: 6.1.2 (a 6.2.1 tinha 3 dias em 05/11/2026).
 catalog:
   "@anthropic-ai/sdk": 1.4.0
   "@biomejs/biome": 2.6.4
+  "@fontsource/sofia-sans": 5.3.0
+  "@fontsource/sofia-sans-extra-condensed": 5.3.0
+  "@fontsource/spectral": 5.3.0
   "@types/node": 24.19.2
+  "@types/react": 19.3.0
+  "@types/react-dom": 19.3.0
+  "@vitejs/plugin-react": 6.1.2
   fast-xml-parser: 5.11.2
   postgres: 4.0.0
+  react: 19.1.10
+  react-dom: 19.1.10
   typescript: ^7.0.2
+  vite: 8.3.5
   vitest: ^5.1.0
   zod: ^4.6.7

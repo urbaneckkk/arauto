@@ -1,0 +1,140 @@
+name: Publicar
+
+# O que este fluxo faz, todo dia e a cada mudança no app:
+#   1. gera o briefing do dia (só se faltar e só se a chave estiver configurada),
+#   2. guarda o resultado na branch "dados" (briefings e livro-caixa de custo),
+#   3. compila o app, confere o que vai ao ar e publica no GitHub Pages.
+# Sem a chave configurada, ele só republica o app com o último briefing guardado (custo zero).
+
+on:
+  schedule:
+    # 09:00 UTC = 06:00 em São Paulo (sem horário de verão). O segundo horário é só reserva:
+    # com --se-faltar ele não faz nada (e não gasta nada) se o primeiro já deu certo.
+    - cron: "0 9 * * *"
+    - cron: "45 9 * * *"
+  workflow_dispatch:
+    inputs:
+      gerar:
+        description: "Gerar o briefing de hoje (só gasta se ainda não existir; custa cerca de US$ 0,20)"
+        type: boolean
+        default: true
+      forcar:
+        description: "Gerar de novo mesmo que já exista (cada vez custa cerca de US$ 0,20)"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - "packages/web/**"
+      - "packages/core/**"
+      - "packages/server/**"
+      - "scripts/exportar-site.mjs"
+      - "scripts/conferir-publicacao.mjs"
+      - ".github/workflows/publicar.yml"
+
+# Nada por padrão. Cada tarefa pede só o que precisa.
+permissions: {}
+
+# Uma execução por vez: dois fluxos mexendo na branch "dados" ao mesmo tempo se atropelariam.
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write # gravar na branch "dados"
+      pages: write # publicar no Pages
+      id-token: write # exigido pelo deploy-pages
+    environment:
+      name: github-pages
+      url: ${{ steps.implantar.outputs.page_url }}
+    env:
+      TEM_CHAVE: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+      VITE_BASE: /${{ github.event.repository.name }}/
+
+    steps:
+      # As ações estão fixadas pelo hash do commit (o comentário diz a versão).
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # A branch "dados" guarda os briefings. Sem credencial salva: o push usa o token só no momento.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: dados
+          path: dados
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter "@arauto/server..." build
+
+      - name: Gerar o briefing de hoje
+        id: gerar
+        if: env.TEM_CHAVE == 'true' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.gerar))
+        # Se a geração falhar (ou parar pela trava de custo), o app ainda é republicado com o último briefing.
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PERFIL_CUSTO: ${{ vars.PERFIL_CUSTO || 'economico' }}
+          MAX_USD_MES: ${{ vars.MAX_USD_MES || '5' }}
+          MAX_USD_POR_EXECUCAO: ${{ vars.MAX_USD_POR_EXECUCAO || '1' }}
+          FORCAR: ${{ (github.event_name == 'workflow_dispatch' && inputs.forcar) && 'sim' || 'nao' }}
+        run: |
+          args=""
+          if [ "$FORCAR" != "sim" ]; then args="--se-faltar"; fi
+          node packages/server/dist/cli/gerar.js --estado dados/estado.json $args
+
+      - name: Avisar se a geração não deu certo
+        if: steps.gerar.outcome == 'failure'
+        run: |
+          echo "::warning title=Briefing não gerado::A geração falhou ou parou pela trava de custo. O app foi republicado com o último briefing guardado. Veja o passo 'Gerar o briefing de hoje'."
+          echo "### Briefing não gerado" >> "$GITHUB_STEP_SUMMARY"
+          echo "A geração falhou ou parou pela trava de custo. O app foi republicado com o último briefing guardado." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Avisar se falta a chave
+        if: env.TEM_CHAVE != 'true' && github.event_name != 'push'
+        run: |
+          echo "::notice title=Sem chave::O segredo ANTHROPIC_API_KEY não está configurado: nenhum briefing novo foi gerado (nenhum gasto). Rode 'pnpm automacao:ativar' no seu computador."
+
+      - name: Exportar os briefings para o site (e podar o estado)
+        run: node scripts/exportar-site.mjs --estado dados/estado.json --saida packages/web/public/briefing --podar
+
+      - name: Guardar na branch dados
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd dados
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add estado.json
+          if git diff --cached --quiet; then
+            echo "Nada novo para guardar."
+          else
+            git commit -m "dados: estado de $(date -u +%Y-%m-%dT%H:%MZ)"
+            auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+            git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:dados
+          fi
+
+      - run: pnpm --filter @arauto/web build
+
+      - name: Conferir o que vai ao ar
+        run: node scripts/conferir-publicacao.mjs packages/web/dist
+
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: packages/web/dist
+
+      - id: implantar
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

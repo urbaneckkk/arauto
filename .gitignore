@@ -42,3 +42,9 @@ Thumbs.db
 *.user
 .vscode/*
 !.vscode/extensions.json
+
+# briefings exportados para o site (gerados; a branch "dados" é quem publica)
+packages/web/public/briefing/
+
+# configuração local do Claude Code
+.claude/
