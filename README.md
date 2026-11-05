@@ -28,6 +28,8 @@ pnpm verificar   # build, typecheck, lint e testes: o mesmo que o CI roda
 
 Comandos avulsos: `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm format`.
 
+Depois de clonar, rode uma vez `pnpm hooks:instalar`: ele liga a trava que **bloqueia commit e envio com segredo** (`.githooks/`).
+
 ## Gerar um briefing (Etapa 1)
 
 ```bash

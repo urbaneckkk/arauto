@@ -42,7 +42,12 @@ export interface ResultadoDaVerificacao {
 
 type Avaliacao = { ok: true; fonte: Fonte } | { ok: false; motivo: string };
 
-const TAMANHO_DO_TRECHO_COPIADO = 8;
+/**
+ * Calibrado na 1ª execução real: com 8 palavras o filtro descartava fatos curtos inevitáveis
+ * ("o líder do governo no Congresso, Fulano", "mais de 7 mil denúncias de assédio") e jogou fora 7 de
+ * 17 notícias. A única cópia de verdade tinha 16 palavras. Com 12, pega prosa copiada.
+ */
+const TAMANHO_DO_TRECHO_COPIADO = 12;
 const CONCORRENCIA_HTTP = 6;
 
 function palavras(texto: string): string[] {
@@ -207,36 +212,51 @@ export async function verificarRedacao(
   const descartes: Descarte[] = [];
   // Seção repetida pelo redator: junta as notícias na primeira.
   const secoesPorId = new Map<string, Noticia[]>();
+  const importanciaDe = new WeakMap<Noticia, number>();
+  const ordemDe = new WeakMap<Noticia, number>();
+  let ordem = 0;
   for (const secao of redacao.secoes) {
     const lista = secoesPorId.get(secao.id) ?? [];
     secao.noticias.forEach((noticia, i) => {
       const onde = `${secao.id} #${i + 1} "${noticia.titulo}"`;
       const valida = processarNoticia(noticia, avaliacoes, registro, descartes, onde);
-      if (valida) lista.push(valida);
+      if (valida) {
+        lista.push(valida);
+        importanciaDe.set(valida, Math.min(5, Math.max(1, Math.round(noticia.importancia))));
+        ordemDe.set(valida, ordem++);
+      }
     });
     secoesPorId.set(secao.id, lista);
   }
 
-  // Limites do contrato: no máximo 4 por seção e o teto global.
+  // Limites do contrato: no máximo 4 por seção e o teto global. O corte tira primeiro as de menor
+  // importância (nota do redator); em empate, a que vem mais tarde.
+  const removerMenosImportante = (
+    candidatas: { id: string; noticia: Noticia }[],
+    motivo: string,
+  ) => {
+    const [pior] = [...candidatas].sort(
+      (a, b) =>
+        (importanciaDe.get(a.noticia) ?? 3) - (importanciaDe.get(b.noticia) ?? 3) ||
+        (ordemDe.get(b.noticia) ?? 0) - (ordemDe.get(a.noticia) ?? 0),
+    );
+    if (!pior) return;
+    const lista = secoesPorId.get(pior.id) ?? [];
+    lista.splice(lista.indexOf(pior.noticia), 1);
+    descartes.push({ onde: `${pior.id} "${pior.noticia.titulo}"`, motivo });
+  };
   for (const [id, lista] of secoesPorId) {
     while (lista.length > NOTICIAS_MAX_POR_SECAO) {
-      const removida = lista.pop();
-      descartes.push({
-        onde: `${id} "${removida?.titulo}"`,
-        motivo: "acima do máximo de notícias por seção",
-      });
+      removerMenosImportante(
+        lista.map((noticia) => ({ id, noticia })),
+        "acima do máximo de notícias por seção",
+      );
     }
   }
-  const total = () => [...secoesPorId.values()].reduce((soma, lista) => soma + lista.length, 0);
-  while (total() > TETO_NOTICIAS) {
-    const [idMaior] = [...secoesPorId.entries()].reduce((maior, atual) =>
-      atual[1].length >= maior[1].length ? atual : maior,
-    );
-    const removida = secoesPorId.get(idMaior)?.pop();
-    descartes.push({
-      onde: `${idMaior} "${removida?.titulo}"`,
-      motivo: `acima do teto de ${TETO_NOTICIAS} notícias`,
-    });
+  const todas = () =>
+    [...secoesPorId.entries()].flatMap(([id, lista]) => lista.map((noticia) => ({ id, noticia })));
+  while (todas().length > TETO_NOTICIAS) {
+    removerMenosImportante(todas(), `acima do teto de ${TETO_NOTICIAS} notícias`);
   }
 
   const secoes: Secao[] = [...secoesPorId.entries()]

@@ -17,6 +17,8 @@ export const NoticiaRedigidaSchema = z.object({
   lados: z.array(LadoSchema),
   continuaDeOntem: z.string().nullable(),
   fontes: z.array(z.string()),
+  /** 1 a 5: o quanto importa hoje para quem mora em Curitiba. O código a usa para cortar o excesso. */
+  importancia: z.number().default(3),
 });
 export type NoticiaRedigida = z.infer<typeof NoticiaRedigidaSchema>;
 
@@ -50,7 +52,7 @@ export async function executarRedacao(
     modelo: deps.modelo,
     sistema: lerPrompt("editorial"),
     usuario,
-    maxTokens: 12_000,
+    maxTokens: 16_000,
     esforco: deps.perfil.esforcoRedacao,
     formato: RedacaoSchema,
   });

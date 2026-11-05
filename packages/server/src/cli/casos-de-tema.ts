@@ -186,6 +186,8 @@ export interface ResultadoDoCaso {
   acertos: number;
   /** Quantas vezes o modelo falhou e o tema veio do plano de emergência. */
   falhasDoModelo: number;
+  /** Mensagens distintas das falhas do modelo (para diagnóstico). */
+  erros: string[];
   respostas: Record<string, number>;
 }
 
@@ -200,6 +202,7 @@ export async function rodarCaso(
   const respostas: Record<string, number> = {};
   let acertos = 0;
   let falhasDoModelo = 0;
+  const erros = new Set<string>();
   for (let i = 0; i < repeticoes; i++) {
     let id: TemaId;
     try {
@@ -208,12 +211,13 @@ export async function rodarCaso(
       // Custo esgotado para tudo; qualquer outra falha cai no plano de emergência, como no pipeline.
       if (erro instanceof Error && erro.name === "OrcamentoEsgotado") throw erro;
       falhasDoModelo++;
+      erros.add(erro instanceof Error ? erro.message : String(erro));
       id = temaDeEmergencia(historia).tema.id;
     }
     respostas[id] = (respostas[id] ?? 0) + 1;
     if (caso.esperado.includes(id)) acertos++;
   }
-  return { caso, repeticoes, acertos, falhasDoModelo, respostas };
+  return { caso, repeticoes, acertos, falhasDoModelo, erros: [...erros].slice(0, 3), respostas };
 }
 
 export async function rodarTodosOsCasos(

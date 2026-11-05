@@ -148,6 +148,7 @@ export function redacaoFalsa(chamada: ChamadaDeModelo): RespostaDoModelo {
     lados: [],
     continuaDeOntem: null,
     fontes: fonte ? [fonte] : [],
+    importancia: 3,
   });
   const redacao = {
     historiaDoDia: {

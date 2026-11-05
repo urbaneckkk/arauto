@@ -280,15 +280,27 @@ Sobre "notícias legais": o que decide isso é o prompt editorial e a curadoria 
 | Vetos de nuclear e de animal ferido | Novos (seção 2.5): o critério "100%" não pode depender só da ficha que o modelo preenche. |
 | Fallback de recusa | Ver seção 2.1: desligado até a primeira execução real. |
 
-**Aceite da Etapa 1: o que já está provado e o que precisa da sua chave**
+**Aceite da Etapa 1 (04/11/2026): resultado**
 
-| Critério | Estado |
+| Critério | Resultado |
 |---|---|
-| Pipeline completo, `brief:gerar` e `brief:ver` | ✅ Funcionam. Verificado ponta a ponta em replay. |
-| Matérias gravadas para testar sem gastar API | ✅ `--gravar` e `--replay`, com teste de que o replay reproduz o mesmo briefing. |
-| Casos fictícios de tema (os 8 do briefing) | ✅ Nas regras (determinístico, inclusive todas as combinações de sinais) e no pipeline. ⏳ Contra o **modelo real**: `pnpm tema:testar`. |
-| 100% em luto, nuclear e animal ferido | ✅ Garantido por código, com vetos que não dependem do modelo: um modelo hostil que erra de propósito ainda passa (teste). ⏳ Confirmar com o modelo real. |
-| 3 execuções reais, links abrindo, datas em 36 h, leitura de 5 a 7 min, custo registrado | ⏳ **Precisa da chave da Anthropic.** `pnpm brief:ver --links` confere links e datas. |
+| Pipeline completo, `brief:gerar` e `brief:ver` | ✅ 6 execuções reais, todas terminaram. |
+| Matérias gravadas para testar sem gastar API | ✅ `--gravar` e `--replay`. O replay da 1ª execução real, com o filtro recalibrado, rodou de graça e reproduziu o resultado. |
+| Casos fictícios de tema (os 8 do briefing + 3 adversariais) | ✅ **88 de 88** com o modelo real (11 casos × 8 repetições), por US$ 0,03. |
+| 100% em luto, nuclear e animal ferido | ✅ 8/8 em todos os casos críticos, e a segurança não depende do modelo: um modelo hostil que erra de propósito ainda passa (teste). |
+| 3 execuções reais, links abrindo, datas em 36 h, leitura de 5 a 7 min, custo registrado | ✅ Execuções 3, 4 e 5 (código final): **6,5 / 6,1 / 6,2 min**, 42 / 40 / 34 links conferidos com `brief:ver --links`, **todos abrem**, o mais velho com 15 h. Execução 6 (Econômico): 6,7 min, 53 links. Custo gravado em cada passo. |
+
+**O que as execuções reais ensinaram (5 problemas que nenhum teste sintético mostraria):**
+
+| # | Problema | Correção |
+|---|---|---|
+| 1 | A busca web **recusa a chamada inteira** (HTTP 400) se `allowed_domains` tiver um domínio que o rastreador da Anthropic não acessa: `reuters.com`, `apnews.com`, `bbc.com`, `bbc.co.uk` e `estadao.com.br`. | Lista da busca sem esses 5 (`DOMINIOS_PARA_BUSCA`). BBC e Estadão continuam entrando pelo RSS. Reuters e AP **não têm como entrar** hoje (sem RSS e sem busca). |
+| 2 | O filtro anti-cópia de 8 palavras jogava fora fatos curtos inevitáveis (nome com cargo, número, lugar) e cortou 7 de 17 notícias. A única cópia de verdade tinha 16 palavras. | Limite de 12 palavras, calibrado com as frases reais. |
+| 3 | O Haiku devolveu um agrupamento degenerado (1 acontecimento, ids sem o prefixo `i`) e o briefing saiu com 3 notícias. | Aceita ids sem prefixo, exige qualidade mínima (15 acontecimentos e 25% dos itens) e repete o passo se vier pobre. Esforço `medium` e limite de saída de 32 mil tokens (o raciocínio entra no limite: chegou a 25 mil). |
+| 4 | **29% dos itens (toda a Folha) chegavam com acento quebrado.** O feed é ISO-8859-1 e o leitor assumia UTF-8. | Decodificação pelo charset do cabeçalho ou da declaração do XML, mais a tabela do windows-1252 (o `TextDecoder` do Node 24 devolve caracteres de controle nessa faixa). |
+| 5 | O redator escrevia 21 a 23 notícias para um teto de 14, e o corte era arbitrário. Também escrevia notícias de 43 palavras (pedido: 65 a 85). | Cada notícia traz uma nota de importância (1 a 5) e o corte tira as menos importantes primeiro. Prompt pede o tamanho e a escolha antes de escrever; material com resumos maiores e 4 itens por acontecimento. |
+
+Também: o texto do aviso do tema vinha acima de 40/110 caracteres e derrubava a resposta inteira. Agora o código troca só o texto do aviso e **mantém a decisão do tema**. A definição de `nuclear` no prompt ganhou contraexemplos (acordo, energia e medicina nuclear), e "animal em sofrimento" ganhou a exceção do animal resgatado sem ferimentos.
 
 **Como rodar** (a chave vai só no `.env`, que o Git ignora):
 
@@ -301,8 +313,16 @@ pnpm brief:ver --sem-banco --links
 pnpm brief:gerar --sem-banco --replay real-1   # repete de graça
 ```
 
-**Pontos em aberto da Etapa 1:** pesos da pontuação (provisórios), tamanho real do briefing (meta de 5 a 7 min, só se mede com a execução real), custo real contra a estimativa da seção 3, perfil Econômico contra Padrão (seção 3.3) e se o modelo recusa notícias sensíveis. O `tema:testar` não entra no total do mês do livro-caixa (custa centavos).
+**Medido nas 6 execuções reais** (US$ 1,46 no livro-caixa, mais ~US$ 0,22 em testes avulsos de tema e termômetro; total ~US$ 1,68):
 
+| Perfil | Buscas | Custo | Palavras | Leitura | Fontes | Notícias |
+|---|---|---|---|---|---|---|
+| Padrão (execução 5) | 8 | US$ 0,31 | 1.363 | 6,2 min | 37 | 13 + curiosidade |
+| Econômico (execução 6) | 3 | **US$ 0,21** | 1.482 | 6,7 min | 55 | 14 + curiosidade |
+
+O Econômico saiu **31% mais barato** com qualidade equivalente nesta amostra (uma execução de cada: é pouco para afirmar). A busca web custa US$ 0,01 cada; o resto é leitura de contexto. Projeção: 30 briefings por mês ficam em ~US$ 6 (Econômico) ou ~US$ 9 (Padrão), sem contar atualizações.
+
+**Ainda em aberto:** (a) pesos da pontuação são provisórios, e o GDELT **não respondeu em nenhuma das 6 execuções**, então a pontuação foi sempre parcial (só RSS); (b) o `fallbacks: "default"` segue desligado porque **não houve nenhuma recusa** em 6 execuções e mais de 250 chamadas de teste; (c) o `tema:testar` não entra no total do mês do livro-caixa (custa centavos); (d) o briefing das 06:30 usa o dia anterior como "ontem" só se houver um registro de data anterior.
 ---
 
 ## 6. Roadmap e o que verifico no início de cada etapa

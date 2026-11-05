@@ -107,8 +107,19 @@ Detalhes e a lista do que fica para o servidor na Etapa 2: [PLAN.md](../PLAN.md)
 - **`renameSync` no Windows** pode falhar de vez em quando (antivírus segurando o arquivo). O repositório em arquivo repete e, no último caso, grava direto.
 - **Vetos por palavras precisam de testes dos dois lados.** "Cai 10%" não são 10 mortos, "acordo nuclear" não é arma nuclear, "filhote resgatado" não é animal ferido. Cada veto tem casos que acusam e casos que não acusam.
 
-### Pendente para fechar a Etapa 1
+### As execuções reais (04/11/2026)
 
-- **3 execuções reais** (precisam da chave da Anthropic), com links abrindo, datas em até 36 h e leitura de 5 a 7 minutos.
-- **`pnpm tema:testar`** com o modelo real (os casos de tema).
-- Você testar. Depois disso, a Etapa 2.
+Seis execuções reais (US$ 1,46 no livro-caixa) mostraram **cinco problemas que 208 testes sintéticos não pegariam**. A tabela completa, com a correção de cada um, está em [PLAN.md](../PLAN.md) (seção 5, "Etapa 1"). O que vale guardar:
+
+- **Teste com dados reais, cedo e barato.** A primeira execução custou US$ 0,09 e já achou o bloqueio de domínios na busca, o filtro anti-cópia rígido demais e, indiretamente, o acento quebrado da Folha. Trazer o dado real para o desenvolvimento antes de "terminar" a etapa foi o que mais valeu.
+- **Modelo oscila; o código precisa de portão de qualidade.** O mesmo prompt deu 62 acontecimentos numa execução e 1 na outra. A resposta "válida no formato" não basta: agora o agrupamento tem qualidade mínima e o passo repete se vier pobre.
+- **Raciocínio conta no limite de saída.** O esforço `medium` do Haiku chega a 25 mil tokens; com limite de 16 mil o JSON vinha cortado. Medir 3 a 4 vezes com a gravação da coleta (US$ 0,01 cada) resolveu a dúvida em minutos.
+- **Gravar e repetir pagou-se na hora.** O replay da 1ª execução, com o filtro recalibrado, mostrou de graça o efeito da mudança (10 → 14 notícias mantidas).
+- **Calibrar com as frases reais, não com o palpite.** Imprimir as frases que o filtro pegou mostrou que eram nomes, números e lugares, e que só uma era cópia de prosa.
+- **Conferir o que o modelo afirma contra o material.** "Primeira reunião depois da reeleição de Lula" vinha das notas da busca (fonte `[w01]`), não de invenção do redator.
+- **Um segredo foi colado no arquivo errado** (o `.env.example`, que é público) e o verificador de segredos acusou na hora, antes de qualquer commit. A chave nunca foi para o Git. Daí a trava local de commit (`.githooks/`, `pnpm hooks:instalar`).
+
+### Estado da Etapa 1
+
+- **Critérios de aceite cumpridos** (detalhes no PLAN.md): 88/88 nos casos de tema com o modelo real; 3 execuções reais com 5 a 7 min de leitura, todos os links abrindo e datas em até 15 h; custo registrado em cada passo.
+- **Falta você testar e dar o ok** para abrir a Etapa 2.

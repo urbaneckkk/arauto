@@ -1,6 +1,10 @@
 import { SECAO_IDS } from "@arauto/core";
 import type { AlertaDoInmet } from "../coleta/tipos.js";
-import { DOMINIOS_DE_REDIRECIONAMENTO, DOMINIOS_PERMITIDOS } from "../config/dominios.js";
+import {
+  DOMINIOS_DE_REDIRECIONAMENTO,
+  DOMINIOS_PARA_BUSCA,
+  DOMINIOS_PERMITIDOS,
+} from "../config/dominios.js";
 import type { Perfil } from "../config/env.js";
 import { lerPrompt } from "../config/prompts.js";
 import type { Logger } from "../infra/log.js";
@@ -93,7 +97,7 @@ export async function executarApuracao(
     usuario,
     maxTokens: 4_000,
     esforco: perfil.esforcoApuracao,
-    busca: { maxBuscas: perfil.maxBuscas, dominios: DOMINIOS_PERMITIDOS },
+    busca: { maxBuscas: perfil.maxBuscas, dominios: DOMINIOS_PARA_BUSCA },
   });
 
   // Registro dos achados: só domínio permitido, sem repetir URL.

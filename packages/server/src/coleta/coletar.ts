@@ -22,7 +22,7 @@ export const JANELA_DE_NOTICIAS_HORAS = 36;
 /** Um feed cujo item mais novo é mais velho que isso é considerado parado. */
 const FEED_PARADO_APOS_HORAS = 72;
 const LIMITE_PADRAO_POR_FEED = 40;
-const TAMANHO_DO_RESUMO = 300;
+const TAMANHO_DO_RESUMO = 500;
 
 export interface DependenciasDaColeta {
   transporte: Transporte;

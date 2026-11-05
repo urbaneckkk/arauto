@@ -1,0 +1,11 @@
+#!/bin/sh
+# Trava local: nenhum commit sai com segredo.
+# Roda o verificador de segredos (scripts/verificar-segredos.mjs) antes de cada commit.
+# Ative uma vez por clone com: pnpm hooks:instalar
+
+if ! node scripts/verificar-segredos.mjs; then
+  echo "" >&2
+  echo "Commit BLOQUEADO: há segredo ou arquivo proibido (veja acima)." >&2
+  echo "Chaves vão só no .env (ignorado pelo Git), nunca no .env.example." >&2
+  exit 1
+fi

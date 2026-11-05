@@ -1,0 +1,9 @@
+#!/bin/sh
+# Segunda trava, antes de enviar para o GitHub: o mesmo verificador de segredos.
+# Ative uma vez por clone com: pnpm hooks:instalar
+
+if ! node scripts/verificar-segredos.mjs; then
+  echo "" >&2
+  echo "Envio BLOQUEADO: há segredo ou arquivo proibido (veja acima)." >&2
+  exit 1
+fi

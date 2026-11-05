@@ -5,7 +5,7 @@ import type { ItemColetado } from "../coleta/tipos.js";
 import { lerPrompt } from "../config/prompts.js";
 import type { Logger } from "../infra/log.js";
 import type { Transporte } from "../infra/transporte.js";
-import { type ClienteDeModelo, lerJson } from "../modelos/cliente.js";
+import { type ClienteDeModelo, lerJson, RespostaInvalida } from "../modelos/cliente.js";
 import type { Relogio } from "../util/tempo.js";
 import { pontuarComGdelt, pontuarSemGdelt, recencia } from "./pontuacao.js";
 import type { Categoria, Pausa } from "./tipos.js";
@@ -70,6 +70,22 @@ export function listaParaAgrupar(itens: readonly ItemColetado[]): string {
 
 const distintos = (valores: readonly string[]) => new Set(valores).size;
 
+/**
+ * Qualidade mínima do agrupamento, só exigida com bastante material (uma execução real tem ~720
+ * itens). Na 2ª execução real o Haiku devolveu UM acontecimento, com ids malformados, e o briefing
+ * saiu com 3 notícias. Agrupamento pobre é erro: o passo é repetido.
+ */
+export const ITENS_PARA_EXIGIR_QUALIDADE = 100;
+export const MIN_ACONTECIMENTOS = 15;
+export const MIN_COBERTURA_DOS_ITENS = 0.25;
+
+/** O modelo às vezes escreve "015" ou "15" em vez de "i015". Aceita as três formas. */
+export function normalizarId(id: string): string {
+  const limpo = id.trim().toLowerCase();
+  const digitos = limpo.match(/^i?(\d+)$/)?.[1];
+  return digitos ? `i${digitos.padStart(3, "0")}` : limpo;
+}
+
 /** Passo 2: o modelo agrupa as manchetes por acontecimento; o CÓDIGO calcula a pontuação. */
 export async function executarTermometro(
   deps: DependenciasDoTermometro,
@@ -84,8 +100,9 @@ export async function executarTermometro(
     modelo,
     sistema: lerPrompt("termometro"),
     usuario: listaParaAgrupar(itens),
-    maxTokens: 16_000,
-    esforco: "low",
+    // O raciocínio entra no limite de saída: no esforço médio chega a ~25 mil tokens (medido em 04/11).
+    maxTokens: 32_000,
+    esforco: "medium",
     formato: AgrupamentoSchema,
   });
   const agrupamento = lerJson("termometro", resposta.texto, AgrupamentoSchema);
@@ -96,9 +113,10 @@ export async function executarTermometro(
   for (const acontecimento of agrupamento.acontecimentos) {
     const membros: ItemColetado[] = [];
     for (const id of acontecimento.itens) {
-      const item = porId.get(id);
-      if (!item || usados.has(id)) continue;
-      usados.add(id);
+      const idNormal = normalizarId(id);
+      const item = porId.get(idNormal);
+      if (!item || usados.has(idNormal)) continue;
+      usados.add(idNormal);
       membros.push(item);
     }
     if (membros.length === 0) continue;
@@ -120,6 +138,16 @@ export async function executarTermometro(
       pontuacaoParcial: true,
       gdelt: null,
     });
+  }
+
+  if (itens.length >= ITENS_PARA_EXIGIR_QUALIDADE) {
+    const cobertura = usados.size / itens.length;
+    if (clusters.length < MIN_ACONTECIMENTOS || cobertura < MIN_COBERTURA_DOS_ITENS) {
+      throw new RespostaInvalida(
+        "termometro",
+        `agrupamento pobre: ${clusters.length} acontecimentos cobrindo ${Math.round(cobertura * 100)}% dos ${itens.length} itens (mínimo: ${MIN_ACONTECIMENTOS} acontecimentos e ${Math.round(MIN_COBERTURA_DOS_ITENS * 100)}%)`,
+      );
+    }
   }
 
   const elegiveis = clusters.filter((c) => c.categoria !== "descartar");

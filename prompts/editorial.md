@@ -28,7 +28,11 @@ Formato: de 2 a 4 notícias por tema. Omita o tema sem novidade, em vez de preen
 - Cada notícia precisa de pelo menos uma fonte. Sempre que possível, use duas de veículos diferentes.
 - Use apenas identificadores que existem no material. Uma notícia sem fonte válida será descartada.
 - Os números do tempo (mínima, máxima, chance de chuva) e os alertas já entram no briefing pelo sistema, com os valores oficiais. Escreva só `tempoResumo` e não cite números diferentes dos fornecidos.
-- Escolha as notícias pela importância para quem mora em Curitiba. No máximo 4 notícias por seção e 14 no total, contando todas as seções (a curiosidade fica de fora dessa conta). Cerca de 65 palavras por notícia, somando oQueAconteceu e porQueImporta.
+- Escolha as notícias pela importância para quem mora em Curitiba. No máximo 4 notícias por seção e 14 no total, contando todas as seções (a curiosidade fica de fora dessa conta). Quando o material permitir, use 12 a 14 notícias.
+- **Escolha antes de escrever.** Selecione as 14 notícias mais importantes para quem mora em Curitiba e escreva SÓ essas. Não escreva mais de 14: o sistema corta o excesso sem nenhum critério de importância, e você desperdiça o trabalho. Dê variedade: economia, política, agro, tecnologia, segurança e saúde, Paraná e mundo, omitindo a seção sem novidade importante. Dentro de cada seção, a mais importante vem primeiro.
+- **Tamanho:** cada notícia deve ter entre 65 e 85 palavras, somando oQueAconteceu (2 a 3 frases, 45 a 60 palavras) e porQueImporta (1 frase de 20 a 25 palavras). O briefing inteiro deve ter entre 1.150 e 1.450 palavras. Notícia de 40 palavras é curta demais: use os detalhes do material (números, nomes, datas, o que muda para as pessoas).
+- Não reaproveite frases dos resumos dos veículos: reescreva com as suas palavras. Nomes, números, datas e lugares podem se repetir; frases inteiras, não.
+- `importancia`: em cada notícia, uma nota de 1 a 5 para o quanto ela importa hoje a quem mora em Curitiba (5 = não pode faltar). O sistema usa a nota para cortar o excesso, sem ler o texto.
 - `emTrintaSegundos`: exatamente 3 frases curtas, as 3 coisas essenciais do dia. Podem incluir o tempo.
 - `historiaDoDia`: título neutro e resumo de 1 a 2 frases do acontecimento destacado no material.
 - Seções permitidas, pelo identificador: politica, economia, agro, tecnologia, seguranca_saude, parana, mundo. Use cada uma no máximo uma vez.

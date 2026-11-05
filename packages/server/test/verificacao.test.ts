@@ -36,6 +36,7 @@ const noticia = (fontes: string[], extras: Record<string, unknown> = {}) => ({
   lados: [],
   continuaDeOntem: null,
   fontes,
+  importancia: 3,
   ...extras,
 });
 
@@ -322,29 +323,126 @@ describe("verificação de fontes (passo 5)", () => {
 
 describe("temTrechoCopiado", () => {
   const referencia =
-    "o governo anunciou nesta terça um pacote de medidas para conter a alta dos preços";
+    "o governo anunciou nesta terça um pacote de medidas para conter a alta dos preços e proteger o consumidor";
 
-  it("acha 8 palavras seguidas iguais, ignorando maiúsculas e pontuação", () => {
+  it("acha 12 palavras seguidas iguais, ignorando maiúsculas e pontuação", () => {
     expect(
-      temTrechoCopiado("Foi assim: O governo anunciou, nesta terça, um pacote de medidas!", [
-        referencia,
-      ]),
+      temTrechoCopiado(
+        "Foi assim: O governo anunciou, nesta terça, um pacote de medidas para conter a alta!",
+        [referencia],
+      ),
     ).toBe(true);
   });
 
-  it("não acusa texto reescrito, nem 7 palavras seguidas", () => {
+  it("não acusa texto reescrito, nem 11 palavras seguidas", () => {
     expect(
       temTrechoCopiado("Medidas contra a alta de preços foram anunciadas pelo governo na terça.", [
         referencia,
       ]),
     ).toBe(false);
+    // 11 palavras iguais, a 12ª muda.
     expect(
-      temTrechoCopiado("o governo anunciou nesta terça um pacote ideias novas", [referencia]),
+      temTrechoCopiado(
+        "o governo anunciou nesta terça um pacote de medidas para conter ideias novas",
+        [referencia],
+      ),
     ).toBe(false);
+  });
+
+  it("fatos curtos inevitáveis (nome, número, lugar) não contam como cópia", () => {
+    const resumo =
+      "O líder do governo no Congresso, Randolfe Rodrigues, disse que o Ministério já recebeu mais de 7 mil denúncias de assédio eleitoral.";
+    expect(
+      temTrechoCopiado(
+        "Segundo o líder do governo no Congresso, Randolfe Rodrigues, a pasta já recebeu mais de 7 mil denúncias de assédio eleitoral.",
+        [resumo],
+      ),
+    ).toBe(false);
+  });
+
+  it("o tamanho do trecho pode ser informado", () => {
+    expect(
+      temTrechoCopiado("o governo anunciou nesta terça um pacote de medidas", [referencia], 8),
+    ).toBe(true);
   });
 
   it("sem referência ou com referência curta, nunca acusa", () => {
     expect(temTrechoCopiado("qualquer texto aqui", [])).toBe(false);
     expect(temTrechoCopiado("qualquer texto aqui", ["curta"])).toBe(false);
+  });
+});
+
+describe("corte por importância (as menos importantes saem primeiro)", () => {
+  const comNota = (titulo: string, importancia: number) => noticia(["i1"], { titulo, importancia });
+  const titulos = (resultado: Awaited<ReturnType<typeof verificar>>["resultado"]) =>
+    resultado.secoes.flatMap((s) => s.noticias.map((n) => n.titulo));
+
+  it("no máximo 4 por seção: sai a menos importante, não a última", async () => {
+    const notas = [5, 1, 4, 2, 5, 3];
+    const r = redacao({
+      secoes: [{ id: "politica", noticias: notas.map((nota, i) => comNota(`N${i}`, nota)) }],
+    });
+    const { resultado } = await verificar(r, [item("i1")]);
+    expect(titulos(resultado)).toEqual(["N0", "N2", "N4", "N5"]);
+  });
+
+  it("no teto global de 14: saem as de menor nota, em qualquer seção", async () => {
+    const secao = (id: "politica" | "economia" | "agro" | "mundo", notas: number[]) => ({
+      id,
+      noticias: notas.map((nota, i) => comNota(`${id}-${i}`, nota)),
+    });
+    const r = redacao({
+      secoes: [
+        secao("politica", [1, 5, 5, 5]),
+        secao("economia", [5, 5, 5, 5]),
+        secao("agro", [5, 5, 5, 2]),
+        secao("mundo", [5, 5, 5, 5]),
+      ],
+    });
+    const { resultado } = await verificar(r, [item("i1")]);
+    const mantidas = titulos(resultado);
+    expect(mantidas).toHaveLength(14);
+    expect(mantidas).not.toContain("politica-0");
+    expect(mantidas).not.toContain("agro-3");
+  });
+
+  it("em empate de importância, sai a que vem mais tarde", async () => {
+    const r = redacao({
+      secoes: [{ id: "politica", noticias: [0, 1, 2, 3, 4, 5].map((i) => comNota(`N${i}`, 3)) }],
+    });
+    const { resultado } = await verificar(r, [item("i1")]);
+    expect(titulos(resultado)).toEqual(["N0", "N1", "N2", "N3"]);
+  });
+
+  it("nota fora de 1 a 5 ou quebrada é ajustada, sem derrubar nada", async () => {
+    const r = redacao({
+      secoes: [
+        {
+          id: "politica",
+          noticias: [
+            comNota("A", 99),
+            comNota("B", 0),
+            comNota("C", 4.6),
+            comNota("D", -3),
+            comNota("E", 3),
+          ],
+        },
+      ],
+    });
+    const { resultado } = await verificar(r, [item("i1")]);
+    // A=5, B=1, C=5, D=1, E=3: sobram 4, saindo uma das notas 1 (a mais tardia, D).
+    expect(titulos(resultado)).toEqual(["A", "B", "C", "E"]);
+  });
+
+  it("o motivo do descarte fica registrado", async () => {
+    const r = redacao({
+      secoes: [
+        { id: "politica", noticias: [5, 5, 5, 5, 1].map((nota, i) => comNota(`N${i}`, nota)) },
+      ],
+    });
+    const { resultado } = await verificar(r, [item("i1")]);
+    expect(
+      resultado.descartes.some((d) => d.onde.includes("N4") && d.motivo.includes("máximo")),
+    ).toBe(true);
   });
 });

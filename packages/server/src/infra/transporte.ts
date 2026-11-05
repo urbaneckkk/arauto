@@ -37,6 +37,71 @@ export interface Transporte {
   verificar(url: string, opcoes?: OpcoesHttp): Promise<ResultadoDaVerificacao>;
 }
 
+/**
+ * Os bytes 0x80 a 0x9F do windows-1252 são aspas curvas, travessões, reticências etc. O
+ * TextDecoder do Node os devolve como caracteres de controle (confirmado no Node 24.11), então
+ * trocamos pela tabela oficial. Os bytes 0x81, 0x8D, 0x8F, 0x90 e 0x9D não existem na tabela.
+ */
+const CP1252: Readonly<Record<number, string>> = {
+  128: "€",
+  130: "‚",
+  131: "ƒ",
+  132: "„",
+  133: "…",
+  134: "†",
+  135: "‡",
+  136: "ˆ",
+  137: "‰",
+  138: "Š",
+  139: "‹",
+  140: "Œ",
+  142: "Ž",
+  145: "‘",
+  146: "’",
+  147: "“",
+  148: "”",
+  149: "•",
+  150: "–",
+  151: "—",
+  152: "˜",
+  153: "™",
+  154: "š",
+  155: "›",
+  156: "œ",
+  158: "ž",
+  159: "Ÿ",
+};
+
+function corrigirCp1252(texto: string): string {
+  let saida = "";
+  for (const caractere of texto) {
+    const codigo = caractere.codePointAt(0) ?? 0;
+    saida += codigo >= 0x80 && codigo <= 0x9f ? (CP1252[codigo] ?? caractere) : caractere;
+  }
+  return saida;
+}
+
+/**
+ * Decodifica o corpo da resposta pelo charset certo: o do cabeçalho HTTP; na falta dele, o da
+ * declaração <?xml ... encoding="..."?>; na falta dos dois, UTF-8. Sem isso, o feed da Folha
+ * (ISO-8859-1, sem charset no cabeçalho) chegava com "al�quotas" no lugar de "alíquotas".
+ */
+export function decodificarCorpo(bytes: Uint8Array, contentType: string | null): string {
+  const doCabecalho = contentType?.match(/charset\s*=\s*["']?([\w.:-]+)/i)?.[1];
+  // Os primeiros bytes da declaração XML são ASCII em qualquer uma dessas codificações.
+  const inicio = new TextDecoder("latin1").decode(bytes.subarray(0, 200));
+  const doXml = inicio.match(/<\?xml[^>]*\sencoding\s*=\s*["']([\w.:-]+)["']/i)?.[1];
+  const charset = (doCabecalho ?? doXml ?? "utf-8").toLowerCase();
+  try {
+    const decodificador = new TextDecoder(charset);
+    const texto = decodificador.decode(bytes);
+    return decodificador.encoding === "windows-1252" ? corrigirCp1252(texto) : texto;
+  } catch {
+    // Charset que o Node não conhece: UTF-8 é o melhor palpite.
+    return new TextDecoder("utf-8").decode(bytes);
+  }
+}
+
 const CABECALHOS = {
   "user-agent": USER_AGENT,
   accept: "application/rss+xml, application/xml, application/json, text/html;q=0.8, */*;q=0.5",
@@ -50,8 +115,9 @@ export class TransporteReal implements Transporte {
       signal: AbortSignal.timeout(timeoutMs),
       headers: CABECALHOS,
     });
-    const corpo = await resposta.text();
-    return { status: resposta.status, contentType: resposta.headers.get("content-type"), corpo };
+    const contentType = resposta.headers.get("content-type");
+    const corpo = decodificarCorpo(new Uint8Array(await resposta.arrayBuffer()), contentType);
+    return { status: resposta.status, contentType, corpo };
   }
 
   async verificar(

@@ -6,7 +6,7 @@ import { cortar } from "../util/texto.js";
 import type { ResultadoDaApuracao } from "./apuracao.js";
 import type { ClusterPontuado, ResultadoDoTermometro } from "./termometro.js";
 
-const ITENS_POR_ACONTECIMENTO = 3;
+const ITENS_POR_ACONTECIMENTO = 4;
 const SECOES_COM_MAIS_ESPACO = new Set(["mundo"]);
 
 /** Até `quantos` itens, priorizando veículos diferentes e os mais recentes. */
@@ -28,7 +28,7 @@ export function escolherItens(itens: readonly ItemColetado[], quantos: number): 
 }
 
 function linhaDeItem(item: ItemColetado): string {
-  const resumo = item.resumo ? ` — ${cortar(item.resumo, 220)}` : "";
+  const resumo = item.resumo ? ` — ${cortar(item.resumo, 450)}` : "";
   return `[${item.id}] ${item.veiculo} · ${formatarDataHora(item.publicadoEm)} · ${item.titulo}${resumo}`;
 }
 

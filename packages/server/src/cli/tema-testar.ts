@@ -74,6 +74,13 @@ async function main(): Promise<number> {
     );
   }
 
+  const comErro = resultados.filter((r) => r.erros.length > 0);
+  if (comErro.length > 0) {
+    console.log("\nFalhas do modelo (o tema caiu no plano de emergência):");
+    for (const r of comErro)
+      for (const erro of r.erros) console.log(`  - ${r.caso.id}: ${erro.slice(0, 400)}`);
+  }
+
   const gasto = orcamento.gastoDaExecucaoUsd;
   const passou = aprovado(resultados);
   console.log(`\nCusto: ${usd(gasto)} (${mesEmSaoPaulo(relogioReal.agora())}).`);

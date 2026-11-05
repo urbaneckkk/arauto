@@ -20,7 +20,8 @@
     "brief:gerar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/gerar.js",
     "brief:ver": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/ver.js",
     "db:migrar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/migrar.js",
-    "tema:testar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/tema-testar.js"
+    "tema:testar": "pnpm --silent build && node --env-file-if-exists=.env packages/server/dist/cli/tema-testar.js",
+    "hooks:instalar": "git config core.hooksPath .githooks"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:"

@@ -19,7 +19,7 @@ import { type Leitura, medirLeitura } from "../passos/leitura.js";
 import { montarMaterial } from "../passos/material.js";
 import { montarBriefing } from "../passos/montagem.js";
 import { executarRedacao, type Redacao } from "../passos/redacao.js";
-import { executarTema, temaDeEmergencia } from "../passos/tema.js";
+import { executarTema, type ResultadoDoTema, temaDeEmergencia } from "../passos/tema.js";
 import { executarTermometro } from "../passos/termometro.js";
 import { type ItemDeMaterial, type Pausa, paraMaterial } from "../passos/tipos.js";
 import {
@@ -333,7 +333,7 @@ export async function executarPipeline(
       resumo: redacao.historiaDoDia.resumo,
       manchetes: termometro.historiaDoDia.itens.map((item) => item.titulo),
     };
-    let decisao = temaDeEmergencia(historiaParaTema);
+    let decisao: ResultadoDoTema = temaDeEmergencia(historiaParaTema);
     let temaPeloModelo = false;
     try {
       const temaResultado = await comRepeticoes(
@@ -353,6 +353,11 @@ export async function executarPipeline(
     }
     if (!temaPeloModelo) {
       avisos.push("O tema foi escolhido por segurança (neutro), porque o passo do modelo falhou.");
+    }
+    if (decisao.avisoSubstituido) {
+      avisos.push(
+        "O texto do aviso escrito pelo modelo passou do limite de caracteres e foi trocado pelo texto padrão.",
+      );
     }
     if (decisao.regras.length > 0) {
       avisos.push(`Regras de segurança alteraram o tema: ${decisao.regras.join(", ")}.`);

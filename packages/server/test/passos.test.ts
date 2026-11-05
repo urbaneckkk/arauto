@@ -304,6 +304,16 @@ describe("apuração (passo 3)", () => {
     expect(chamada?.busca?.maxBuscas).toBe(3);
     expect(chamada?.busca?.dominios).toContain("simepar.br");
     expect(chamada?.busca?.dominios).toContain("defesacivil.pr.gov.br");
+    // O rastreador da Anthropic não acessa estes (a busca inteira dá 400): ficam fora da lista da busca.
+    for (const bloqueado of [
+      "reuters.com",
+      "apnews.com",
+      "bbc.com",
+      "bbc.co.uk",
+      "estadao.com.br",
+    ]) {
+      expect(chamada?.busca?.dominios, bloqueado).not.toContain(bloqueado);
+    }
     expect(chamada?.esforco).toBe("low");
   });
 

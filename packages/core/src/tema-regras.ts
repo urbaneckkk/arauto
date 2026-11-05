@@ -232,8 +232,8 @@ function cortar(texto: string, maximo: number): string {
   return texto.length <= maximo ? texto : `${texto.slice(0, maximo - 1).trimEnd()}…`;
 }
 
-/** Aviso sóbrio, usado quando uma regra troca o tema e o texto do modelo deixa de servir. */
-function notificacaoSegura(tituloDaHistoria: string | undefined) {
+/** Aviso sóbrio, usado quando uma regra troca o tema ou o texto do modelo deixa de servir. */
+export function notificacaoSegura(tituloDaHistoria: string | undefined) {
   const corpo = tituloDaHistoria?.trim() ? tituloDaHistoria.trim() : "Veja o briefing de hoje.";
   return { titulo: "Briefing de hoje", corpo: cortar(corpo, 110) };
 }
