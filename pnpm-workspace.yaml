@@ -11,7 +11,7 @@ packages:
 # - @vitejs/plugin-react: 6.1.2 (a 6.2.1 tinha 3 dias em 05/11/2026).
 catalog:
   "@anthropic-ai/sdk": 1.4.0
-  "@biomejs/biome": 2.6.4
+  "@biomejs/biome": 2.6.5
   "@fontsource/sofia-sans": 5.3.0
   "@fontsource/sofia-sans-extra-condensed": 5.3.0
   "@fontsource/spectral": 5.3.0
